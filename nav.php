@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navigation Bar</title>
     <style>
-        nav {
+        header {
             background-color: #333;
             color: #fff;
             padding: 1em;
             text-align: center;
         }
-        nav ul {
+        ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
-        nav li {
+        li {
             display: inline-block;
             margin-right: 20px;
         }
-        nav a {
+        a {
             color: #fff;
             text-decoration: none;
         }
