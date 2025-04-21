@@ -34,11 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
 
             // Redirect based on role
-            if ($_SESSION['roles'] == 'mentor') {
-                header("Location: home_mentors.php");  // Redirect to a different home page for mentors
+            if ($_SESSION['roles'] == 'admin') {
+                header("Location: #");  // Redirectto the admin home page
                 exit();
             } else {
-                header("Location: home_buddies.php");  // Redirect to the general home page
+                header("Location: #");  // Redirect to the general home page
                 exit();
             }
         } else {
@@ -80,7 +80,7 @@ $conn->close();
             <h2>Login</h2>
 
             <!-- Input form -->
-            <form id="loginForm" action="login.php" method="post">
+            <form id="loginForm" action="login.php" method="post" autocomplete="off">
 
                 <!-- Email -->
                 <div class="input-group">
@@ -92,7 +92,7 @@ $conn->close();
 
                 <!-- Password -->
                 <div class="input-group">
-                    <input type="password" id="loginPassword" placeholder="Password" name="password" required>
+                    <input type="password" id="loginPassword" placeholder="Password" name="password" required> 
                     <span class="icon">
                         <img src="icons/lock2.png" alt="Password Icon" id="loginPasswordIcon" class="password-icon">
                     </span>
@@ -101,7 +101,7 @@ $conn->close();
                 <!-- Submit Button -->
                 <button type="submit" class="login-btn" name="submit">Login</button>
             </form>
-            <p class="register-text">Don't have an account?
+            <p class="register-text" style="margin-bottom: 30px">Don't have an account?
                 <a href="register.php"> Register Now</a>
             </p>
         </div>

@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
                     // Define the default role for new users
-                    $default_role = 'student';
+                    $default_role = 'user';
 
                     // Define the default profile image for the new users
                     $profile_img = 'images/profile.png';
@@ -102,7 +102,7 @@ $conn->close();
             <h2>Register</h2>
 
             <!-- Input form -->
-            <form id="registerForm" action="register.php" method="post">
+            <form id="registerForm" action="register.php" method="post" autocomplete="off">
                 <!-- Email -->
                 <div class="input-group">
                     <input type="email" id="registerEmail" placeholder="Email" name="email" required>
@@ -140,7 +140,7 @@ $conn->close();
             </form>
 
             <!-- Register Link Page -->
-            <p class="register-text">Already have an account?
+            <p class="register-text" style="margin-bottom: 30px">Already have an account?
                 <a href="login.php"> Login Now</a>
             </p>
         </div>
