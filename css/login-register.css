@@ -2,13 +2,12 @@
 
 /* Strong Commands */
 :root {
-    /* Color Pallate */
-    --text: #eaf2e8;
-    --background: #070c06;
-    --primary: #a8d69f;
-    --secondary: #3a3d72;
-    --accent: #72cc61;
-    --button: #54687B;
+    --text: #F9FAFB;       
+    --background: #212121;    
+    --primary: #3B82F6;      
+    --secondary: #10B981;     
+    --accent: #F59E0B;         
+    --button: #2563EB;         
 }
 
 * {

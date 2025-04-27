@@ -14,8 +14,22 @@ include 'database.php';
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+        /* Strong Commands */
+        :root {
+            --text: #F9FAFB;       
+            --background: #212121;    
+            --primary: #3B82F6;      
+            --secondary: #10B981;     
+            --accent: #F59E0B;         
+            --button: #2563EB;         
+        }
+
+        * {
+            font-family: inherit;
+        }
         body {
             font-family: 'Roboto', sans-serif;
+            background-color: var(--background);
         }
     </style>
 </head>
