@@ -81,9 +81,10 @@
     }
 
     .greeting img.profile {
-        width: 25px;
-        height: 25px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
+        margin-right: 5px;
     }
 
     .greeting span {
@@ -95,11 +96,12 @@
         border: none;
         cursor: pointer;
         padding: 0;
+        margin-top: 7px;
     }
 
     .logout-btn img {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         transition: opacity 0.3s ease;
     }
 
@@ -127,13 +129,20 @@
             <!-- Greeting and Logout -->
             <div class="greeting">
                 <?php if (isset($_SESSION['username'])) : ?>
+                    <!-- Profile Picture -->
                     <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'icons/user.png'; ?>" alt="Profile Picture" class="profile">
+
+                    <!-- Username -->
                     <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+
+                    <!-- Logout Button -->
                     <form action="logout.php" method="post" style="display:inline;">
                         <button type="submit" class="logout-btn" title="Logout">
                             <img src="icons/logout.png" alt="Logout Icon">
                         </button>
                     </form>
+
+                    <!-- No Account -->
                 <?php else : ?>
                     <a href="no_account.php" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
                         <img src="icons/user.png" alt="Guest" class="profile">

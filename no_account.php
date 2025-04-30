@@ -13,6 +13,8 @@ if (isset($_SESSION['username'])) {
     <meta charset="UTF-8">
     <title>Account Required</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
         :root {
             --text: #ecf2f4;       
             --background: #0a161a;    
@@ -28,7 +30,7 @@ if (isset($_SESSION['username'])) {
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background);
             display: flex;
             justify-content: center;
@@ -99,9 +101,9 @@ if (isset($_SESSION['username'])) {
             transition: color 0.3s ease;
         }
 
-.back-btn:hover {
-    color: var(--primary);
-}
+        .back-btn:hover {
+            color: var(--primary);
+        }
 
     </style>
 </head>
