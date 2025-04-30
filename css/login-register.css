@@ -2,12 +2,11 @@
 
 /* Strong Commands */
 :root {
-    --text: #F9FAFB;       
-    --background: #212121;    
-    --primary: #3B82F6;      
-    --secondary: #10B981;     
-    --accent: #F59E0B;         
-    --button: #2563EB;         
+    --text: #ecf2f4;       
+    --background: #0a161a;    
+    --primary: #87c9e3;      
+    --secondary: #127094;     
+    --accent: #29bff9;         
 }
 
 * {
@@ -107,7 +106,7 @@ h2 {
     margin: 10px 10px;
     border: none;
     border-radius: 5px;
-    background-color: var(--button);
+    background-color: var(--secondary);
     color: white;
     font-size: 16px;
     cursor: pointer;

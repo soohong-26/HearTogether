@@ -1,65 +1,49 @@
 <!-- PHP -->
 <?php
-// Include database connection file
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require 'database.php';
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get email and password from POST request
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Prepare and bind statement to prevent SQL injection
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
-    
-    // Execute the statement
     $stmt->execute();
     
-    // Get the result
     $result = $stmt->get_result();
 
-    // Check if email exists
     if ($result->num_rows > 0) {
-        // Fetch user data
         $user = $result->fetch_assoc();
-        
-        // Verify password (assuming passwords are hashed)
+
         if (password_verify($password, $user['password'])) {
-            
-            // Set session variables
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['roles'] = $user['roles'];
             $_SESSION['logged_in'] = true;
 
-            // Redirect based on role
             if ($_SESSION['roles'] == 'admin') {
-                header("Location: #");  // Redirectto the admin home page
+                header("Location: #.php");
                 exit();
             } else {
-                header("Location: #");  // Redirect to the general home page
+                header("Location: homepage.php");
                 exit();
             }
         } else {
-            // Invalid password
-            echo "<script>
-                    alert('Invalid Password!');
-                  </script>";
+            echo "<script>alert('Invalid Password!');</script>";
         }
     } else {
-        // When the email doesn't exist in the database
-        echo "<script>
-                    alert('Email does not exist in the database!');
-                  </script>";
+        echo "<script>alert('Email does not exist in the database!');</script>";
     }
-    // Close statement
+
     $stmt->close();
 }
-
-// Close connection
 $conn->close();
 ?>
+
 
 <!-- HTML -->
 <!DOCTYPE html>

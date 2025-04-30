@@ -9,8 +9,16 @@
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+    :root {
+        --text: #ecf2f4;       
+        --background: #0a161a;    
+        --primary: #87c9e3;      
+        --secondary: #127094;     
+        --accent: #29bff9;         
+    }
+
     header {
-        background-color: #333;
+        background-color: var(--background);
         color: #fff;
         padding: 10px 40px;
         margin: 20px 20px 0 20px;
@@ -18,6 +26,7 @@
         display: flex;
         align-items: center;
         border-radius: 20px;
+        border: 0.5px solid var(--accent);
     }
 
     .header-title, nav,
@@ -34,7 +43,7 @@
 
     .header-title a {
         text-decoration: none;
-        color: #7AA3CC;
+        color: var(--primary);
         font-size: 22px;
         font-weight: 600;
     }
@@ -61,57 +70,78 @@
     }
 
     .nav-links li a:hover {
-        color: #7AA3CC;
+        color: var(--secondary);
         text-decoration: none;
     }
 
     .greeting {
         justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
     }
 
-    .greeting img {
+    .greeting img.profile {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        margin-right: 10px;
     }
 
     .greeting span {
         font-size: 16px;
     }
-</style>
 
+    .logout-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .logout-btn img {
+        width: 22px;
+        height: 22px;
+        transition: opacity 0.3s ease;
+    }
+
+    .logout-btn img:hover {
+        opacity: 0.7;
+    }
+    </style>
 </head>
 <body>
-        <header>
-            <!-- Logo -->
-                <h2 class="header-title">
-                    <a href="#">
-                        HearTogether
-                    </a>
-                </h2>
+    <header>
+        <!-- Logo -->
+        <h2 class="header-title">
+            <a href="#">HearTogether</a>
+        </h2>
 
-            <!-- Navigation Panel -->
-            <nav>
-                <ul class="nav-links">
-                    <!-- Links when clicked -->
-                    <li><a class='nav-anc' href="#">Home</a></li>
-                    <li><a class='nav-anc' href="#">Videos</a></li>
-                    <li><a class='nav-anc' href="#">FAQ</a></li>
-                </ul>
+        <!-- Navigation Panel -->
+        <nav>
+            <ul class="nav-links">
+                <!-- Links when clicked -->
+                <li><a class='nav-anc' href="#">Home</a></li>
+                <li><a class='nav-anc' href="#">Videos</a></li>
+                <li><a class='nav-anc' href="#">FAQ</a></li>
+            </ul>
 
-            <!-- Greeting and Profile Picture -->
+            <!-- Greeting and Logout -->
             <div class="greeting">
                 <?php if (isset($_SESSION['username'])) : ?>
-                    <img src="<?php echo $_SESSION['profile_img']; ?>" alt="Profile Picture">
-                    <span>Hello, <?php echo $_SESSION['username']; ?></span>
+                    <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'icons/user.png'; ?>" alt="Profile Picture" class="profile">
+                    <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <form action="logout.php" method="post" style="display:inline;">
+                        <button type="submit" class="logout-btn" title="Logout">
+                            <img src="icons/logout.png" alt="Logout Icon">
+                        </button>
+                    </form>
                 <?php else : ?>
-                    <img src="icons/user.png" alt="Guest">
-                    <span>Hello, Guest</span>
+                    <a href="no_account.php" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                        <img src="icons/user.png" alt="Guest" class="profile">
+                        <span>Hello, Guest</span>
+                    </a>
                 <?php endif; ?>
             </div>
-
-            </nav>
-        </header>
+        </nav>
+    </header>
 </body>
 </html>

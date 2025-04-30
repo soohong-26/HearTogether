@@ -16,14 +16,12 @@ include 'database.php';
 
         /* Strong Commands */
         :root {
-            --text: #F9FAFB;       
-            --background: #212121;    
-            --primary: #3B82F6;      
-            --secondary: #10B981;     
-            --accent: #F59E0B;         
-            --button: #2563EB;         
+            --text: #ecf2f4;       
+            --background: #0a161a;    
+            --primary: #87c9e3;      
+            --secondary: #127094;     
+            --accent: #29bff9;         
         }
-
         * {
             font-family: inherit;
         }
@@ -37,7 +35,6 @@ include 'database.php';
     <!-- Navigation Bar -->
     <?php include 'nav.php'; ?>
 
-    <h1>HearTogether</h1>
-    <!-- Add homepage content here -->
+    
 </body>
 </html>
