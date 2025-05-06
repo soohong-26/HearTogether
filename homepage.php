@@ -22,9 +22,11 @@ include 'database.php';
             --secondary: #127094;     
             --accent: #29bff9;         
         }
+
         * {
             font-family: inherit;
         }
+        
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background);

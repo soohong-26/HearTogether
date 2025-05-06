@@ -19,7 +19,8 @@ if (isset($_SESSION['username'])) {
             --text: #ecf2f4;       
             --background: #0a161a;    
             --primary: #87c9e3;      
-            --secondary: #127094;     
+            --secondary: #127094; 
+            --third: #666666;    
             --accent: #29bff9;         
             }
 
@@ -39,7 +40,7 @@ if (isset($_SESSION['username'])) {
         }
 
         .container {
-            background-color: var(--secondary);
+            background-color: var(--third);
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);

@@ -14,11 +14,12 @@
         --background: #0a161a;    
         --primary: #87c9e3;      
         --secondary: #127094;     
+        --third: #666666;
         --accent: #29bff9;         
     }
 
     header {
-        background-color: var(--background);
+        background-color: var(--third);
         color: #fff;
         padding: 10px 40px;
         margin: 20px 20px 0 20px;
@@ -26,7 +27,7 @@
         display: flex;
         align-items: center;
         border-radius: 20px;
-        border: 0.5px solid var(--accent);
+        border: none;
     }
 
     .header-title, nav,
@@ -43,7 +44,7 @@
 
     .header-title a {
         text-decoration: none;
-        color: var(--primary);
+        color: var(--text);
         font-size: 22px;
         font-weight: 600;
     }
@@ -70,7 +71,7 @@
     }
 
     .nav-links li a:hover {
-        color: var(--secondary);
+        color: var(--accent);
         text-decoration: none;
     }
 
@@ -108,13 +109,17 @@
     .logout-btn img:hover {
         opacity: 0.7;
     }
+
+    .video-section .nav-anc[href="videos.php"] {
+    color: var(--text);
+}
     </style>
 </head>
 <body>
     <header>
         <!-- Logo -->
         <h2 class="header-title">
-            <a href="#">HearTogether</a>
+            <a href="homepage.php">HearTogether</a>
         </h2>
 
         <!-- Navigation Panel -->
@@ -122,7 +127,7 @@
             <ul class="nav-links">
                 <!-- Links when clicked -->
                 <li><a class='nav-anc' href="#">Home</a></li>
-                <li><a class='nav-anc' href="#">Videos</a></li>
+                <li><a class='nav-anc' href="videos.php">Videos</a></li>
                 <li><a class='nav-anc' href="#">FAQ</a></li>
             </ul>
 

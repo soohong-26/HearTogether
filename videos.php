@@ -20,48 +20,8 @@ session_start();
         }
 
         body {
-            margin: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        header {
             background-color: var(--background);
-            color: #fff;
-            padding: 10px 40px;
-            margin: 20px 20px 0 20px;
-            border-radius: 20px;
-            border: 0.5px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header-title a {
-            text-decoration: none;
-            color: var(--primary);
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        nav ul {
-            display: flex;
-            gap: 48px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--accent);
         }
 
         .greeting {
@@ -96,31 +56,52 @@ session_start();
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 20px;
+            color: var(--text);
         }
 
         .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            display: flex;
+            overflow-x: auto;
             gap: 20px;
-            margin-bottom: 40px;
+            padding-bottom: 10px;
+            scroll-snap-type: x mandatory;
         }
 
         .video-card {
+            min-width: 320px;
+            flex: 0 0 auto;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+        }
+
+        .video-wrapper {
             aspect-ratio: 16 / 9;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .video-card iframe {
+        .video-wrapper iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
+
+        .video-title {
+            font-size: 14px;
+            padding: 10px;
+            color: var(--background);
+            text-align: center;
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+
 
         hr {
             border: none;
@@ -131,41 +112,35 @@ session_start();
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="header-title">
-            <a href="#">HearTogether</a>
-        </div>
-
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a class="active" href="#">Videos</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-
-        <div class="greeting">
-            <?php if (isset($_SESSION['username'])) : ?>
-                <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'icons/user.png'; ?>" alt="Profile Picture">
-                <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                <a href="logout.php" class="logout-icon" title="Logout">⎋</a>
-            <?php else : ?>
-                <img src="icons/user.png" alt="Guest">
-                <span>Hello, Guest</span>
-            <?php endif; ?>
-        </div>
-    </header>
+    <!-- Navigation Bar -->
+    <?php include 'nav.php'; ?>
 
     <main class="video-section">
         <div>
             <h2 class="section-title">How To Sign Basic Conversations</h2>
             <div class="video-grid">
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe></div>
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/abc2" allowfullscreen></iframe></div>
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/abc3" allowfullscreen></iframe></div>
-            </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
+            
         </div>
 
         <hr>
@@ -173,9 +148,26 @@ session_start();
         <div>
             <h2 class="section-title">Common Phrases in Sign Language</h2>
             <div class="video-grid">
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/def1" allowfullscreen></iframe></div>
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/def2" allowfullscreen></iframe></div>
-                <div class="video-card"><iframe src="https://www.youtube.com/embed/def3" allowfullscreen></iframe></div>
+            <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-title">Greeting with Sign Language</div>
+                </div>
             </div>
         </div>
     </main>
