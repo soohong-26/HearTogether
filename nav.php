@@ -75,6 +75,12 @@
         text-decoration: none;
     }
 
+    .nav-links li a.active {
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+
     .greeting {
         justify-content: flex-end;
         align-items: center;
@@ -116,6 +122,9 @@
     </style>
 </head>
 <body>
+
+    <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
+
     <header>
         <!-- Logo -->
         <h2 class="header-title">
@@ -126,9 +135,9 @@
         <nav>
             <ul class="nav-links">
                 <!-- Links when clicked -->
-                <li><a class='nav-anc' href="#">Home</a></li>
-                <li><a class='nav-anc' href="videos.php">Videos</a></li>
-                <li><a class='nav-anc' href="#">FAQ</a></li>
+                <li><a class='nav-anc <?php echo $currentPage == "homepage.php" ? "active" : ""; ?>' href="homepage.php">Home</a></li>
+                <li><a class='nav-anc <?php echo $currentPage == "videos.php" ? "active" : ""; ?>' href="videos.php">Videos</a></li>
+                <li><a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">FAQ</a></li>
             </ul>
 
             <!-- Greeting and Logout -->
