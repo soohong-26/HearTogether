@@ -137,7 +137,7 @@
                 <!-- Links when clicked -->
                 <li><a class='nav-anc <?php echo $currentPage == "homepage.php" ? "active" : ""; ?>' href="homepage.php">Home</a></li>
                 <li><a class='nav-anc <?php echo $currentPage == "videos.php" ? "active" : ""; ?>' href="videos.php">Videos</a></li>
-                <li><a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">FAQ</a></li>
+                <li><a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="#">FAQ</a></li>
             </ul>
 
             <!-- Greeting and Logout -->
