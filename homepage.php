@@ -17,18 +17,25 @@
             --accent: #29bff9;
         }
 
-        body {
+        body, html {
             margin: 0;
             font-family: 'Roboto', sans-serif;
             background-color: var(--background);
             color: var(--text);
+            overflow-y: scroll;           /* Allow vertical scrolling */
+            scrollbar-width: none;        /* Firefox */
+            -ms-overflow-style: none;     /* IE and Edge */
+        }
+
+        body::-webkit-scrollbar {
+            display: none;                /* Chrome, Safari and Opera */
         }
 
         .hero {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 60px 80px;
+            padding: 60px;
             flex-wrap: wrap;
             background-color: var(--background);
         }
@@ -151,7 +158,7 @@
             <a href="videos.php">Start Learning</a>
         </div>
         <div class="hero-img">
-            <img src="assets/images/hero-illustration.png" alt="Sign language illustration">
+            <img src="images/hero-illustration.png" alt="Sign language illustration">
         </div>
     </section>
 
