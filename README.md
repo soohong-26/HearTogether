@@ -8,9 +8,15 @@ The website is an aid for newly parents which had found out that their child may
 ### Login and Register
 - login.php
 - register.php
+- logout.php
 
 ### Default
 - nav.php
+- homepage.php
+
+### Videos
+- videos.php
+- videos_admin.php
 
 # **Database**
 - database.php
