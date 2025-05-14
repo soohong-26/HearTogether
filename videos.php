@@ -1,6 +1,13 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['username'])) {
+    // Optional: add a message to show after redirection
+    header("Location: homepage.php?error=unauthorised");
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

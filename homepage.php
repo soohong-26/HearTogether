@@ -206,6 +206,37 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
     </section>
 
 </body>
+
+<?php if (isset($_GET['error']) && $_GET['error'] === 'unauthorised'): ?>
+    <div id="unauth-toast" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #ff5e57;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-weight: 600;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    ">
+        Please log in to view the videos.
+    </div>
+    <script>
+        const unauthToast = document.getElementById('unauth-toast');
+        if (unauthToast) {
+            setTimeout(() => {
+                unauthToast.style.opacity = '1';
+            }, 100);
+            setTimeout(() => {
+                unauthToast.style.opacity = '0';
+            }, 3000);
+        }
+    </script>
+<?php endif; ?>
+
 <?php if (!empty($logoutMessage)): ?>
     <div id="logout-toast" style="
         position: fixed;
