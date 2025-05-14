@@ -45,7 +45,7 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 60px;
+            padding: 40px 60px 60px 60px;
             flex-wrap: wrap;
             background-color: var(--background);
         }
@@ -231,7 +231,12 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
                 unauthToast.style.opacity = '1';
             }, 100);
             setTimeout(() => {
-                unauthToast.style.opacity = '0';
+                toast.style.opacity = '0';
+
+                // Remove the query parameter without reloading the page
+                const url = new URL(window.location);
+                url.searchParams.delete('error');
+                window.history.replaceState({}, document.title, url);
             }, 3000);
         }
     </script>
