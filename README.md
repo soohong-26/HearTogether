@@ -5,5 +5,18 @@ The website is an aid for newly parents which had found out that their child may
 # **File Structure**
 
 ## Features
+### Login and Register
+- login.php
+- register.php
+- logout.php
+
+### Default
+- nav.php
+- homepage.php
+
+### Videos
+- videos.php
+- videos_admin.php
 
 # **Database**
+- database.php
