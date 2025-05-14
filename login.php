@@ -20,23 +20,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
 
         if (password_verify($password, $user['password'])) {
+            echo "Password verified successfully!";
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['roles'] = $user['roles'];
             $_SESSION['logged_in'] = true;
 
             if ($_SESSION['roles'] == 'admin') {
-                header("Location: #.php");
+                header("Location: admin.php"); // Replace #.php with the correct file name
                 exit();
             } else {
                 header("Location: homepage.php");
                 exit();
             }
         } else {
-            echo "<script>alert('Invalid Password!');</script>";
+            echo "Invalid password!";
         }
     } else {
-        echo "<script>alert('Email does not exist in the database!');</script>";
+        echo "Email does not exist in the database!";
     }
 
     $stmt->close();

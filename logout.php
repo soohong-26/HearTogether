@@ -20,6 +20,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect to the home page or login page
-header("Location: homepage.php");
+header("Location: homepage.php?logout=success");
 exit();
 ?>

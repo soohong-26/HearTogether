@@ -1,3 +1,13 @@
+<?php
+session_start();
+$logoutMessage = '';
+
+if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
+    $logoutMessage = 'You have been successfully logged out.';
+}
+?>
+
+
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
@@ -144,6 +154,17 @@
             max-width: 600px;
             margin: 0 auto;
         }
+        .logout-message {
+            background-color: #29bff9;
+            color: #0a161a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            max-width: 300px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -185,4 +206,37 @@
     </section>
 
 </body>
+<?php if (!empty($logoutMessage)): ?>
+    <div id="logout-toast" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #29bff9;
+        color: #0a161a;
+        padding: 12px 18px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-weight: 600;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    ">
+        <?php echo htmlspecialchars($logoutMessage); ?>
+    </div>
+    <script>
+        // Show the toast
+        const toast = document.getElementById('logout-toast');
+        if (toast) {
+            setTimeout(() => {
+                toast.style.opacity = '1';
+            }, 100); // slight delay to trigger transition
+
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+    </script>
+<?php endif; ?>
+
 </html>
