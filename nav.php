@@ -146,8 +146,10 @@
                     <!-- Profile Picture -->
                     <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'icons/user.png'; ?>" alt="Profile Picture" class="profile">
 
-                    <!-- Username -->
-                    <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <!-- Username with link to profile -->
+                    <a href="profile.php" style="text-decoration: none; color: var(--text); font-weight: 500;">
+                        <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    </a>
 
                     <!-- Logout Button -->
                     <form action="logout.php" method="post" style="display:inline;">

@@ -8,7 +8,6 @@ if (!isset($_SESSION['username'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +28,18 @@ if (!isset($_SESSION['username'])) {
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow-y: scroll; /* allows scrolling */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;     /* Firefox */
+        }
+
+        /* For Chrome, Safari, Opera */
+        body::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;  /* just to be safe */
         }
 
         .greeting {
@@ -108,7 +119,6 @@ if (!isset($_SESSION['username'])) {
             background-color: #f5f5f5;
             font-weight: 500;
         }
-
 
         hr {
             border: none;
