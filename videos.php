@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+require 'database.php';
 
 if (!isset($_SESSION['username'])) {
     // Optional: add a message to show after redirection
@@ -134,31 +135,31 @@ if (!isset($_SESSION['username'])) {
 
     <main class="video-section">
         <div>
-            <h2 class="section-title">How To Sign Basic Conversations</h2>
-            <div class="video-grid">
+    <h2 class="section-title">Common Phrases in Sign Language</h2>
+    <div class="video-grid">
+        <?php
+        // Fetch only GIFs related to 'Common Phrases'
+        $phraseQuery = "SELECT * FROM videos WHERE category = 'common_phrases' ORDER BY video_id DESC";
+        $phraseResult = $conn->query($phraseQuery);
 
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
+        if ($phraseResult->num_rows > 0):
+            while ($row = $phraseResult->fetch_assoc()):
+        ?>
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="videos/<?php echo htmlspecialchars($row['filename']); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>">
                 </div>
+                <div class="video-title"><?php echo htmlspecialchars($row['title']); ?></div>
+            </div>
+        <?php
+            endwhile;
+        else:
+            echo "<p style='color: var(--text);'>No common phrase GIFs available.</p>";
+        endif;
+        ?>
+    </div>
+</div>
 
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
-                </div>
-
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
-                </div>
-            
-        </div>
 
         <hr>
 
