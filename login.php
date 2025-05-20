@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
 
             if ($_SESSION['roles'] == 'admin') {
-                header("Location: admin.php"); // Replace #.php with the correct file name
+                header("Location: homepage.php"); // Replace #.php with the correct file name
                 exit();
             } else {
                 header("Location: homepage.php");
