@@ -3,7 +3,6 @@
 require 'database.php';
 
 if (!isset($_SESSION['username'])) {
-    // Optional: add a message to show after redirection
     header("Location: homepage.php?error=unauthorised");
     exit();
 }
@@ -32,15 +31,14 @@ if (!isset($_SESSION['username'])) {
             margin: 0;
             padding: 0;
             height: 100vh;
-            overflow-y: scroll; /* allows scrolling */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;     /* Firefox */
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
-        /* For Chrome, Safari, Opera */
         body::-webkit-scrollbar {
             width: 0px;
-            background: transparent;  /* just to be safe */
+            background: transparent;
         }
 
         .greeting {
@@ -99,17 +97,20 @@ if (!isset($_SESSION['username'])) {
         }
 
         .video-wrapper {
-            aspect-ratio: 16 / 9;
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #f9f9f9;
+            width: 100%;
+            height: 200px; /* or whatever height you find comfortable */
+            overflow: hidden;
         }
 
-        .video-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .video-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
         .video-title {
@@ -130,65 +131,38 @@ if (!isset($_SESSION['username'])) {
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <?php include 'nav.php'; ?>
+<?php include 'nav.php'; ?>
 
-    <main class="video-section">
+<main class="video-section">
+    <?php
+    $categoryResult = $conn->query("SELECT DISTINCT category FROM videos ORDER BY category ASC");
+
+    while ($cat = $categoryResult->fetch_assoc()):
+        $categoryName = $cat['category'];
+        $stmt = $conn->prepare("SELECT * FROM videos WHERE category = ? ORDER BY video_id DESC");
+        $stmt->bind_param("s", $categoryName);
+        $stmt->execute();
+        $videoResult = $stmt->get_result();
+    ?>
         <div>
-    <h2 class="section-title">Common Phrases in Sign Language</h2>
-    <div class="video-grid">
-        <?php
-        // Fetch only GIFs related to 'Common Phrases'
-        $phraseQuery = "SELECT * FROM videos WHERE category = 'common_phrases' ORDER BY video_id DESC";
-        $phraseResult = $conn->query($phraseQuery);
-
-        if ($phraseResult->num_rows > 0):
-            while ($row = $phraseResult->fetch_assoc()):
-        ?>
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <img src="videos/<?php echo htmlspecialchars($row['filename']); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>">
-                </div>
-                <div class="video-title"><?php echo htmlspecialchars($row['title']); ?></div>
-            </div>
-        <?php
-            endwhile;
-        else:
-            echo "<p style='color: var(--text);'>No common phrase GIFs available.</p>";
-        endif;
-        ?>
-    </div>
-</div>
-
-
-        <hr>
-
-        <div>
-            <h2 class="section-title">Common Phrases in Sign Language</h2>
+            <h2 class="section-title"><?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $categoryName))); ?></h2>
             <div class="video-grid">
-            <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
-                </div>
-
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
-                </div>
-
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/abc1" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-title">Greeting with Sign Language</div>
-                </div>
+                <?php if ($videoResult->num_rows > 0): ?>
+                    <?php while ($video = $videoResult->fetch_assoc()): ?>
+                        <div class="video-card">
+                            <div class="video-wrapper">
+                                <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
+                            </div>
+                            <div class="video-title"><?php echo htmlspecialchars($video['title']); ?></div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p style="color: var(--text);">No videos found for this category.</p>
+                <?php endif; ?>
             </div>
         </div>
-    </main>
-
+        <hr>
+    <?php endwhile; ?>
+</main>
 </body>
 </html>

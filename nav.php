@@ -134,10 +134,28 @@
         <!-- Navigation Panel -->
         <nav>
             <ul class="nav-links">
-                <!-- Links when clicked -->
-                <li><a class='nav-anc <?php echo $currentPage == "homepage.php" ? "active" : ""; ?>' href="homepage.php">Home</a></li>
-                <li><a class='nav-anc <?php echo $currentPage == "videos.php" ? "active" : ""; ?>' href="videos.php">Videos</a></li>
-                <li><a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">FAQ</a></li>
+                <!-- Home Link -->
+                <li>
+                    <a class='nav-anc <?php echo $currentPage == "homepage.php" ? "active" : ""; ?>' 
+                    href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'homepage.php' : 'homepage.php'; ?>">
+                    Home
+                    </a>
+                </li>
+
+                <!-- Videos Link -->
+                <li>
+                    <a class='nav-anc <?php echo $currentPage == "videos.php" || $currentPage == "admin_videos.php" ? "active" : ""; ?>' 
+                    href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'admin_videos.php' : 'videos.php'; ?>">
+                    Videos
+                    </a>
+                </li>
+
+                <!-- FAQ Link -->
+                <li>
+                    <a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">
+                        FAQ
+                    </a>
+                </li>
             </ul>
 
             <!-- Greeting and Logout -->
