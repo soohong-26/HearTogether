@@ -150,6 +150,15 @@
                     </a>
                 </li>
 
+                <!-- User Approval (Admins Only) -->
+                <?php if (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') : ?>
+                    <li>
+                        <a class='nav-anc <?php echo $currentPage == "admin_approval.php" ? "active" : ""; ?>' href="admin_approval.php">
+                            User Approval
+                        </a>
+                    </li>
+                <?php endif; ?>
+
                 <!-- FAQ Link -->
                 <li>
                     <a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">

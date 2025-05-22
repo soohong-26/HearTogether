@@ -10,41 +10,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    // Check only users who are approved
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND is_approved = 1");
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    
+
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
         if (password_verify($password, $user['password'])) {
-            echo "Password verified successfully!";
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['roles'] = $user['roles'];
             $_SESSION['logged_in'] = true;
 
-            if ($_SESSION['roles'] == 'admin') {
-                header("Location: homepage.php"); // Replace #.php with the correct file name
+            if ($_SESSION['roles'] === 'admin') {
+                header("Location: homepage.php"); // Adjust if admin has a separate dashboard
                 exit();
             } else {
                 header("Location: homepage.php");
                 exit();
             }
         } else {
-            echo "Invalid password!";
+            echo "<script>alert('Invalid password!'); window.location.href = 'login.php';</script>";
         }
     } else {
-        echo "Email does not exist in the database!";
+        // Either the email doesn’t exist OR the user isn’t approved yet
+        // So let's do another query just to confirm the cause and give better feedback
+        $checkPendingStmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $checkPendingStmt->bind_param("s", $email);
+        $checkPendingStmt->execute();
+        $pendingResult = $checkPendingStmt->get_result();
+
+        if ($pendingResult->num_rows > 0) {
+            echo "<script>alert('Your account is pending approval. Please wait for an admin to approve your account.'); window.location.href = 'login.php';</script>";
+        } else {
+            echo "<script>alert('Email does not exist in the system.'); window.location.href = 'login.php';</script>";
+        }
+
+        $checkPendingStmt->close();
     }
 
     $stmt->close();
 }
 $conn->close();
 ?>
-
 
 <!-- HTML -->
 <!DOCTYPE html>
