@@ -66,7 +66,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HearTogether - Login</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="css/login-register.css">
+    <link rel="stylesheet" href="css/login-register.css?v=<?= time(); ?>">
 </head>
 <body>
     <div class="login-container"></div>

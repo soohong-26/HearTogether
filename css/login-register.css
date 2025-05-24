@@ -2,12 +2,44 @@
 
 /* Strong Commands */
 :root {
-    --text: #ecf2f4;       
-    --background: #0a161a;    
-    --primary: #87c9e3;      
-    --secondary: #127094;     
-    --accent: #29bff9;         
+  /* Primary Colours */
+  --primary-colour: #4CAF50;         /* Soft Green */
+  --primary-hover: #45A049;
+
+  /* Backgrounds */
+  --background-colour: #f5f7fa;      /* Light Greyish Blue */
+  --container-background: #ffffff;   /* Pure White */
+  --input-background: #ffffff;
+
+  /* Text Colours */
+  --text: #333333;            /* Deep Grey */
+  --placeholder-colour: #999999;     /* Medium Grey */
+  --heading-colour: #2C3E50;         /* Navy Blue-Grey */
+
+  /* Borders & Lines */
+  --border-colour: #cccccc;          /* Light Grey */
+  --focus-border-colour: #4CAF50;    /* Match primary */
+
+  /* Buttons */
+  --button-background: var(--primary-colour);
+  --button-hover: var(--primary-hover);
+  --button-text: #ffffff;
+
+  /* Links */
+  --link-colour: #1a73e8;
+  --link-hover: #1558b0;
+
+  /* Toast */
+  --toast-success-bg: #1d8a47;
+  --toast-error-bg: #ff5e57;
+
+  /* Misc */
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+
 }
+
 
 * {
     font-family: inherit;
@@ -29,7 +61,7 @@ body {
     /* Optional: Fix the background image so it doesn't scroll with the content */
     background-attachment: fixed;
     /* Background colour */
-    background-color: #212121;
+    background-color: var(--background-colour);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -46,10 +78,10 @@ body {
 
 /* Styling for the login box */
 .login-box {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--container-background);
     padding: 20px 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--box-shadow);
     width: 350px;
     text-align: center;
     position: relative;
@@ -58,7 +90,7 @@ body {
 /* Login text styling */
 h2 {
     margin: 40px 0 50px 0;
-    color: white;
+    color: var(--text);
     font-weight: bold;
     font-size: 45px;
 }
@@ -72,9 +104,10 @@ h2 {
 .input-group input {
     width: 250px;
     padding: 10px;
-    border: none;
+    border: 2px;
+    border: 2px solid var(--border-colour);
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--input-background);
     color: var(--text);
     font-size: 16px;
 }
@@ -106,29 +139,30 @@ h2 {
     margin: 10px 10px;
     border: none;
     border-radius: 5px;
-    background-color: var(--secondary);
-    color: white;
+    background-color: var(--button-background);
+    color: var(--button-text);
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .login-btn:hover {
-    background-color: #555;
+    background-color: var(--button-hover);
 }
 
 /* Register text styling */
 .register-text {
     margin-top: 15px;
-    color: white;
+    color: var(--text);
     font-size: 12px;
 }
 
 .register-text a {
-    color: #00A7FF;
+    color: var(--link-colour);
     text-decoration: none;
 }
 
 .register-text a:hover {
     text-decoration: underline;
+    color: var(--link-hover);
 }
