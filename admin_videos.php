@@ -242,6 +242,22 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         #toast.error {
             background-color: var(--toast-error-bg);
         }
+
+        input[type="text"],
+            input[type="file"],
+            select {
+                height: 45px;
+                font-size: 16px;
+                padding: 10px 15px;
+                border-radius: 5px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            ::placeholder {
+                font-size: 16px;
+                color: #888; 
+            }
     </style>
 </head>
 <body>
