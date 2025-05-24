@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_video_id'], $_PO
     exit();
 }
 
-// Handle delete
-if (isset($_GET['delete'])) {
+// Handle delete (only if 'delete' is numeric)
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $id = (int)$_GET['delete'];
 
     // Get filename to delete physical file
