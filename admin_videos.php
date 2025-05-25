@@ -291,7 +291,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             <br><br>
 
             <label for="gif">Upload GIF File</label>
-            <input type="file" name="gif" id="gif" accept=".gif" required>
+            <input type="file" name="gif" id="gif" accept=".gif, .png, .jpeg, .jpg, image/gif, image/png, image/jpeg" required>
 
             <br>
             <button type="submit">Upload GIF</button>

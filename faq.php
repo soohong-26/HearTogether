@@ -1,100 +1,22 @@
 <?php
-session_start();
+require 'database.php';
+
+// Fetch all FAQs grouped by category
+$faqs = [];
+$res = $conn->query("SELECT * FROM faq ORDER BY category ASC, id ASC");
+while ($row = $res->fetch_assoc()) {
+    $faqs[$row['category']][] = $row;
+}
 ?>
 
-<!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HearTogether - FAQ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
-
-        :root {
-            --text: #ecf2f4;
-            --background: #0a161a;
-            --primary: #87c9e3;
-            --secondary: #127094;
-            --third: #666666;
-            --accent: #29bff9;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--background);
-            font-family: 'Roboto', sans-serif;
-            color: var(--text);
-        }
-
-        main {
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        .faq-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .faq-header h2 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .faq-header input[type="text"] {
-            padding: 8px 12px;
-            border-radius: 20px;
-            border: none;
-            width: 200px;
-            font-size: 14px;
-            background-color: #d3d3d3;
-            outline: none;
-        }
-
-        .accordion {
-            background-color: #d3d3d3;
-            color: black;
-            cursor: pointer;
-            padding: 16px;
-            margin-bottom: 16px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .accordion:after {
-            content: "\25BC";
-            font-size: 12px;
-        }
-
-        .accordion.active:after {
-            content: "\25B2";
-        }
-
-        .panel {
-            padding: 0 16px;
-            background-color: #e0e0e0;
-            display: none;
-            overflow: hidden;
-            border-radius: 0 0 10px 10px;
-            margin-top: -12px;
-            margin-bottom: 16px;
-        }
-    </style>
+    <!-- Link the shared FAQ stylesheet -->
+    <link rel="stylesheet" href="css/faq.css?v=<?= time(); ?>">
 </head>
 <body>
 
@@ -102,41 +24,51 @@ session_start();
 
 <main>
     <div class="faq-header">
-        <h2>Category Title</h2>
-        <input type="text" placeholder="🔍 Search...">
+        <h2>Frequently Asked Questions</h2>
+        <input type="text" id="faqSearch" placeholder="🔍 Search...">
     </div>
 
-    <button class="accordion">What is sign language?</button>
-    <div class="panel">
-        <p>Sign language is a visual language using hand gestures, facial expressions, and body language to communicate.</p>
-    </div>
-
-    <button class="accordion">Who can benefit from learning sign language?</button>
-    <div class="panel">
-        <p>Anyone can benefit, including those who are deaf, hard of hearing, or those who want to communicate inclusively.</p>
-    </div>
-
-    <button class="accordion">Is the content beginner-friendly?</button>
-    <div class="panel">
-        <p>Yes! All videos and articles are curated to be suitable for complete beginners.</p>
-    </div>
-
-    <button class="accordion">Do I need an account to access videos?</button>
-    <div class="panel">
-        <p>Some videos are available to guests, but full access requires an account.</p>
-    </div>
+    <?php foreach ($faqs as $category => $items): ?>
+        <div class="category">
+            <h3><?= htmlspecialchars($category) ?></h3>
+            <?php foreach ($items as $faq): ?>
+                <button class="accordion"><?= htmlspecialchars($faq['question']) ?></button>
+                <div class="panel"><p><?= nl2br(htmlspecialchars($faq['answer'])) ?></p></div>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
 </main>
 
 <script>
-    // Accordion script
-    const acc = document.querySelectorAll(".accordion");
-    acc.forEach(button => {
-        button.addEventListener("click", function () {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
-            panel.style.display = panel.style.display === "block" ? "none" : "block";
+// One open at a time
+const acc = document.querySelectorAll(".accordion");
+acc.forEach(button => {
+    button.addEventListener("click", function () {
+        acc.forEach(btn => {
+            if (btn !== this) {
+                btn.classList.remove("active");
+                btn.nextElementSibling.style.display = "none";
+            }
         });
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
     });
+});
+
+// Search/filter function
+const searchInput = document.getElementById('faqSearch');
+searchInput.addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    acc.forEach(button => {
+        const question = button.textContent.toLowerCase();
+        const panel = button.nextElementSibling;
+        const match = question.includes(searchTerm);
+        button.style.display = match ? "flex" : "none";
+        panel.style.display = "none";
+        button.classList.remove("active");
+    });
+});
 </script>
 
 </body>
