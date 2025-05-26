@@ -31,79 +31,137 @@ $pendingUsers = $result->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <title>Admin - User Approvals</title>
     <style>
-        body {
-            background-color: #0a161a;
-            color: #ecf2f4;
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-        }
+    :root {
+        /* Primary Colours */
+        --primary-colour: #6A7BA2;
+        --primary-hover: #5C728A;
 
-        .title {
-            color: #87c9e3;
-            margin-bottom: 20px;
-            padding: 0 20px 0 20px;
-            margin-top: 40px;
-        }
+        /* Backgrounds */
+        --background-colour: rgb(211, 229, 255);
+        --container-background: #ffffff;
+        --input-background: #ffffff;
 
-        .status {
-            padding: 0 20px 0 20px;
-        }
+        /* Text Colours */
+        --text: #333333;
+        --placeholder-colour: #999999;
+        --heading-colour: #2C3E50;
 
-        .approval-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+        /* Borders & Lines */
+        --border-colour: #cccccc;
+        --focus-border-colour: #738678;
 
-        .approval-table th,
-        .approval-table td {
-            padding: 12px 15px;
-            border: 1px solid #87c9e3;
-            text-align: left;
-        }
+        /* Buttons */
+        --button-background: var(--primary-colour);
+        --button-hover: var(--primary-hover);
+        --button-text: #ffffff;
 
-        .approval-table th {
-            background-color: #127094;
-        }
+        /* Links */
+        --link-colour: #1a73e8;
+        --link-hover: #1558b0;
 
-        .approval-table td {
-            background-color: #0f2c35;
-        }
+        /* Toast */
+        --toast-success-bg: #1d8a47;
+        --toast-error-bg: #ff5e57;
 
-        .action-btn {
-            padding: 6px 14px;
-            margin-right: 6px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        /* Misc */
+        --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        --border-radius: 8px;
+        --transition-speed: 0.3s;
+    }
 
-        .approve {
-            background-color: #29bff9;
-            color: #0a161a;
-        }
+    body {
+        background-color: var(--background-colour);
+        color: var(--text);
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+    }
 
-        .decline {
-            background-color: #ff5e57;
-            color: white;
-        }
+    .title {
+        color: var(--primary-colour);
+        margin-bottom: 20px;
+        padding: 0 20px 0 20px;
+        margin-top: 40px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
 
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #29bff9;
-            color: #0a161a;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 9999;
-        }
-    </style>
+    .status {
+        padding: 0 20px 0 20px;
+        color: var(--heading-colour);
+    }
+
+    .approval-table {
+        width: 95%;
+        border-collapse: collapse;
+        margin: 20px auto 0 auto;
+        background: var(--container-background);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+    }
+
+    .approval-table th,
+    .approval-table td {
+        padding: 12px 15px;
+        border: 1px solid var(--border-colour);
+        text-align: left;
+    }
+
+    .approval-table th {
+        background-color: var(--primary-colour);
+        color: var(--button-text);
+        font-weight: 700;
+    }
+
+    .approval-table td {
+        background-color: var(--container-background);
+        color: var(--text);
+    }
+
+    .action-btn {
+        padding: 6px 14px;
+        margin-right: 6px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color var(--transition-speed);
+    }
+
+    .approve {
+        background-color: var(--primary-colour);
+        color: var(--button-text);
+    }
+
+    .approve:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .decline {
+        background-color: var(--toast-error-bg);
+        color: white;
+    }
+
+    .decline:hover {
+        background-color: #d9534f;
+    }
+
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--primary-colour);
+        color: var(--button-text);
+        padding: 12px 18px;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        z-index: 9999;
+    }
+</style>
+
 </head>
 <body>
     <?php include 'nav.php'; ?>

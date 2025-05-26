@@ -6,19 +6,48 @@
 }
 
 :root {
-    --text: #ecf2f4;
-    --background: #0a161a;
-    --primary: #87c9e3;
-    --secondary: #127094;
-    --third: #666666;
-    --accent: #29bff9;
+    /* Primary Colours */
+    --primary-colour: #6A7BA2;
+    --primary-hover: #5C728A;
+
+    /* Backgrounds */
+    --background-colour: rgb(211, 229, 255);
+    --container-background: #ffffff;
+    --input-background: #ffffff;
+
+    /* Text Colours */
+    --text: #333333;
+    --placeholder-colour: #999999;
+    --heading-colour: #2C3E50;
+
+    /* Borders & Lines */
+    --border-colour: #cccccc;
+    --focus-border-colour: #738678;
+
+    /* Buttons */
+    --button-background: var(--primary-colour);
+    --button-hover: var(--primary-hover);
+    --button-text: #ffffff;
+
+    /* Links */
+    --link-colour: #1a73e8;
+    --link-hover: #1558b0;
+
+    /* Toast */
+    --toast-success-bg: #1d8a47;
+    --toast-error-bg: #ff5e57;
+
+    /* Misc */
+    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
 }
 
 /* Body base styles */
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--background);
+    background-color: var(--background-colour);
     font-family: 'Roboto', sans-serif;
     color: var(--text);
 }
@@ -26,7 +55,7 @@ body {
 /* Shared main container */
 main {
     padding: 60px 30px 40px 30px;
-    max-width: 10px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -46,29 +75,33 @@ body.admin .admin-header h2 {
     margin: 0;
     font-size: 22px;
     font-weight: 700;
+    color: var(--primary-colour);
 }
 
 .faq-header input[type="text"] {
     padding: 8px 12px;
     border-radius: 20px;
-    border: none;
+    border: 1px solid var(--border-colour);
     width: 200px;
     font-size: 14px;
-    background-color: #d3d3d3;
+    background-color: var(--input-background);
+    color: var(--text);
     outline: none;
 }
 
 /* FAQ Form (public and admin) */
 .faq-form {
-    background: var(--secondary);
+    background: var(--container-background);
     color: var(--text);
     padding: 24px;
     border-radius: 12px;
     margin-bottom: 40px;
     max-width: 100%;
+    box-shadow: var(--box-shadow);
 }
 .faq-form label {
     font-weight: bold;
+    color: var(--heading-colour);
 }
 .faq-form input,
 .faq-form select,
@@ -79,47 +112,56 @@ body.admin .admin-header h2 {
     margin-bottom: 18px;
     padding: 10px;
     border-radius: 6px;
-    border: none;
+    border: 1px solid var(--border-colour);
     font-size: 15px;
     display: block;
-    background: #fff;
+    background: var(--input-background);
+    color: var(--text);
+    box-sizing: border-box;
+    transition: border-color var(--transition-speed);
 }
 .faq-form textarea {
     resize: vertical;
 }
 .faq-form button {
-    background: var(--accent);
-    color: var(--background);
+    background: var(--button-background);
+    color: var(--button-text);
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background var(--transition-speed);
+    border: none;
 }
 .faq-form button:hover {
-    background: #1fa6e0;
+    background: var(--button-hover);
 }
 
 /* Category headings */
 .category,
 body.admin .category-box {
     margin-bottom: 40px;
+    background: var(--container-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 22px 20px 18px 20px;
 }
 .category h3,
 body.admin .category-box h3 {
     margin-bottom: 20px;
     font-size: 18px;
-    color: var(--accent);
+    color: var(--primary-colour);
     margin-top: 0;
+    font-weight: 600;
 }
 
 /* Public FAQ Accordion */
 .accordion {
-    background-color: #d3d3d3;
-    color: black;
+    background-color: #e7ecf3;
+    color: var(--text);
     cursor: pointer;
     padding: 16px;
     margin-bottom: 16px;
     width: 100%;
-    border: none;
+    border: 1px solid var(--border-colour);
     text-align: left;
     outline: none;
     border-radius: 10px;
@@ -138,7 +180,7 @@ body.admin .category-box h3 {
 }
 .panel {
     padding: 0 16px 16px;
-    background-color: #e0e0e0;
+    background-color: #f5f7fa;
     display: none;
     overflow: hidden;
     border-radius: 0 0 10px 10px;
@@ -151,7 +193,7 @@ body.admin .category-box h3 {
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
-    background: #e5f1f8;
+    background: #e7ecf3;
     padding: 6px 10px;
     border-radius: 6px;
     transition: background 0.2s;
@@ -160,25 +202,25 @@ body.admin .category-box h3 {
 .faq-field input[type="text"] {
     flex: 1 1 auto;
     font-size: 15px;
-    border: 1.5px solid var(--accent);
+    border: 1.5px solid var(--primary-colour);
     border-radius: 5px;
     padding: 8px;
-    background: #e5f1f8;
-    color: #1a2327;
+    background: var(--input-background);
+    color: var(--text);
     transition: border 0.2s;
 }
 
 .faq-field input[type="text"]:focus {
     outline: none;
-    border: 2px solid var(--primary);
+    border: 2px solid var(--primary-hover);
     background: #fff;
 }
 
 .confirm-btn {
     display: none;
     padding: 8px 18px 8px 14px;
-    background: var(--accent);
-    color: var(--background);
+    background: var(--button-background);
+    color: var(--button-text);
     border: none;
     border-radius: 6px;
     font-weight: 600;
@@ -186,12 +228,12 @@ body.admin .category-box h3 {
     margin-left: 8px;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(60,200,255,0.08);
-    transition: background 0.2s, transform 0.1s;
+    transition: background var(--transition-speed), transform 0.1s;
     position: relative;
 }
 
 .confirm-btn:hover {
-    background: #1fa6e0;
+    background: var(--button-hover);
     transform: translateY(-2px) scale(1.05);
 }
 
@@ -201,7 +243,7 @@ body.admin .category-box h3 {
 
 .delete-btn {
     padding: 6px 20px;
-    background: #ff5e57;
+    background: var(--toast-error-bg);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -220,12 +262,13 @@ body.admin .category-box h3 {
 
 /* Admin-only FAQ list styles */
 body.admin .faq-item {
-    background: #d3d3d3;
-    color: #0a161a;
+    background: #f3f6fa;
+    color: var(--text);
     border-radius: 10px;
     margin-bottom: 18px;
     padding: 18px 16px 12px 16px;
     position: relative;
+    border: 1px solid var(--border-colour);
 }
 body.admin .faq-item .faq-q,
 body.admin .faq-item .faq-a {
@@ -233,12 +276,14 @@ body.admin .faq-item .faq-a {
     padding: 6px;
     border-radius: 5px;
     transition: background 0.1s;
-    background: #fff;
+    background: var(--input-background);
+    color: var(--text);
+    border: 1.5px solid var(--border-colour);
 }
 body.admin .faq-item .faq-q[contenteditable="true"],
 body.admin .faq-item .faq-a[contenteditable="true"] {
-    background: #e5f1f8;
-    outline: 2px solid var(--accent);
+    background: #e7ecf3;
+    outline: 2px solid var(--primary-colour);
 }
 body.admin .faq-item .faq-actions {
     position: absolute;
@@ -246,7 +291,7 @@ body.admin .faq-item .faq-actions {
     top: 10px;
 }
 body.admin .faq-item .faq-actions button {
-    background: #ff5e57;
+    background: var(--toast-error-bg);
     color: white;
     border: none;
     border-radius: 5px;
@@ -254,6 +299,7 @@ body.admin .faq-item .faq-actions button {
     font-size: 13px;
     cursor: pointer;
     margin-left: 8px;
+    transition: background 0.18s;
 }
 body.admin .faq-item .faq-actions button:hover {
     background: #e84840;
@@ -264,13 +310,14 @@ body.admin .faq-item .faq-actions button:hover {
     position: fixed;
     top: 30px;
     right: 30px;
-    background: var(--accent);
-    color: #fff;
+    background: var(--primary-colour);
+    color: var(--button-text);
     padding: 15px 22px;
     border-radius: 8px;
     font-weight: bold;
     z-index: 9999;
     display: none;
+    box-shadow: var(--box-shadow);
 }
 
 /* Responsive adjustments */

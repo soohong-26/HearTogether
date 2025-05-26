@@ -56,7 +56,7 @@ $categories = array_keys($faqs);
     <meta charset="UTF-8">
     <title>Admin FAQ Management</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="css/faq.css?v=<?= time(); ?>">
 </head>
 <body class="admin">
 <?php include 'nav.php'; ?>

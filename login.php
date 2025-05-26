@@ -83,7 +83,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="email" id="loginEmail" placeholder="Email" name="email" required>
                     <span class="icon">
-                        <img src="icons/mail.png" alt="Email Icon">
+                        <img src="icons/mail_black.svg" alt="Email Icon">
                     </span>
                 </div>
 
@@ -91,7 +91,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="password" id="loginPassword" placeholder="Password" name="password" required> 
                     <span class="icon">
-                        <img src="icons/lock2.png" alt="Password Icon" id="loginPasswordIcon" class="password-icon">
+                        <img src="icons/lock2_black.svg" alt="Password Icon" id="loginPasswordIcon" class="password-icon">
                     </span>
                 </div>
 
@@ -114,10 +114,10 @@ $conn->close();
             // Check current type of the password field
             if (passwordField.type === "password") {
                 passwordField.type = "text"; // Show the password
-                icon.src = "icons/unlock.png"; // Change to unlock icon
+                icon.src = "icons/unlock_black.svg"; // Change to unlock icon
             } else {
                 passwordField.type = "password"; // Hide the password
-                icon.src = "icons/lock2.png"; // Change to lock icon
+                icon.src = "icons/lock2_black.svg"; // Change to lock icon
             }
         }
 

@@ -1,24 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* Strong Commands */
 :root {
   /* Primary Colours */
-  --primary-colour: #4CAF50;         /* Soft Green */
-  --primary-hover: #45A049;
+  --primary-colour: #6A7BA2;
+  --primary-hover: #5C728A;
 
   /* Backgrounds */
-  --background-colour: #f5f7fa;      /* Light Greyish Blue */
-  --container-background: #ffffff;   /* Pure White */
+  --background-colour: rgb(211, 229, 255);
+  --container-background: #ffffff;
   --input-background: #ffffff;
 
   /* Text Colours */
-  --text: #333333;            /* Deep Grey */
-  --placeholder-colour: #999999;     /* Medium Grey */
-  --heading-colour: #2C3E50;         /* Navy Blue-Grey */
+  --text: #333333;
+  --placeholder-colour: #999999;
+  --heading-colour: #2C3E50;
 
   /* Borders & Lines */
-  --border-colour: #cccccc;          /* Light Grey */
-  --focus-border-colour: #4CAF50;    /* Match primary */
+  --border-colour: #cccccc;
+  --focus-border-colour: #738678;
 
   /* Buttons */
   --button-background: var(--primary-colour);
@@ -35,134 +34,159 @@
 
   /* Misc */
   --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  --border-radius: 8px;
+  --border-radius: 10px;
   --transition-speed: 0.3s;
-
 }
-
 
 * {
-    font-family: inherit;
+  font-family: inherit;
 }
 
-/* General body styling */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    /* Set the background image */
-    background-image: url('/images/wallpaper.png');
-    /* Ensure the image covers the entire background */
-    background-size: cover;
-    /* Center the image */
-    background-position: center;
-    /* Prevent the image from repeating */
-    background-repeat: no-repeat;
-    /* Optional: Fix the background image so it doesn't scroll with the content */
-    background-attachment: fixed;
-    /* Background colour */
-    background-color: var(--background-colour);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-image: url('/images/wallpaper.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: var(--background-colour);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Container for the login box */
+/* Container for the login/register box */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
-/* Styling for the login box */
+/* Box styling */
 .login-box {
-    background-color: var(--container-background);
-    padding: 20px 20px;
-    border-radius: 10px;
-    box-shadow: var(--box-shadow);
-    width: 350px;
-    text-align: center;
-    position: relative;
+  background-color: var(--container-background);
+  padding: 28px 22px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 350px;
+  text-align: center;
+  position: relative;
 }
 
-/* Login text styling */
 h2 {
-    margin: 40px 0 50px 0;
-    color: var(--text);
-    font-weight: bold;
-    font-size: 45px;
+  margin: 36px 0 40px 0;
+  color: var(--primary-colour);
+  font-weight: bold;
+  font-size: 36px;
+  letter-spacing: 1px;
 }
 
 /* Input group styling */
 .input-group {
-    position: relative;
-    margin-bottom: 20px;
+  position: relative;
+  margin-bottom: 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .input-group input {
-    width: 250px;
-    padding: 10px;
-    border: 2px;
-    border: 2px solid var(--border-colour);
-    border-radius: 5px;
-    background: var(--input-background);
-    color: var(--text);
-    font-size: 16px;
+  width: 100%;
+  padding: 12px 40px 12px 36px;
+  border: 1.5px solid var(--border-colour);
+  border-radius: 6px;
+  background: var(--input-background);
+  color: var(--text);
+  font-size: 16px;
+  transition: border-color var(--transition-speed);
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: var(--focus-border-colour);
+  outline: none;
+  background: #f4f8fc;
 }
 
 .input-group input::placeholder {
-    color: var(--text);
-    opacity: 0.4;
+  color: var(--placeholder-colour);
+  opacity: 1;
+  font-size: 15px;
 }
 
-.input-group .icon {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+.input-group .icon{
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
 }
 
 .input-group img {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
-/* Login button styling */
+/* Button styling */
 .login-btn {
-    width: 150px;
-    padding: 10px;
-    margin: 10px 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: var(--button-background);
-    color: var(--button-text);
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 12px 0;
+  margin: 10px 0 0 0;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--button-background);
+  color: var(--button-text);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+  box-shadow: var(--box-shadow);
 }
 
 .login-btn:hover {
-    background-color: var(--button-hover);
+  background-color: var(--button-hover);
 }
 
 /* Register text styling */
 .register-text {
-    margin-top: 15px;
-    color: var(--text);
-    font-size: 12px;
+  margin-top: 18px;
+  color: var(--text);
+  font-size: 14px;
 }
 
 .register-text a {
-    color: var(--link-colour);
-    text-decoration: none;
+  color: var(--link-colour);
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .register-text a:hover {
-    text-decoration: underline;
-    color: var(--link-hover);
+  text-decoration: underline;
+  color: var(--link-hover);
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+  .login-box {
+    padding: 16px 6px;
+    min-width: unset;
+    max-width: 95vw;
+  }
+  h2 {
+    font-size: 28px;
+    margin: 22px 0 30px 0;
+  }
+  .input-group input {
+    font-size: 15px;
+    padding: 12px 34px 12px 32px;
+  }
 }

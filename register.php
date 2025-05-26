@@ -107,7 +107,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="email" id="registerEmail" placeholder="Email" name="email" required>
                     <span class="icon">
-                        <img src="icons/mail.png" alt="Email Icon">
+                        <img src="icons/mail_black.svg" alt="Email Icon">
                     </span>
                 </div>
 
@@ -115,7 +115,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="text" id="registerUsername" placeholder="Username" name="username" required>
                     <span class="icon">
-                        <img src="icons/user.png" alt="Password Icon">
+                        <img src="icons/user_black.svg" alt="Password Icon">
                     </span>
                 </div>
 
@@ -123,7 +123,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="password" id="registerPassword" placeholder="Password" name="password" required>
                     <span class="icon toggle-password">
-                        <img src="icons/lock2.png" alt="Password Icon" id="registerPasswordIcon" class="password-icon">
+                        <img src="icons/lock2_black.svg" alt="Password Icon" id="registerPasswordIcon" class="password-icon">
                     </span>
                 </div>
 
@@ -131,7 +131,7 @@ $conn->close();
                 <div class="input-group">
                     <input type="password" id="confirmPassword" placeholder="Reenter Password" name="check_password" required>
                     <span class="icon">
-                        <img src="icons/lock2.png" alt="Password Icon" id="confirmPasswordIcon" class="password-icon">
+                        <img src="icons/lock2_black.svg" alt="Password Icon" id="confirmPasswordIcon" class="password-icon">
                     </span>
                 </div>
 
@@ -200,13 +200,12 @@ $conn->close();
             const passwordField = document.getElementById(passwordFieldId);
             const icon = document.getElementById(iconId);
 
-            // Check current type of the password field
             if (passwordField.type === "password") {
-                passwordField.type = "text"; // Show the password
-                icon.src = "icons/unlock.png"; // Change to unlock icon
+                passwordField.type = "text";
+                icon.src = "icons/unlock_black.svg";
             } else {
-                passwordField.type = "password"; // Hide the password
-                icon.src = "icons/lock2.png"; // Change to lock icon
+                passwordField.type = "password";
+                icon.src = "icons/lock2_black.svg";
             }
         }
 

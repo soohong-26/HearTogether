@@ -7,7 +7,6 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
 }
 ?>
 
-
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
@@ -20,34 +19,65 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
         :root {
-            --text: #ecf2f4;
-            --background: #0a161a;
-            --primary: #87c9e3;
-            --secondary: #127094;
-            --accent: #29bff9;
+            /* Primary Colours */
+            --primary-colour: #6A7BA2;
+            --primary-hover: #5C728A;
+
+            /* Backgrounds */
+            --background-colour:rgb(211, 229, 255);
+            --container-background: #ffffff;
+            --input-background: #ffffff;
+
+            /* Text Colours */
+            --text: #333333;
+            --placeholder-colour: #999999;
+            --heading-colour: #2C3E50;
+
+            /* Borders & Lines */
+            --border-colour: #cccccc;
+            --focus-border-colour: #738678;
+
+            /* Buttons */
+            --button-background: var(--primary-colour);
+            --button-hover: var(--primary-hover);
+            --button-text: #ffffff;
+
+            /* Links */
+            --link-colour: #1a73e8;
+            --link-hover: #1558b0;
+
+            /* Toast */
+            --toast-success-bg: #1d8a47;
+            --toast-error-bg: #ff5e57;
+
+            /* Misc */
+            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
         }
 
         body, html {
             margin: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: var(--background);
+            background-color: var(--background-colour);
             color: var(--text);
-            overflow-y: scroll;           /* Allow vertical scrolling */
-            scrollbar-width: none;        /* Firefox */
-            -ms-overflow-style: none;     /* IE and Edge */
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         body::-webkit-scrollbar {
-            display: none;                /* Chrome, Safari and Opera */
+            display: none;
         }
 
         .hero {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 40px 60px 60px 60px;
+            padding: 0 60px 0 60px;
             flex-wrap: wrap;
-            background-color: var(--background);
+            background-color: var(--container-background);
+            margin: 40px 0 20px 0;
         }
 
         .hero-text {
@@ -60,12 +90,13 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
             font-weight: 700;
             margin-bottom: 20px;
             line-height: 1.3;
+            color: var(--heading-colour);
         }
 
         .hero-text p {
             font-size: 18px;
             margin-bottom: 30px;
-            color: var(--primary);
+            color: var(--primary-colour);
         }
 
         .hero-text a {
@@ -73,15 +104,15 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
             padding: 12px 28px;
             font-size: 16px;
             font-weight: 600;
-            color: var(--background);
-            background-color: var(--accent);
-            border-radius: 10px;
+            color: var(--button-text);
+            background-color: var(--button-background);
+            border-radius: var(--border-radius);
             text-decoration: none;
-            transition: background-color 0.3s ease;
+            transition: background-color var(--transition-speed) ease;
         }
 
         .hero-text a:hover {
-            background-color: #22a2d4;
+            background-color: var(--button-hover);
         }
 
         .hero-img {
@@ -90,7 +121,7 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         }
 
         .hero-img img {
-            max-width: 400px;
+            max-width: 300px;
             width: 100%;
             height: auto;
         }
@@ -114,12 +145,16 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
 
         .cta-buttons a {
             text-decoration: none;
-            background-color: var(--accent);
-            color: var(--background);
+            background-color: var(--button-background);
+            color: var(--button-text);
             padding: 12px 24px;
             margin: 0 10px;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             font-weight: 600;
+        }
+
+        .cta-buttons a:hover {
+            background-color: var(--button-hover);
         }
 
         .features {
@@ -131,17 +166,17 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         }
 
         .feature-box {
-            background-color: var(--primary);
+            background-color: var(--primary-colour);
             padding: 20px;
             border-radius: 15px;
             width: 280px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.09);
         }
 
         .feature-box h3 {
             margin-bottom: 10px;
-            color: var(--background);
+            color: var(--button-text);
         }
 
         .testimonials {
@@ -149,21 +184,26 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
             margin: 60px 20px;
         }
 
+        .testimonials h2 {
+            color: var(--heading-colour);
+        }
+
         .testimonials p {
             font-style: italic;
             max-width: 600px;
             margin: 0 auto;
         }
+
         .logout-message {
-            background-color: #29bff9;
-            color: #0a161a;
+            background-color: var(--primary-colour);
+            color: var(--button-text);
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             font-weight: 600;
             max-width: 300px;
             margin: 20px auto;
             text-align: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--box-shadow);
         }
     </style>
 </head>
@@ -212,10 +252,10 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         position: fixed;
         top: 20px;
         right: 20px;
-        background-color: #ff5e57;
-        color: white;
+        background-color: var(--toast-error-bg);
+        color: #fff;
         padding: 12px 18px;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         font-weight: 600;
         z-index: 9999;
@@ -231,7 +271,7 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
                 unauthToast.style.opacity = '1';
             }, 100);
             setTimeout(() => {
-                toast.style.opacity = '0';
+                unauthToast.style.opacity = '0';
 
                 // Remove the query parameter without reloading the page
                 const url = new URL(window.location);
@@ -247,10 +287,10 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         position: fixed;
         top: 20px;
         right: 20px;
-        background-color: #29bff9;
-        color: #0a161a;
+        background-color: var(--primary-colour);
+        color: var(--button-text);
         padding: 12px 18px;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         font-weight: 600;
         z-index: 9999;
@@ -265,9 +305,7 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
         if (toast) {
             setTimeout(() => {
                 toast.style.opacity = '1';
-            }, 100); // slight delay to trigger transition
-
-            // Hide after 3 seconds
+            }, 100);
             setTimeout(() => {
                 toast.style.opacity = '0';
             }, 3000);

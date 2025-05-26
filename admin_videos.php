@@ -88,18 +88,46 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
         :root {
-            --text: #ecf2f4;
-            --background: #0a161a;
-            --primary: #87c9e3;
-            --secondary: #127094;
-            --accent: #29bff9;
+            /* Primary Colours */
+            --primary-colour: #6A7BA2;
+            --primary-hover: #5C728A;
+
+            /* Backgrounds */
+            --background-colour:rgb(211, 229, 255);
+            --container-background: #ffffff;
+            --input-background: #ffffff;
+
+            /* Text Colours */
+            --text: #333333;
+            --placeholder-colour: #999999;
+            --heading-colour: #2C3E50;
+
+            /* Borders & Lines */
+            --border-colour: #cccccc;
+            --focus-border-colour: #738678;
+
+            /* Buttons */
+            --button-background: var(--primary-colour);
+            --button-hover: var(--primary-hover);
+            --button-text: #ffffff;
+
+            /* Links */
+            --link-colour: #1a73e8;
+            --link-hover: #1558b0;
+
+            /* Toast */
             --toast-success-bg: #1d8a47;
             --toast-error-bg: #ff5e57;
+
+            /* Misc */
+            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--background);
+            background-color: var(--background-colour);
             margin: 0;
             padding: 0;
             overflow-y: scroll;
@@ -121,7 +149,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             font-size: 22px;
             font-weight: bold;
             margin: 40px 0 20px;
-            color: var(--text);
+            color: var(--heading-colour);
         }
 
         .video-grid {
@@ -135,9 +163,9 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         .video-card {
             min-width: 320px;
             flex: 0 0 auto;
-            background-color: white;
+            background-color: var(--container-background);
             border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -150,7 +178,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             justify-content: center;
             background-color: #f9f9f9;
             width: 100%;
-            height: 200px; /* or whatever height you find comfortable */
+            height: 200px;
             overflow: hidden;
         }
 
@@ -164,22 +192,23 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         .video-title {
             font-size: 14px;
             padding: 10px;
-            color: var(--background);
+            color: var(--heading-colour);
             text-align: center;
-            background-color: #f5f5f5;
+            background-color: #f5f7fa;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
+            transition: background-color var(--transition-speed);
         }
 
         .video-title[contenteditable="true"] {
-            outline: 2px solid var(--accent);
+            outline: 2px solid var(--primary-colour);
             background-color: #e8f4fb;
         }
 
         .admin-controls {
             text-align: center;
-            background-color: #f5f5f5;
+            background-color: #f5f7fa;
             padding: 10px;
         }
 
@@ -187,20 +216,25 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
-            color: red;
+            color: #ff5e57;
             margin: 0 10px;
+            transition: color var(--transition-speed);
+        }
+        .admin-controls a:hover {
+            color: var(--primary-colour);
         }
 
         .upload-form {
-            background-color: var(--secondary);
+            background-color: var(--primary-colour);
             padding: 20px;
             margin: 20px 0;
             border-radius: 10px;
-            color: white;
+            color: var(--button-text);
         }
 
         .upload-form label {
             font-weight: bold;
+            color: var(--button-text);
         }
 
         .upload-form input,
@@ -210,12 +244,33 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             width: 100%;
             padding: 10px;
             border-radius: 6px;
-            border: none;
+            border: 1px solid var(--border-colour);
             font-size: 14px;
+            background-color: var(--input-background);
+            color: var(--text);
+        }
+
+        .upload-form input[type="file"] {
+            background-color: var(--container-background);
+        }
+
+        .upload-form button {
+            background-color: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+            margin-top: 18px;
+        }
+
+        .upload-form button:hover {
+            background-color: var(--button-hover);
         }
 
         .upload-form input::placeholder {
             font-size: 14px;
+            color: var(--placeholder-colour);
         }
 
         /* Toast styles */
@@ -225,7 +280,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             right: 20px;
             max-width: 320px;
             padding: 14px 20px;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             font-weight: 600;
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -244,20 +299,21 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         }
 
         input[type="text"],
-            input[type="file"],
-            select {
-                height: 45px;
-                font-size: 16px;
-                padding: 10px 15px;
-                border-radius: 5px;
-                width: 100%;
-                box-sizing: border-box;
-            }
+        input[type="file"],
+        select {
+            height: 45px;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--border-colour);
+        }
 
-            ::placeholder {
-                font-size: 16px;
-                color: #888; 
-            }
+        ::placeholder {
+            font-size: 16px;
+            color: var(--placeholder-colour);
+        }
     </style>
 </head>
 <body>

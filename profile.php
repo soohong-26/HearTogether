@@ -30,70 +30,103 @@ $profile_img = !empty($user['profile_img']) ? $user['profile_img'] : 'icons/user
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title>HearTogether - User Profile</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
-        :root {
-            --text: #ecf2f4;
-            --background: #0a161a;
-            --primary: #87c9e3;
-            --secondary: #127094;
-            --accent: #29bff9;
-        }
+    :root {
+        /* Primary Colours */
+        --primary-colour: #6A7BA2;
+        --primary-hover: #5C728A;
 
-        body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-        }
+        /* Backgrounds */
+        --background-colour: rgb(211, 229, 255);
+        --container-background: #ffffff;
+        --input-background: #ffffff;
 
-        .profile-container {
-            max-width: 600px;
-            margin: 60px auto;
-            background-color: var(--secondary);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
+        /* Text Colours */
+        --text: #333333;
+        --placeholder-colour: #999999;
+        --heading-colour: #2C3E50;
 
-        .profile-container img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 3px solid var(--accent);
-        }
+        /* Borders & Lines */
+        --border-colour: #cccccc;
+        --focus-border-colour: #738678;
 
-        .profile-container h2 {
-            margin: 10px 0;
-            color: var(--accent);
-        }
+        /* Buttons */
+        --button-background: var(--primary-colour);
+        --button-hover: var(--primary-hover);
+        --button-text: #ffffff;
 
-        .profile-container p {
-            font-size: 16px;
-            color: var(--text);
-        }
+        /* Links */
+        --link-colour: #1a73e8;
+        --link-hover: #1558b0;
 
-        .back-home {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 10px 20px;
-            background-color: var(--accent);
-            color: var(--background);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
+        /* Toast */
+        --toast-success-bg: #1d8a47;
+        --toast-error-bg: #ff5e57;
 
-        .back-home:hover {
-            background-color: #22a2d4;
-        }
-    </style>
+        /* Misc */
+        --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        --border-radius: 8px;
+        --transition-speed: 0.3s;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        background-color: var(--background-colour);
+        color: var(--text);
+    }
+
+    .profile-container {
+        max-width: 600px;
+        margin: 60px auto;
+        background-color: var(--container-background);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: var(--box-shadow);
+        text-align: center;
+    }
+
+    .profile-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        border: 3px solid var(--primary-colour);
+        background: var(--background-colour);
+    }
+
+    .profile-container h2 {
+        margin: 10px 0;
+        color: var(--primary-colour);
+        font-weight: 700;
+    }
+
+    .profile-container p {
+        font-size: 16px;
+        color: var(--text);
+    }
+
+    .back-home {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 10px 20px;
+        background-color: var(--button-background);
+        color: var(--button-text);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        transition: background-color var(--transition-speed);
+        box-shadow: var(--box-shadow);
+    }
+
+    .back-home:hover {
+        background-color: var(--button-hover);
+    }
+</style>
 </head>
 <body>
 
