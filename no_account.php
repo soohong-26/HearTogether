@@ -13,100 +13,126 @@ if (isset($_SESSION['username'])) {
     <meta charset="UTF-8">
     <title>Account Required</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-        :root {
-            --text: #ecf2f4;       
-            --background: #0a161a;    
-            --primary: #87c9e3;      
-            --secondary: #127094; 
-            --third: #666666;    
-            --accent: #29bff9;         
-            }
+    :root {
+        /* Primary Colours */
+        --primary-colour: #6A7BA2;
+        --primary-hover: #5C728A;
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Backgrounds */
+        --background-colour: rgb(211, 229, 255);
+        --container-background: #ffffff;
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+        /* Text Colours */
+        --text: #333333;
+        --heading-colour: #2C3E50;
 
-        .container {
-            background-color: var(--third);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
+        /* Borders & Lines */
+        --border-colour: #cccccc;
 
-        h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
+        /* Buttons */
+        --button-background: var(--primary-colour);
+        --button-hover: var(--primary-hover);
+        --button-text: #ffffff;
 
-        p {
-            color: var(--text);
-            margin-bottom: 25px;
-        }
+        /* Accent */
+        --accent: #29bff9;
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 5px;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
+        /* Misc */
+        --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        --border-radius: 16px;
+        --transition-speed: 0.3s;
+    }
 
-        .login-btn {
-            background-color: var(--button);
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        .login-btn:hover {
-            background-color: #357ABD;
-        }
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: var(--background-colour);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
 
-        .register-btn {
-            background-color: var(--accent);
-        }
+    .container {
+        background-color: var(--container-background);
+        padding: 40px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
 
-        .register-btn:hover {
-            background-color: #357ABD;
-        }
+    h2 {
+        color: var(--primary-colour);
+        margin-bottom: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
 
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: var(--text);
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            background: none;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
+    p {
+        color: var(--text);
+        margin-bottom: 25px;
+        font-size: 17px;
+    }
 
-        .back-btn:hover {
-            color: var(--primary);
-        }
+    .btn {
+        display: inline-block;
+        padding: 10px 22px;
+        margin: 10px 5px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        color: var(--button-text);
+        transition: background-color var(--transition-speed);
+        font-size: 16px;
+        box-shadow: var(--box-shadow);
+    }
 
-    </style>
+    .login-btn {
+        background-color: var(--button-background);
+    }
+
+    .login-btn:hover {
+        background-color: var(--button-hover);
+    }
+
+    .register-btn {
+        background-color: var(--accent);
+    }
+
+    .register-btn:hover {
+        background-color: #22a2d4;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: var(--primary-colour);
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        background: none;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: color var(--transition-speed);
+    }
+
+    .back-btn:hover {
+        color: var(--accent);
+    }
+
+</style>
 </head>
 <body>
     <!-- Back button -->

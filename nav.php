@@ -206,6 +206,15 @@
                         FAQ
                     </a>
                 </li>
+
+                <!-- FAQ Control Panel (Admins Only) -->
+                <?php if (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') : ?>
+                    <li>
+                        <a class='nav-anc <?php echo $currentPage == "admin_faq.php" ? "active" : ""; ?>' href="admin_faq.php">
+                            FAQ Control
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
 
             <!-- Greeting and Logout -->
@@ -228,7 +237,7 @@
 
                 <?php else : ?>
                     <a href="no_account.php">
-                        <img src="icons/user.png" alt="Guest" class="profile">
+                        <img src="icons/user_black.svg" alt="Guest" class="profile">
                         <span>Hello, Guest</span>
                     </a>
                 <?php endif; ?>
