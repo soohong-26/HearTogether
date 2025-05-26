@@ -92,15 +92,21 @@ $categories = array_keys($faqs);
             <div class="faq-item" data-id="<?= $faq['id'] ?>">
                 <div class="faq-field">
                     <input type="text" class="faq-q" value="<?= htmlspecialchars($faq['question']) ?>" data-field="question" autocomplete="off">
-                    <button class="confirm-btn" style="display:none;" data-field="question">Confirm</button>
+                    <button class="confirm-btn" style="display:none;" data-field="question" title="Confirm">
+                        <img src="icons/save_black.svg" alt="Confirm" class="confirm-icon">
+                    </button>
                     <form method="get" style="margin:0;display:inline;">
                         <input type="hidden" name="delete" value="<?= $faq['id'] ?>">
-                        <button type="submit" class="delete-btn" onclick="return confirm('Delete this FAQ?')">Delete</button>
+                        <button type="submit" class="delete-btn" title="Delete FAQ" onclick="return confirm('Delete this FAQ?')">
+                            <img src="icons/delete_black.svg" alt="Delete" class="delete-icon">
+                        </button>
                     </form>
                 </div>
                 <div class="faq-field">
                     <input type="text" class="faq-a" value="<?= htmlspecialchars($faq['answer']) ?>" data-field="answer" autocomplete="off">
-                    <button class="confirm-btn" style="display:none;" data-field="answer">Confirm</button>
+                    <button class="confirm-btn" style="display:none;" data-field="answer" title="Confirm">
+                        <img src="icons/save_black.svg" alt="Confirm" class="confirm-icon">
+                    </button>
                 </div>
             </div>
         <?php endforeach; ?>

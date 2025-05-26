@@ -218,8 +218,8 @@ body.admin .category-box h3 {
 
 .confirm-btn {
     display: none;
-    padding: 8px 18px 8px 14px;
-    background: var(--button-background);
+    padding: 8px 12px;
+    background: var(--primary-colour);
     color: var(--button-text);
     border: none;
     border-radius: 6px;
@@ -228,13 +228,24 @@ body.admin .category-box h3 {
     margin-left: 8px;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(60,200,255,0.08);
-    transition: background var(--transition-speed), transform 0.1s;
+    transition: background 0.2s, transform 0.1s;
     position: relative;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
 }
 
 .confirm-btn:hover {
-    background: var(--button-hover);
+    background: var(--primary-hover);
     transform: translateY(-2px) scale(1.05);
+}
+
+.confirm-btn .confirm-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    pointer-events: none;
 }
 
 .faq-actions {
@@ -242,23 +253,34 @@ body.admin .category-box h3 {
 }
 
 .delete-btn {
-    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
     background: var(--toast-error-bg);
-    color: #fff;
+    color: var(--button-text);
     border: none;
     border-radius: 6px;
+    font-weight: 600;
     font-size: 15px;
-    font-weight: 500;
+    margin-left: 8px;
     cursor: pointer;
-    transition: background 0.18s;
-    display: block;
-    width: 100%;
-    max-width: 120px;
+    box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+    min-width: 36px;
+    min-height: 36px;
 }
 .delete-btn:hover {
     background: #e84840;
+    transform: translateY(-2px) scale(1.05);
 }
-
+.delete-btn .delete-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    pointer-events: none;
+}
 
 /* Admin-only FAQ list styles */
 body.admin .faq-item {
