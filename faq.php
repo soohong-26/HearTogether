@@ -25,7 +25,7 @@ while ($row = $res->fetch_assoc()) {
 <main>
     <div class="faq-header">
         <h2>Frequently Asked Questions</h2>
-        <input type="text" id="faqSearch" placeholder="🔍 Search...">
+        <input type="text" id="faqSearch" placeholder="Search...">
     </div>
 
     <?php foreach ($faqs as $category => $items): ?>

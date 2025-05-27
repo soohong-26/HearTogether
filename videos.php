@@ -18,19 +18,37 @@ if (!isset($_SESSION['username'])) {
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
         :root {
-            --text: #ecf2f4;
-            --background: #0a161a;
-            --primary: #87c9e3;
-            --secondary: #127094;
+            /* Primary Colours */
+            --primary-colour: #6A7BA2;
+            --primary-hover: #5C728A;
+
+            /* Backgrounds */
+            --background-colour: rgb(211, 229, 255);
+            --container-background: #ffffff;
+
+            /* Text Colours */
+            --text: #333333;
+            --heading-colour: #2C3E50;
+
+            /* Borders & Lines */
+            --border-colour: #cccccc;
+
+            /* Accent */
             --accent: #29bff9;
+
+            /* Misc */
+            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+            --border-radius: 10px;
+            --transition-speed: 0.3s;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--background);
+            background-color: var(--background-colour);
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
+            color: var(--text);
             overflow-y: scroll;
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -66,14 +84,17 @@ if (!isset($_SESSION['username'])) {
         }
 
         .video-section {
-            padding: 40px;
+            padding: 40px 6vw 40px 6vw;
+            max-width: 1440px;
+            margin: 0 auto;
         }
 
         .section-title {
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 20px;
-            color: var(--text);
+            color: var(--primary-colour);
+            letter-spacing: 0.5px;
         }
 
         .video-grid {
@@ -87,22 +108,23 @@ if (!isset($_SESSION['username'])) {
         .video-card {
             min-width: 320px;
             flex: 0 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background-color: var(--container-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             scroll-snap-align: start;
+            border: 1px solid var(--border-colour);
         }
 
         .video-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f9f9f9;
+            background-color: #f5f7fa;
             width: 100%;
-            height: 200px; /* or whatever height you find comfortable */
+            height: 200px;
             overflow: hidden;
         }
 
@@ -114,19 +136,61 @@ if (!isset($_SESSION['username'])) {
         }
 
         .video-title {
-            font-size: 14px;
-            padding: 10px;
-            color: var(--background);
+            font-size: 15px;
+            padding: 14px 8px;
+            color: var(--heading-colour);
             text-align: center;
-            background-color: #f5f5f5;
+            background-color: #f5f7fa;
             font-weight: 500;
+            border-top: 1px solid var(--border-colour);
+            letter-spacing: 0.15px;
         }
 
         hr {
             border: none;
             height: 1px;
-            background-color: #ccc;
-            margin: 40px 0;
+            background-color: var(--border-colour);
+            margin: 44px 0;
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .video-header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-colour);
+        }
+
+        .video-header input[type="text"] {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-colour);
+            width: 200px;
+            font-size: 14px;
+            background-color: var(--container-background);
+            color: var(--text);
+            outline: none;
+        }
+
+        @media (max-width: 700px) {
+            .video-section {
+                padding: 24px 4vw 24px 4vw;
+            }
+            .video-card {
+                min-width: 200px;
+            }
+            .video-title {
+                font-size: 13px;
+                padding: 10px 4px;
+            }
         }
     </style>
 </head>
@@ -134,6 +198,14 @@ if (!isset($_SESSION['username'])) {
 <?php include 'nav.php'; ?>
 
 <main class="video-section">
+
+    <!-- Video Search -->
+    <div class="video-header">
+        <h2>Videos</h2>
+        <input type="text" id="videoSearch" placeholder="Search...">
+    </div>
+
+
     <?php
     $categoryResult = $conn->query("SELECT DISTINCT category FROM videos ORDER BY category ASC");
 
@@ -144,12 +216,14 @@ if (!isset($_SESSION['username'])) {
         $stmt->execute();
         $videoResult = $stmt->get_result();
     ?>
-        <div>
+        <div class="category-section">
             <h2 class="section-title"><?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $categoryName))); ?></h2>
             <div class="video-grid">
                 <?php if ($videoResult->num_rows > 0): ?>
                     <?php while ($video = $videoResult->fetch_assoc()): ?>
-                        <div class="video-card">
+                        <div class="video-card"
+                            data-title="<?php echo htmlspecialchars(strtolower($video['title'])); ?>"
+                            data-category="<?php echo htmlspecialchars(strtolower($video['category'])); ?>">
                             <div class="video-wrapper">
                                 <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
                             </div>
@@ -164,5 +238,30 @@ if (!isset($_SESSION['username'])) {
         <hr>
     <?php endwhile; ?>
 </main>
+
+<script>
+const videoSearch = document.getElementById('videoSearch');
+const videoCards = document.querySelectorAll('.video-card');
+const categorySections = document.querySelectorAll('.category-section');
+
+videoSearch.addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    // Track if any cards are visible in a category
+    categorySections.forEach(section => {
+        let visibleCount = 0;
+        // Only search cards in this category
+        const cards = section.querySelectorAll('.video-card');
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            const category = card.getAttribute('data-category');
+            const match = title.includes(searchTerm) || category.includes(searchTerm);
+            card.style.display = match ? "" : "none";
+            if (match) visibleCount++;
+        });
+        // Hide entire category section if no cards match
+        section.style.display = visibleCount === 0 ? "none" : "";
+    });
+});
+</script>
 </body>
 </html>
