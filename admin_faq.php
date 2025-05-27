@@ -69,21 +69,28 @@ $categories = array_keys($faqs);
 
     <div class="faq-form">
         <form method="post" autocomplete="off">
-            <label for="new_category">Category</label>
-            <select id="new_category" name="new_category">
+            <label for="new_category">Select Existing Category</label>
+            <select id="new_category" name="new_category" onchange="document.getElementById('new_category_input').disabled = !!this.value;">
                 <option value="">-- Select Existing Category --</option>
                 <?php foreach ($categories as $cat): ?>
                     <option value="<?= htmlspecialchars($cat) ?>"><?= htmlspecialchars($cat) ?></option>
                 <?php endforeach; ?>
             </select>
-            <input type="text" name="new_category_input" placeholder="Or type new category name here">
+
+            <label for="new_category_input">Or Type New Category</label>
+            <input type="text" id="new_category_input" name="new_category_input" placeholder="Or type new category name here"
+                oninput="document.getElementById('new_category').disabled = !!this.value; if(!this.value) document.getElementById('new_category').disabled=false;">
+            
             <label for="new_question">Question</label>
             <input type="text" id="new_question" name="new_question" required placeholder="Enter new FAQ question">
+            
             <label for="new_answer">Answer</label>
             <textarea id="new_answer" name="new_answer" required rows="3" placeholder="Enter answer here"></textarea>
+            
             <button type="submit">Add FAQ</button>
         </form>
     </div>
+
 
     <?php foreach ($faqs as $category => $items): ?>
     <div class="category-box">
@@ -158,13 +165,34 @@ document.querySelectorAll('.confirm-btn').forEach(btn => {
     });
 });
 
-function showToast(msg, error) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.background = error ? '#ff5e57' : 'var(--accent)';
-    toast.style.display = 'block';
-    setTimeout(()=>{toast.style.display='none';}, 2300);
-}
+    function showToast(msg, error) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.background = error ? '#ff5e57' : 'var(--accent)';
+        toast.style.display = 'block';
+        setTimeout(()=>{toast.style.display='none';}, 2300);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('add') === 'success') {
+                showToast('FAQ added successfully!');
+                params.delete('add');
+                // Update URL so the toast doesn't keep showing on refresh
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+    // Dynamic disabling for category and input
+    document.getElementById('new_category').addEventListener('change', function() {
+        document.getElementById('new_category_input').disabled = !!this.value;
+        if(this.value) document.getElementById('new_category_input').value = '';
+    });
+    document.getElementById('new_category_input').addEventListener('input', function() {
+        document.getElementById('new_category').disabled = !!this.value;
+        if(this.value) document.getElementById('new_category').value = '';
+        else document.getElementById('new_category').disabled = false;
+    });
 </script>
 </body>
 </html>
