@@ -332,7 +332,7 @@ body.admin .faq-item .faq-actions button:hover {
     position: fixed;
     top: 30px;
     right: 30px;
-    background: var(--toast-success-bg);
+    background-color: var(--toast-success-bg);
     color: var(--button-text);
     padding: 15px 22px;
     border-radius: 8px;

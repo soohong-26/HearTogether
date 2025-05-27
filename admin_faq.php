@@ -34,10 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'], $_POST['fi
 }
 
 // --- Handle Delete ---
-if (isset($_GET['delete'])) {
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     $conn->query("DELETE FROM faq WHERE id=$id");
-    header("Location: admin_faq.php?delete=success");
+    // Redirect without the 'delete' parameter to avoid accidental repeat deletes
+    header("Location: admin_faq.php?delete_success=1");
     exit();
 }
 
@@ -168,10 +169,11 @@ document.querySelectorAll('.confirm-btn').forEach(btn => {
     function showToast(msg, error) {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
-        toast.style.background = error ? '#ff5e57' : 'var(--accent)';
+        toast.className = 'toast ' + (error ? 'error' : 'success');
         toast.style.display = 'block';
         setTimeout(()=>{toast.style.display='none';}, 2300);
     }
+
 
     document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
@@ -193,6 +195,24 @@ document.querySelectorAll('.confirm-btn').forEach(btn => {
         if(this.value) document.getElementById('new_category').value = '';
         else document.getElementById('new_category').disabled = false;
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get('add') === 'success') {
+        showToast('FAQ added successfully!');
+        params.delete('add');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Handle delete success
+    if (params.get('delete_success') === '1') {
+        showToast('FAQ deleted successfully!');
+        params.delete('delete_success');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+});
+
 </script>
 </body>
 </html>
