@@ -170,7 +170,7 @@ document.querySelectorAll('.confirm-btn').forEach(btn => {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
         toast.className = 'toast ' + (error ? 'error' : 'success');
-        toast.style.display = 'block';
+        toast.style.display = 'block';  
         setTimeout(()=>{toast.style.display='none';}, 2300);
     }
 
