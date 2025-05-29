@@ -18,32 +18,40 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             /* Primary Colours */
             --primary-colour: #6A7BA2;
             --primary-hover: #5C728A;
+
             /* Backgrounds */
             --background-colour: rgb(211, 229, 255);
             --container-background: #ffffff;
             --input-background: #ffffff;
+
             /* Text Colours */
             --text: #333333;
             --placeholder-colour: #999999;
             --heading-colour: #2C3E50;
+
             /* Borders & Lines */
             --border-colour: #cccccc;
             --focus-border-colour: #738678;
+
             /* Buttons */
             --button-background: var(--primary-colour);
             --button-hover: var(--primary-hover);
             --button-text: #ffffff;
+
             /* Links */
             --link-colour: #1a73e8;
             --link-hover: #1558b0;
+
             /* Toast */
             --toast-success-bg: #1d8a47;
             --toast-error-bg: #ff5e57;
+
             /* Misc */
             --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             --border-radius: 8px;
             --transition-speed: 0.3s;
         }
+
         header {
             background-color: rgb(243, 249, 255);
             color: var(--text);
@@ -60,6 +68,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             position: relative;
             gap: 0;
         }
+
         .header-title {
             flex: 1 1 0%;
             display: flex;
@@ -68,12 +77,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             font-family: "Poppins", sans-serif;
             min-width: 180px;
         }
+
         .header-title a {
             text-decoration: none;
             color: var(--heading-colour);
             font-size: 22px;
             font-weight: 600;
         }
+
         nav {
             flex: 2 1 0%;
             display: flex;
@@ -82,6 +93,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             position: relative;
             min-width: 250px;
         }
+
         .nav-links {
             list-style: none;
             display: flex;
@@ -92,12 +104,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             margin: 0;
             transition: max-height 0.4s ease;
         }
+
         .nav-links li a {
             color: var(--link-colour);
             text-decoration: none;
             font-size: 16px;
             transition: color var(--transition-speed) ease;
         }
+
         .nav-links li a:hover {
             color: var(--link-hover);
             text-decoration: none;
@@ -106,6 +120,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             color: var(--primary-colour);
             font-weight: 600;
         }
+
         /* Greeting */
         .greeting-desktop {
             flex: 1 1 0%;
@@ -115,6 +130,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             min-width: 180px;
             gap: 10px;
         }
+
         .greeting img.profile {
             width: 24px;
             height: 24px;
@@ -123,30 +139,36 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             border: 1.5px solid var(--border-colour);
             background: var(--container-background);
         }
+
         .greeting span {
             font-size: 16px;
             color: var(--text);
         }
+
         .greeting form {
             display: flex;
             align-items: center;
             margin: 0 0 0 6px;
         }
+
         .logout-btn {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
         }
+
         .logout-btn img {
             width: 20px;
             height: 20px;
             transition: opacity var(--transition-speed) ease;
             vertical-align: middle;
         }
+
         .logout-btn img:hover {
             opacity: 0.7;
         }
+
         .greeting a {
             color: var(--text);
             text-decoration: none;
@@ -154,6 +176,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             display: flex;
             align-items: center;
         }
+
         /* Hamburger styles */
         .hamburger {
             display: none;
@@ -168,6 +191,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             margin-left: 18px;
             z-index: 101;
         }
+
         .hamburger span {
             width: 26px;
             height: 3.5px;
@@ -177,34 +201,41 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             transition: 0.4s;
             display: block;
         }
+
         /* Responsive Section */
         @media (max-width: 1100px) {
             .nav-links {
                 gap: 28px;
             }
+
             header {
                 padding: 10px 16px;
             }
+
             .greeting-desktop {
                 min-width: 130px;
             }
         }
+
         @media (max-width: 900px) {
             header {
                 flex-direction: column;
                 align-items: stretch;
                 padding: 10px 6px;
             }
+
             .header-title, .greeting-desktop {
                 min-width: 0;
                 width: 100%;
                 justify-content: flex-start;
             }
+
             nav {
                 width: 100%;
                 min-width: 0;
                 justify-content: flex-end;
             }
+
             .nav-links {
                 position: absolute;
                 top: 56px;
@@ -223,21 +254,26 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 border-top: 1px solid var(--border-colour);
                 transition: max-height 0.4s cubic-bezier(.68,-0.55,.27,1.55);
             }
+
             .nav-links.open {
                 max-height: 450px;
                 padding: 16px 0;
             }
+
             .nav-links li {
                 width: 100%;
                 padding: 10px 28px;
             }
+
             .hamburger {
                 display: flex;
                 margin-left: auto;
             }
+
             .greeting-desktop {
                 display: none;
             }
+
             .greeting-mobile {
                 display: flex !important;
                 width: 100%;
@@ -247,6 +283,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 gap: 10px;
             }
         }
+
         @media (min-width: 901px) {
             .greeting-mobile {
                 display: none !important;
@@ -260,30 +297,45 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <div class="header-title">
         <a href="homepage.php">HearTogether</a>
     </div>
+
     <!-- Navigation Links (CENTER) -->
     <nav>
         <ul class="nav-links" id="navLinks">
+            <!-- Homepage -->
             <li>
                 <a class='nav-anc <?php echo $currentPage == "homepage.php" ? "active" : ""; ?>' 
                 href="homepage.php">Home</a>
             </li>
+
+            <!-- Videos Page -->
             <li>
                 <a class='nav-anc <?php echo $currentPage == "videos.php" || $currentPage == "admin_videos.php" ? "active" : ""; ?>' 
                 href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'admin_videos.php' : 'videos.php'; ?>">Videos</a>
             </li>
+
+            <!-- ADMIN ONLY - User Approval -->
             <?php if (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') : ?>
                 <li>
                     <a class='nav-anc <?php echo $currentPage == "admin_approval.php" ? "active" : ""; ?>' href="admin_approval.php">User Approval</a>
                 </li>
             <?php endif; ?>
+            
+            <!-- FAQ Page -->
             <li>
-                <a class='nav-anc <?php echo $currentPage == "faq.php" ? "active" : ""; ?>' href="faq.php">FAQ</a>
+                <a class='nav-anc <?php echo ($currentPage == "faq.php" || $currentPage == "admin_faq.php") ? "active" : ""; ?>' 
+                href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'admin_faq.php' : 'faq.php'; ?>">
+                FAQ
+                </a>
             </li>
-            <?php if (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') : ?>
-                <li>
-                    <a class='nav-anc <?php echo $currentPage == "admin_faq.php" ? "active" : ""; ?>' href="admin_faq.php">FAQ Control</a>
-                </li>
-            <?php endif; ?>
+
+            <!-- Quiz Page -->
+            <li>
+                <a class='nav-anc <?php echo ($currentPage == "quiz_home.php" || $currentPage == "admin_quiz.php") ? "active" : ""; ?>' 
+                href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'admin_quiz.php' : 'quiz_home.php'; ?>">
+                Quiz
+                </a>
+            </li>
+
             <!-- Greeting and Logout (MOBILE) -->
             <li class="greeting greeting-mobile" style="display: none;">
                 <?php if (isset($_SESSION['username'])) : ?>
@@ -304,6 +356,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </li>
         </ul>
+
         <!-- Hamburger Menu -->
         <button class="hamburger" id="hamburgerMenu" aria-label="Open navigation" tabindex="0">
             <span></span>
@@ -311,6 +364,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <span></span>
         </button>
     </nav>
+
     <!-- Greeting and Logout (DESKTOP) -->
     <div class="greeting greeting-desktop">
         <?php if (isset($_SESSION['username'])) : ?>
