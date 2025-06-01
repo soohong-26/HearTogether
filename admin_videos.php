@@ -448,7 +448,7 @@ while ($cat = $cat_res->fetch_assoc()) {
                 <?php endforeach; ?>
             </ul>
             <input type="hidden" name="category_order" id="categoryOrderInput">
-            <button type="submit" style="margin-top:8px;" class="save-order-btn">Save Order</button>
+            <button type="submit" class="save-order-btn">Save Order</button>
         </form>
     </div>
 
