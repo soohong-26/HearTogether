@@ -20,9 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_question'])) {
         $stmt = $conn->prepare("INSERT INTO quiz_questions (question_text, option_a, option_b, option_c, option_d, correct_option) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $q, $a, $b, $c, $d, $correct);
         $stmt->execute();
-        $msg = "Question added!";
+        header("Location: admin_quiz.php?quiz_action=add_success");
+        exit();
     } else {
-        $err = "Please fill in all fields correctly.";
+        header("Location: admin_quiz.php?quiz_action=add_error");
+        exit();
     }
 }
 
@@ -40,9 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_question'])) {
         $stmt = $conn->prepare("UPDATE quiz_questions SET question_text=?, option_a=?, option_b=?, option_c=?, option_d=?, correct_option=? WHERE question_id=?");
         $stmt->bind_param("ssssssi", $q, $a, $b, $c, $d, $correct, $qid);
         $stmt->execute();
-        $msg = "Question updated!";
+        header("Location: admin_quiz.php?quiz_action=edit_success");
+        exit();
     } else {
-        $err = "Please fill in all fields correctly for edit.";
+        header("Location: admin_quiz.php?quiz_action=edit_error");
+        exit();
     }
 }
 
@@ -52,7 +56,8 @@ if (isset($_GET['delete'])) {
     $stmt = $conn->prepare("DELETE FROM quiz_questions WHERE question_id=?");
     $stmt->bind_param("i", $qid);
     $stmt->execute();
-    $msg = "Question deleted!";
+    header("Location: admin_quiz.php?quiz_action=delete_success");
+    exit();
 }
 
 // --- Fetch all quiz questions ---
@@ -123,14 +128,6 @@ if (isset($_GET['user'])) {
         color: var(--heading-colour);
         text-align: center;
     }
-    .msg, .err {
-        text-align: center;
-        padding: 12px 18px;
-        border-radius: 8px;
-        margin: 18px 0;
-    }
-    .msg { background: var(--success); color: #fff; }
-    .err { background: var(--danger); color: #fff; }
     form {
         margin-bottom: 32px;
     }
@@ -233,6 +230,25 @@ if (isset($_GET['user'])) {
     .center {
         text-align: center;
     }
+
+    /* Toast styles */
+    #toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        max-width: 320px;
+        padding: 14px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+        z-index: 9999;
+    }
+    #toast.success { background-color: #1d8a47; }
+    #toast.error { background-color: #ff5e57; }
     </style>
 </head>
 <body>
@@ -240,8 +256,6 @@ if (isset($_GET['user'])) {
 <main>
     <div class="container">
         <h2>Quiz Question Manager</h2>
-        <?php if (isset($msg)) echo '<div class="msg">'.$msg.'</div>'; ?>
-        <?php if (isset($err)) echo '<div class="err">'.$err.'</div>'; ?>
 
         <!-- Add Question Form -->
         <form method="POST" autocomplete="off">
@@ -286,7 +300,6 @@ if (isset($_GET['user'])) {
         <table class="quiz-table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Question</th>
                     <th>Options</th>
                     <th>Correct</th>
@@ -298,7 +311,7 @@ if (isset($_GET['user'])) {
                 <?php if (isset($_GET['edit']) && $_GET['edit'] == $q['question_id']): ?>
                     <tr>
                         <form method="POST">
-                            <td><?= $q['question_id'] ?></td>
+                            <input type="hidden" name="edit_question" value="<?= $q['question_id'] ?>">
                             <td>
                                 <input type="text" name="edit_question_text" value="<?= htmlspecialchars($q['question_text']) ?>" required maxlength="255">
                             </td>
@@ -326,7 +339,6 @@ if (isset($_GET['user'])) {
                     </tr>
                 <?php else: ?>
                     <tr>
-                        <td><?= $q['question_id'] ?></td>
                         <td><?= htmlspecialchars($q['question_text']) ?></td>
                         <td>
                             A. <?= htmlspecialchars($q['option_a']) ?><br>
@@ -349,8 +361,8 @@ if (isset($_GET['user'])) {
 
         <!-- User Quiz Attempts -->
         <h3>User Quiz Attempts</h3>
-        <form method="get" class="user-select-form">
-            <label for="user">Select user:</label>
+        <form method="get" class="form-row">
+            <label for="user" style="margin-top: 5px;">Select user:</label>
             <select name="user" id="user" onchange="this.form.submit()">
                 <option value="">-- Choose User --</option>
                 <?php foreach ($users as $u): ?>
@@ -380,5 +392,40 @@ if (isset($_GET['user'])) {
         <?php endif; ?>
     </div>
 </main>
+<!-- Toast container -->
+<div id="toast"></div>
+<script>
+    const toast = document.getElementById('toast');
+    let toastTimeout;
+    function showToast(message, type = 'success') {
+        toast.textContent = message;
+        toast.className = type;
+        toast.style.opacity = '1';
+        toast.style.pointerEvents = 'auto';
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.pointerEvents = 'none';
+        }, 3500);
+    }
+    // Show notification based on URL query parameters
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('quiz_action')) {
+        const action = params.get('quiz_action');
+        const messages = {
+            'add_success': ['Question added successfully!', 'success'],
+            'edit_success': ['Question updated successfully!', 'success'],
+            'delete_success': ['Question deleted successfully!', 'success'],
+            'add_error': ['Failed to add question. Check all fields.', 'error'],
+            'edit_error': ['Failed to update question. Check all fields.', 'error']
+        };
+        if (messages[action]) {
+            const [text, type] = messages[action];
+            showToast(text, type);
+        }
+        params.delete('quiz_action');
+        history.replaceState(null, '', window.location.pathname);
+    }
+</script>
 </body>
 </html>
