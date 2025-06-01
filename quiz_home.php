@@ -65,7 +65,7 @@ while ($row = $historyRes->fetch_assoc()) {
         }
         h2, h3 {
             text-align: center;
-            color: var(--heading-colour);
+            color: var(--text);
         }
     </style>
 </head>

@@ -63,7 +63,7 @@ $stmt->execute();
             text-align: center;
         }
         h2 {
-            color: var(--heading-colour);
+            color: var(--text);
         }
         .score {
             font-size: 1.5rem;

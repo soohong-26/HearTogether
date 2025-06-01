@@ -164,6 +164,38 @@ if (isset($_GET['user'])) {
     .action-btn:hover, .edit-btn:hover, .save-btn:hover {
         background: var(--button-hover);
     }
+
+    button.save-btn {
+        all: unset; /* Reset default browser styles */
+        display: inline-block;
+        background: var(--button-background);
+        color: #fff;
+        border: none;
+        padding: 5px 16px;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-align: center;
+        width: 80px;
+        transition: background 0.2s;
+    }
+    button.save-btn:hover {
+        background: var(--button-hover);
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start; 
+    }
+
+    .action-buttons button,
+    .action-buttons a {
+        width: 80px;
+        text-align: center;
+    }
+
     .delete-btn {
         background: var(--danger);
     }
@@ -285,8 +317,10 @@ if (isset($_GET['user'])) {
                                 </select>
                             </td>
                             <td>
-                                <button type="submit" name="edit_question" value="<?= $q['question_id'] ?>" class="save-btn">Save</button>
-                                <a href="admin_quiz.php" class="action-btn">Cancel</a>
+                                <div class="action-buttons">
+                                    <button type="submit" name="edit_question" value="<?= $q['question_id'] ?>" class="save-btn">Save</button>
+                                    <a href="admin_quiz.php" class="action-btn">Cancel</a>
+                                </div>
                             </td>
                         </form>
                     </tr>
@@ -302,8 +336,10 @@ if (isset($_GET['user'])) {
                         </td>
                         <td><?= $q['correct_option'] ?></td>
                         <td>
-                            <a href="admin_quiz.php?edit=<?= $q['question_id'] ?>" class="edit-btn">Edit</a>
-                            <a href="admin_quiz.php?delete=<?= $q['question_id'] ?>" class="delete-btn" onclick="return confirm('Delete this question?');">Delete</a>
+                            <div class="action-buttons">
+                                <a href="admin_quiz.php?edit=<?= $q['question_id'] ?>" class="edit-btn">Edit</a>
+                                <a href="admin_quiz.php?delete=<?= $q['question_id'] ?>" class="delete-btn" onclick="return confirm('Delete this question?');">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 <?php endif; ?>

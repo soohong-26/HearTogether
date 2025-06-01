@@ -38,7 +38,7 @@ while ($row = $questionsRes->fetch_assoc()) {
         }
         h2 {
             text-align: center;
-            color: var(--heading-colour);
+            color: var(--text);
         }
         .question {
             margin-bottom: 20px;
