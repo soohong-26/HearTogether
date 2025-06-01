@@ -342,6 +342,62 @@ body.admin .faq-item .faq-actions button:hover {
     box-shadow: var(--box-shadow);
 }
 
+/* Organisation Part */
+.category-order-list {
+    background: var(--container-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+#categoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+#categoryList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 10px;
+    background: #f3f6fa;
+    border-radius: 6px;
+}
+#categoryList button {
+    margin-left: 8px;
+    background: var(--primary-colour);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+#categoryList button:disabled {
+    background: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.save-order-btn {
+    background: var(--button-background);
+    color: var(--button-text);
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background var(--transition-speed);
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+}
+.save-order-btn:hover {
+    background: var(--button-hover);
+}
+
+
 /* Responsive adjustments */
 @media (min-width: 1024px) {
     main {

@@ -1,7 +1,14 @@
 <?php
 require 'database.php';
 
-// Fetch all FAQs grouped by category
+// Get all categories in order
+$cat_res = $conn->query("SELECT name FROM faq_categories ORDER BY category_order ASC, name ASC");
+$categories = [];
+while ($cat = $cat_res->fetch_assoc()) {
+    $categories[] = $cat['name'];
+}
+
+// Get all FAQs grouped by category
 $faqs = [];
 $res = $conn->query("SELECT * FROM faq ORDER BY category ASC, id ASC");
 while ($row = $res->fetch_assoc()) {
@@ -28,14 +35,16 @@ while ($row = $res->fetch_assoc()) {
         <input type="text" id="faqSearch" placeholder="Search...">
     </div>
 
-    <?php foreach ($faqs as $category => $items): ?>
+    <?php foreach ($categories as $category): ?>
+        <?php if (!empty($faqs[$category])): ?>
         <div class="category">
             <h3><?= htmlspecialchars($category) ?></h3>
-            <?php foreach ($items as $faq): ?>
+            <?php foreach ($faqs[$category] as $faq): ?>
                 <button class="accordion"><?= htmlspecialchars($faq['question']) ?></button>
                 <div class="panel"><p><?= nl2br(htmlspecialchars($faq['answer'])) ?></p></div>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
     <?php endforeach; ?>
 </main>
 

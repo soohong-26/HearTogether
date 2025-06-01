@@ -1,9 +1,24 @@
 <?php
 require 'database.php';
 
-// Check if user is an admin
 if (!isset($_SESSION['username']) || $_SESSION['roles'] !== 'admin') {
     header("Location: homepage.php?error=unauthorised");
+    exit();
+}
+
+// Ensure all categories in videos table are in video_categories table
+$conn->query("INSERT IGNORE INTO video_categories (name) SELECT DISTINCT category FROM videos");
+
+// Handle category group reordering
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category_order'])) {
+    $order = explode(',', $_POST['category_order']);
+    foreach ($order as $index => $name) {
+        $stmt = $conn->prepare("UPDATE video_categories SET category_order=? WHERE name=?");
+        $stmt->bind_param("is", $index, $name);
+        $stmt->execute();
+        $stmt->close();
+    }
+    header("Location: admin_videos.php?reorder=success");
     exit();
 }
 
@@ -19,16 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['gif'], $_POST['title
     $targetFile = $targetDir . $filename;
 
     if (!empty($title) && !empty($category) && move_uploaded_file($_FILES['gif']['tmp_name'], $targetFile)) {
+        // Ensure the new category is in video_categories
+        $stmt = $conn->prepare("INSERT IGNORE INTO video_categories (name) VALUES (?)");
+        $stmt->bind_param("s", $category);
+        $stmt->execute();
+        $stmt->close();
+
         $stmt = $conn->prepare("INSERT INTO videos (filename, title, category) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $filename, $title, $category);
         $stmt->execute();
         $stmt->close();
 
-        // Redirect with success flag
         header("Location: admin_videos.php?upload=success");
         exit();
     } else {
-        // Redirect with failure flag
         header("Location: admin_videos.php?upload=fail");
         exit();
     }
@@ -74,8 +93,12 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     exit();
 }
 
-// Fetch categories
-$categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY category ASC");
+// Fetch ordered categories
+$cat_res = $conn->query("SELECT name FROM video_categories ORDER BY category_order ASC, name ASC");
+$categories = [];
+while ($cat = $cat_res->fetch_assoc()) {
+    $categories[] = $cat['name'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -314,6 +337,63 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             font-size: 16px;
             color: var(--placeholder-colour);
         }
+
+        .category-order-list {
+            background: var(--container-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        #categoryList {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        #categoryList li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 10px;
+            background: #f3f6fa;
+            border-radius: 6px;
+        }
+
+        #categoryList button {
+            margin-left: 8px;
+            background: var(--primary-colour);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        #categoryList button:disabled {
+            background: #ddd;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .save-order-btn {
+            background: var(--button-background);
+            color: var(--button-text);
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background var(--transition-speed);
+            margin-top: 10px;
+            box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+        }
+        .save-order-btn:hover {
+            background: var(--button-hover);
+        }
     </style>
 </head>
 <body>
@@ -332,11 +412,11 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
             <label for="category">Select Existing Category</label>
             <select name="category" id="category" onchange="document.getElementById('new_category').disabled = !!this.value;">
                 <option value="">-- None --</option>
-                <?php while ($cat = $categories->fetch_assoc()): ?>
-                    <option value="<?php echo htmlspecialchars($cat['category']); ?>">
-                        <?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $cat['category']))); ?>
+                <?php foreach ($categories as $cat): ?>
+                    <option value="<?php echo htmlspecialchars($cat); ?>">
+                        <?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $cat))); ?>
                     </option>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </select>
 
             <br><br>
@@ -354,12 +434,29 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         </form>
     </div>
 
+    <!-- Category Group Order (Moves all videos in that category as a block) -->
+    <div class="category-order-list">
+        <h3>Organise Category Groups</h3>
+        <form method="post" id="reorderForm" style="margin-bottom:30px;">
+            <ul id="categoryList" style="padding-left:0;">
+                <?php foreach ($categories as $i => $cat): ?>
+                    <li data-name="<?= htmlspecialchars($cat) ?>" style="list-style:none;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <span style="flex:1;"><?= htmlspecialchars(ucwords(str_replace('_', ' ', $cat))); ?></span>
+                        <button type="button" class="move-up" <?= $i==0?'disabled':'' ?>>&#8593;</button>
+                        <button type="button" class="move-down" <?= $i==count($categories)-1?'disabled':'' ?>>&#8595;</button>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <input type="hidden" name="category_order" id="categoryOrderInput">
+            <button type="submit" style="margin-top:8px;" class="save-order-btn">Save Order</button>
+        </form>
+    </div>
+
     <?php
-    // Re-fetch categories for display (since previous loop exhausted it)
-    $categoryResult = $conn->query("SELECT DISTINCT category FROM videos ORDER BY category ASC");
-    while ($cat = $categoryResult->fetch_assoc()):
-        $catName = $cat['category'];
+    // Fetch videos grouped by ordered categories
+    foreach ($categories as $catName):
         $videoSet = $conn->query("SELECT * FROM videos WHERE category = '" . $conn->real_escape_string($catName) . "' ORDER BY video_id DESC");
+        if ($videoSet->num_rows > 0):
     ?>
         <h2 class="section-title"><?php echo ucwords(str_replace('_', ' ', htmlspecialchars($catName))); ?></h2>
         <div class="video-grid">
@@ -368,7 +465,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
                     <div class="video-wrapper">
                         <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
                     </div>
-                    <div class="video-title" contenteditable="true" 
+                    <div class="video-title" contenteditable="true"
                          data-video-id="<?php echo $video['video_id']; ?>"
                          title="Click to edit title. Press Enter to save, Esc to cancel."><?php echo htmlspecialchars($video['title']); ?></div>
                     <div class="admin-controls">
@@ -377,13 +474,46 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
                 </div>
             <?php endwhile; ?>
         </div>
-    <?php endwhile; ?>
+    <?php
+        endif;
+    endforeach;
+    ?>
 </main>
 
 <!-- Toast container -->
 <div id="toast"></div>
 
 <script>
+    // Category move up/down logic
+    function updateMoveButtons() {
+        const lis = document.querySelectorAll('#categoryList li');
+        lis.forEach((li, i) => {
+            li.querySelector('.move-up').disabled = i === 0;
+            li.querySelector('.move-down').disabled = i === lis.length - 1;
+        });
+    }
+    updateMoveButtons();
+
+    document.querySelectorAll('.move-up, .move-down').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const li = this.closest('li');
+            if (this.classList.contains('move-up') && li.previousElementSibling) {
+                li.parentNode.insertBefore(li, li.previousElementSibling);
+            }
+            if (this.classList.contains('move-down') && li.nextElementSibling) {
+                li.parentNode.insertBefore(li.nextElementSibling, li);
+            }
+            updateMoveButtons();
+        });
+    });
+
+    document.getElementById('reorderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const order = Array.from(document.querySelectorAll('#categoryList li')).map(li => li.dataset.name);
+        document.getElementById('categoryOrderInput').value = order.join(',');
+        this.submit();
+    });
+
     // Editable title save logic
     document.querySelectorAll('.video-title').forEach(div => {
         div.addEventListener('keydown', e => {
@@ -391,13 +521,10 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
                 e.preventDefault();
                 const newTitle = e.target.innerText.trim();
                 const videoId = e.target.getAttribute('data-video-id');
-
                 if (newTitle === '') {
                     showToast('Title cannot be empty.', 'error');
                     return;
                 }
-
-                // Save via fetch POST
                 fetch('admin_videos.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -417,7 +544,6 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
                 });
             } else if (e.key === 'Escape') {
                 e.preventDefault();
-                // Revert changes by reloading page (simplest way)
                 window.location.reload();
             }
         });
@@ -426,13 +552,11 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
     // Toast helper
     const toast = document.getElementById('toast');
     let toastTimeout;
-
     function showToast(message, type = 'success') {
         toast.textContent = message;
         toast.className = type;
         toast.style.opacity = '1';
         toast.style.pointerEvents = 'auto';
-
         clearTimeout(toastTimeout);
         toastTimeout = setTimeout(() => {
             toast.style.opacity = '0';
@@ -442,7 +566,6 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
 
     // Show notification based on URL query parameters
     const params = new URLSearchParams(window.location.search);
-
     if (params.has('upload')) {
         if (params.get('upload') === 'success') {
             showToast('GIF uploaded successfully!', 'success');
@@ -452,13 +575,16 @@ $categories = $conn->query("SELECT DISTINCT category FROM videos ORDER BY catego
         params.delete('upload');
         history.replaceState(null, '', window.location.pathname);
     }
-
     if (params.has('delete') && params.get('delete') === 'success') {
         showToast('GIF deleted successfully!', 'success');
         params.delete('delete');
         history.replaceState(null, '', window.location.pathname);
     }
-
+    if (params.has('reorder') && params.get('reorder') === 'success') {
+        showToast('Category order updated!', 'success');
+        params.delete('reorder');
+        history.replaceState(null, '', window.location.pathname);
+    }
     if (params.has('error') && params.get('error') === 'unauthorised') {
         showToast('Unauthorized access. Please log in.', 'error');
         params.delete('error');
