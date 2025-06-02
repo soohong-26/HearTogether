@@ -289,6 +289,48 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 display: none !important;
             }
         }
+
+        .font-size-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 12px;
+            user-select: none;
+        }
+        .font-size-toggle button {
+            background: var(--button-background);
+            color: var(--button-text);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            line-height: 1.1;
+        }
+        .font-size-toggle button:hover,
+        .font-size-toggle button:focus {
+            background: var(--button-hover);
+        }
+        #fontSizeLabel {
+            min-width: 18px;
+            display: inline-block;
+            text-align: center;
+            transition: font-size 0.2s;
+        }
+        
+        /* Universal heading override for scaling with font-size toggle */
+        h1, h2, h3, h4, h5, h6 {
+            font-size: revert;
+            font-size: unset;
+        }
+
+        h1 { font-size: 2.2rem !important; }
+        h2 { font-size: 1.6rem !important; }
+        h3 { font-size: 1.3rem !important; }
+        h4 { font-size: 1.1rem !important; }
+        h5 { font-size: 1rem !important; }
+        h6 { font-size: 0.95rem !important; }
     </style>
 </head>
 <body>
@@ -297,6 +339,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <div class="header-title">
         <a href="homepage.php">HearTogether</a>
     </div>
+
+    <!-- Font Size Toggle -->
+    <div class="font-size-toggle" id="fontSizeToggle">
+        <button type="button" id="fontSizeReset" title="Reset font size">Reset</button>
+        <button type="button" id="fontSizeSmall" title="Decrease font size">–</button>
+        <span id="fontSizeLabel" style="margin: 0 4px; font-size: 15px;">A</span>
+        <button type="button" id="fontSizeLarge" title="Increase font size">+</button>
+    </div>
+
 
     <!-- Navigation Links (CENTER) -->
     <nav>
@@ -387,12 +438,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </header>
 
 <script>
+// Hamburger Menu & Responsive Nav
 document.addEventListener("DOMContentLoaded", function() {
     const hamburger = document.getElementById('hamburgerMenu');
     const navLinks = document.getElementById('navLinks');
     const greetingMobile = document.querySelector('.greeting-mobile');
     const greetingDesktop = document.querySelector('.greeting-desktop');
 
+    // Check window size and display correct greeting block
     function checkWidth() {
         if(window.innerWidth <= 900){
             greetingMobile.style.display = 'flex';
@@ -408,19 +461,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // Listen for resize
     window.addEventListener('resize', checkWidth);
 
-    // Hamburger click
+    // Hamburger click toggles menu
     hamburger.addEventListener('click', function() {
         navLinks.classList.toggle('open');
     });
 
-    // Keyboard accessibility
+    // Keyboard accessibility for hamburger
     hamburger.addEventListener('keydown', function(e) {
         if (e.key === "Enter" || e.key === " ") {
             navLinks.classList.toggle('open');
         }
     });
 
-    // Close menu when link clicked (mobile)
+    // Close menu when a link is clicked (mobile)
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', function() {
             if(window.innerWidth <= 900){
@@ -428,6 +481,48 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+});
+
+// Font Size Toggle
+const fontSizeSmallBtn = document.getElementById('fontSizeSmall');
+const fontSizeLargeBtn = document.getElementById('fontSizeLarge');
+const fontSizeResetBtn = document.getElementById('fontSizeReset');
+const fontSizeLabel = document.getElementById('fontSizeLabel');
+const htmlRoot = document.documentElement;
+
+const FONT_SIZE_KEY = "ht_fontsize";
+const DEFAULT_SIZE = 16;
+const MIN_SIZE = 12;
+const MAX_SIZE = 24;
+
+// Helper to set font size on <html> for whole site
+function setFontSize(size) {
+    size = Math.max(MIN_SIZE, Math.min(MAX_SIZE, size));
+    htmlRoot.style.fontSize = size + "px";
+    fontSizeLabel.textContent = "A";
+    fontSizeLabel.style.fontSize = size + "px";
+    localStorage.setItem(FONT_SIZE_KEY, size);
+}
+
+// On load, use saved font size or default
+let currentSize = parseInt(localStorage.getItem(FONT_SIZE_KEY)) || DEFAULT_SIZE;
+setFontSize(currentSize);
+
+fontSizeSmallBtn.addEventListener('click', function() {
+    if (currentSize > MIN_SIZE) {
+        currentSize -= 2;
+        setFontSize(currentSize);
+    }
+});
+fontSizeLargeBtn.addEventListener('click', function() {
+    if (currentSize < MAX_SIZE) {
+        currentSize += 2;
+        setFontSize(currentSize);
+    }
+});
+fontSizeResetBtn.addEventListener('click', function() {
+    currentSize = DEFAULT_SIZE;
+    setFontSize(currentSize);
 });
 </script>
 </body>
