@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $default_role = 'user';
 
                     // Define the default profile image for the new users
-                    $profile_img = 'images/profile.png';
+                    $profile_img = 'profile/profile.png';
 
                     // Prepare the SQL insert statement including the roles column
                     $sql = "INSERT INTO users (username, email, password, profile_img, roles) VALUES (?, ?, ?, ?, ?)";

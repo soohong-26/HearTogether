@@ -17,31 +17,6 @@ if (!isset($_SESSION['username'])) {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
-        :root {
-            /* Primary Colours */
-            --primary-colour: #6A7BA2;
-            --primary-hover: #5C728A;
-
-            /* Backgrounds */
-            --background-colour: rgb(211, 229, 255);
-            --container-background: #ffffff;
-
-            /* Text Colours */
-            --text: #333333;
-            --heading-colour: #2C3E50;
-
-            /* Borders & Lines */
-            --border-colour: #cccccc;
-
-            /* Accent */
-            --accent: #29bff9;
-
-            /* Misc */
-            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
-            --border-radius: 10px;
-            --transition-speed: 0.3s;
-        }
-
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--background-colour);

@@ -89,6 +89,9 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $stmt->execute();
     $stmt->close();
 
+    // **Clean up empty categories**
+    $conn->query("DELETE FROM video_categories WHERE name NOT IN (SELECT DISTINCT category FROM videos)");
+
     header("Location: admin_videos.php?delete=success");
     exit();
 }
@@ -109,44 +112,6 @@ while ($cat = $cat_res->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
-
-        :root {
-            /* Primary Colours */
-            --primary-colour: #6A7BA2;
-            --primary-hover: #5C728A;
-
-            /* Backgrounds */
-            --background-colour:rgb(211, 229, 255);
-            --container-background: #ffffff;
-            --input-background: #ffffff;
-
-            /* Text Colours */
-            --text: #333333;
-            --placeholder-colour: #999999;
-            --heading-colour: #2C3E50;
-
-            /* Borders & Lines */
-            --border-colour: #cccccc;
-            --focus-border-colour: #738678;
-
-            /* Buttons */
-            --button-background: var(--primary-colour);
-            --button-hover: var(--primary-hover);
-            --button-text: #ffffff;
-
-            /* Links */
-            --link-colour: #1a73e8;
-            --link-hover: #1558b0;
-
-            /* Toast */
-            --toast-success-bg: #1d8a47;
-            --toast-error-bg: #ff5e57;
-
-            /* Misc */
-            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-            --transition-speed: 0.3s;
-        }
 
         body {
             font-family: 'Roboto', sans-serif;
@@ -179,7 +144,7 @@ while ($cat = $cat_res->fetch_assoc()) {
             display: flex;
             overflow-x: auto;
             gap: 20px;
-            padding-bottom: 10px;
+            padding-bottom: 50px;
             scroll-snap-type: x mandatory;
         }
 
@@ -404,8 +369,8 @@ while ($cat = $cat_res->fetch_assoc()) {
 
     <div class="upload-form">
         <form method="POST" enctype="multipart/form-data">
-            <label for="title">GIF Title</label>
-            <input type="text" name="title" id="title" placeholder="Enter GIF Title" required>
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" placeholder="Enter Title" required>
 
             <br><br>
 
@@ -426,11 +391,11 @@ while ($cat = $cat_res->fetch_assoc()) {
 
             <br><br>
 
-            <label for="gif">Upload GIF File</label>
+            <label for="gif">Upload File</label>
             <input type="file" name="gif" id="gif" accept=".gif, .png, .jpeg, .jpg, image/gif, image/png, image/jpeg" required>
 
             <br>
-            <button type="submit">Upload GIF</button>
+            <button type="submit">Upload</button>
         </form>
     </div>
 

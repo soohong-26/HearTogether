@@ -5,44 +5,6 @@
     box-sizing: border-box;
 }
 
-:root {
-    /* Primary Colours */
-    --primary-colour: #6A7BA2;
-    --primary-hover: #5C728A;
-
-    /* Backgrounds */
-    --background-colour: rgb(211, 229, 255);
-    --container-background: #ffffff;
-    --input-background: #ffffff;
-
-    /* Text Colours */
-    --text: #333333;
-    --placeholder-colour: #999999;
-    --heading-colour: #2C3E50;
-
-    /* Borders & Lines */
-    --border-colour: #cccccc;
-    --focus-border-colour: #738678;
-
-    /* Buttons */
-    --button-background: var(--primary-colour);
-    --button-hover: var(--primary-hover);
-    --button-text: #ffffff;
-
-    /* Links */
-    --link-colour: #1a73e8;
-    --link-hover: #1558b0;
-
-    /* Toast */
-    --toast-success-bg: #1d8a47;
-    --toast-error-bg: #ff5e57;
-
-    /* Misc */
-    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
-    --transition-speed: 0.3s;
-}
-
 /* Body base styles */
 body {
     margin: 0;

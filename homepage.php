@@ -18,44 +18,6 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
 
-        :root {
-            /* Primary Colours */
-            --primary-colour: #6A7BA2;
-            --primary-hover: #5C728A;
-
-            /* Backgrounds */
-            --background-colour:rgb(211, 229, 255);
-            --container-background: #ffffff;
-            --input-background: #ffffff;
-
-            /* Text Colours */
-            --text: #333333;
-            --placeholder-colour: #999999;
-            --heading-colour: #2C3E50;
-
-            /* Borders & Lines */
-            --border-colour: #cccccc;
-            --focus-border-colour: #738678;
-
-            /* Buttons */
-            --button-background: var(--primary-colour);
-            --button-hover: var(--primary-hover);
-            --button-text: #ffffff;
-
-            /* Links */
-            --link-colour: #1a73e8;
-            --link-hover: #1558b0;
-
-            /* Toast */
-            --toast-success-bg: #1d8a47;
-            --toast-error-bg: #ff5e57;
-
-            /* Misc */
-            --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-            --transition-speed: 0.3s;
-        }
-
         body, html {
             margin: 0;
             font-family: 'Roboto', sans-serif;
@@ -227,24 +189,17 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'success') {
     <section class="features">
         <div class="feature-box">
             <h3>Learn Sign Language</h3>
-            <p>Watch easy-to-follow videos for beginners and families.</p>
+            <p>Learn basic sign language through easy-to-follow video tutorials made for you.</p>
         </div>
         <div class="feature-box">
-            <h3>Trusted Resources</h3>
-            <p>Access expert-approved content to support your parenting journey.</p>
+            <h3>Simple & Access Design</h3>
+            <p>Enjoy a clean, user-friendly website experience accessible on any device.</p>
         </div>
         <div class="feature-box">
-            <h3>Community Support</h3>
-            <p>Find answers to common questions and connect with others.</p>
+            <h3>Interactive Quizzes</h3>
+            <p>Test your knowledge and track your progress with fun and interactive quizzes.</p>
         </div>
     </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <h2>What Parents Are Saying</h2>
-        <p>"HearTogether helped me understand and communicate better with my child. It's a lifesaver!"</p>
-    </section>
-
 </body>
 
 <?php if (isset($_GET['error']) && $_GET['error'] === 'unauthorised'): ?>

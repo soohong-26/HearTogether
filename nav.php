@@ -390,7 +390,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <!-- Greeting and Logout (MOBILE) -->
             <li class="greeting greeting-mobile" style="display: none;">
                 <?php if (isset($_SESSION['username'])) : ?>
-                    <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'images/profile.png'; ?>" alt="Profile Picture" class="profile">
+                    <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'profile/profile.png'; ?>" alt="Profile Picture" class="profile">
                     <a href="profile.php">
                         <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
                     </a>
@@ -419,7 +419,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Greeting and Logout (DESKTOP) -->
     <div class="greeting greeting-desktop">
         <?php if (isset($_SESSION['username'])) : ?>
-            <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'images/profile.png'; ?>" alt="Profile Picture" class="profile">
+            <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'profile/profile.png'; ?>" alt="Profile Picture" class="profile">
             <a href="profile.php">
                 <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
             </a>
