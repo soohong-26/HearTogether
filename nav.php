@@ -2,7 +2,22 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once 'database.php'; // Make sure this is included for DB connection
+
 $currentPage = basename($_SERVER['PHP_SELF']);
+
+$nav_profile_img = 'profile/profile.png';
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    $stmt = $conn->prepare("SELECT profile_img FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $row = $result->fetch_assoc()) {
+        $nav_profile_img = !empty($row['profile_img']) ? $row['profile_img'] : 'profile/profile.png';
+    }
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -390,7 +405,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <!-- Greeting and Logout (MOBILE) -->
             <li class="greeting greeting-mobile" style="display: none;">
                 <?php if (isset($_SESSION['username'])) : ?>
-                    <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'profile/profile.png'; ?>" alt="Profile Picture" class="profile">
+                    <img src="<?php echo htmlspecialchars($nav_profile_img); ?>" alt="Profile Picture" class="profile">
                     <a href="profile.php">
                         <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
                     </a>
@@ -419,7 +434,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Greeting and Logout (DESKTOP) -->
     <div class="greeting greeting-desktop">
         <?php if (isset($_SESSION['username'])) : ?>
-            <img src="<?php echo isset($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'profile/profile.png'; ?>" alt="Profile Picture" class="profile">
+           <img src="<?php echo htmlspecialchars($nav_profile_img); ?>" alt="Profile Picture" class="profile">
             <a href="profile.php">
                 <span>Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
             </a>

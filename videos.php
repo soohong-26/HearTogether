@@ -59,7 +59,7 @@ if (!isset($_SESSION['username'])) {
         }
 
         .video-section {
-            padding: 40px 6vw 40px 6vw;
+            padding: 40px 0 40px 0;
             max-width: 1440px;
             margin: 0 auto;
         }

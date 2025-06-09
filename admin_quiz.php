@@ -392,6 +392,7 @@ if (isset($_GET['user'])) {
         <?php endif; ?>
     </div>
 </main>
+
 <!-- Toast container -->
 <div id="toast"></div>
 <script>
