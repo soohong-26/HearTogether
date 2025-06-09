@@ -144,7 +144,7 @@ while ($cat = $cat_res->fetch_assoc()) {
             display: flex;
             overflow-x: auto;
             gap: 20px;
-            padding-bottom: 50px;
+            padding-bottom: 30px;
             scroll-snap-type: x mandatory;
         }
 
@@ -180,6 +180,7 @@ while ($cat = $cat_res->fetch_assoc()) {
         .video-title {
             font-size: 14px;
             padding: 10px;
+            margin: 5px 10px;
             color: var(--heading-colour);
             text-align: center;
             background-color: #f5f7fa;
@@ -187,11 +188,19 @@ while ($cat = $cat_res->fetch_assoc()) {
             cursor: pointer;
             user-select: none;
             transition: background-color var(--transition-speed);
+            border-right: none;
+            border-radius: 5px;
         }
 
         .video-title[contenteditable="true"] {
             outline: 2px solid var(--primary-colour);
             background-color: #e8f4fb;
+        }
+
+        .video-title-row {
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
         }
 
         .admin-controls {
@@ -359,6 +368,67 @@ while ($cat = $cat_res->fetch_assoc()) {
         .save-order-btn:hover {
             background: var(--button-hover);
         }
+
+        .delete-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            margin-right: 5px;
+            background: var(--toast-error-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+            transition: background 0.2s, transform 0.1s;
+            position: relative;
+            min-width: 36px;
+            min-height: 36px;
+        }
+        .delete-btn:hover {
+            background: #e84840;
+            transform: translateY(-2px) scale(1.05);
+        }
+        .delete-btn .delete-icon {
+            width: 18px;
+            height: 18px;
+            display: block;
+            pointer-events: none;
+        }
+        .confirm-btn {
+            display: none;
+            padding: 8px 12px;
+            background: var(--primary-colour);
+            color: var(--button-text);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-left: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+            transition: background 0.2s, transform 0.1s;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            min-height: 36px;
+        }
+
+        .confirm-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .confirm-btn .confirm-icon {
+            width: 18px;
+            height: 18px;
+            display: block;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -430,12 +500,25 @@ while ($cat = $cat_res->fetch_assoc()) {
                     <div class="video-wrapper">
                         <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
                     </div>
-                    <div class="video-title" contenteditable="true"
-                         data-video-id="<?php echo $video['video_id']; ?>"
-                         title="Click to edit title. Press Enter to save, Esc to cancel."><?php echo htmlspecialchars($video['title']); ?></div>
-                    <div class="admin-controls">
-                        <a href="admin_videos.php?delete=<?php echo $video['video_id']; ?>" onclick="return confirm('Delete this GIF?')">Delete</a>
+                    <div class="video-title-row" style="display:flex;align-items:center;gap:8px;">
+                        <div class="video-title"
+                            contenteditable="true"
+                            data-video-id="<?php echo $video['video_id']; ?>"
+                            title="Click to edit title. Press Enter to save, Esc to cancel."
+                            style="flex:1;min-width:0;">
+                            <?php echo htmlspecialchars($video['title']); ?>
+                        </div>
+                        <button class="confirm-btn" style="display:none;" data-field="title" title="Confirm">
+                            <img src="icons/save_black.svg" alt="Confirm" class="confirm-icon">
+                        </button>
+                        <form method="get" style="margin:0;display:inline;">
+                            <input type="hidden" name="delete" value="<?= $video['video_id'] ?>">
+                            <button type="submit" class="delete-btn" title="Delete" onclick="return confirm('Delete the video?')">
+                                <img src="icons/delete_black.svg" alt="Delete" class="delete-icon">
+                            </button>
+                        </form>
                     </div>
+
                 </div>
             <?php endwhile; ?>
         </div>
@@ -479,40 +562,60 @@ while ($cat = $cat_res->fetch_assoc()) {
         this.submit();
     });
 
-    // Editable title save logic
-    document.querySelectorAll('.video-title').forEach(div => {
-        div.addEventListener('keydown', e => {
+    // For each video title row
+    document.querySelectorAll('.video-title-row').forEach(row => {
+        const titleDiv = row.querySelector('.video-title');
+        const confirmBtn = row.querySelector('.confirm-btn');
+        let originalTitle = titleDiv.innerText.trim();
+
+        // Show confirm button when title changes
+        titleDiv.addEventListener('input', function() {
+            confirmBtn.style.display = (titleDiv.innerText.trim() !== originalTitle) ? 'inline-block' : 'none';
+        });
+
+        // Handle Enter/Esc keyboard events
+        titleDiv.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                const newTitle = e.target.innerText.trim();
-                const videoId = e.target.getAttribute('data-video-id');
-                if (newTitle === '') {
-                    showToast('Title cannot be empty.', 'error');
-                    return;
-                }
-                fetch('admin_videos.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `edit_video_id=${videoId}&edit_title=${encodeURIComponent(newTitle)}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('Title updated successfully!', 'success');
-                        e.target.blur();
-                    } else {
-                        showToast(data.message || 'Failed to update title.', 'error');
-                    }
-                })
-                .catch(() => {
-                    showToast('Error updating title.', 'error');
-                });
+                confirmBtn.click();
             } else if (e.key === 'Escape') {
                 e.preventDefault();
-                window.location.reload();
+                titleDiv.innerText = originalTitle;
+                confirmBtn.style.display = 'none';
             }
         });
+
+    // Confirm button click = save AJAX
+    confirmBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const newTitle = titleDiv.innerText.trim();
+        const videoId = titleDiv.getAttribute('data-video-id');
+        if (newTitle === '') {
+            showToast('Title cannot be empty.', 'error');
+            return;
+        }
+        fetch('admin_videos.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `edit_video_id=${videoId}&edit_title=${encodeURIComponent(newTitle)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Title updated successfully!', 'success');
+                originalTitle = newTitle;
+                confirmBtn.style.display = 'none';
+                titleDiv.blur();
+            } else {
+                showToast(data.message || 'Failed to update title.', 'error');
+            }
+        })
+        .catch(() => {
+            showToast('Error updating title.', 'error');
+        });
     });
+});
+
 
     // Toast helper
     const toast = document.getElementById('toast');
@@ -533,15 +636,15 @@ while ($cat = $cat_res->fetch_assoc()) {
     const params = new URLSearchParams(window.location.search);
     if (params.has('upload')) {
         if (params.get('upload') === 'success') {
-            showToast('GIF uploaded successfully!', 'success');
+            showToast('Video uploaded successfully!', 'success');
         } else if (params.get('upload') === 'fail') {
-            showToast('Failed to upload GIF.', 'error');
+            showToast('Failed to upload Video.', 'error');
         }
         params.delete('upload');
         history.replaceState(null, '', window.location.pathname);
     }
     if (params.has('delete') && params.get('delete') === 'success') {
-        showToast('GIF deleted successfully!', 'success');
+        showToast('Video deleted successfully!', 'success');
         params.delete('delete');
         history.replaceState(null, '', window.location.pathname);
     }

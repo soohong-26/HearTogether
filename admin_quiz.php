@@ -207,6 +207,23 @@ if ($selected_user) {
         text-align: center;
     }
 
+    .back-link {
+        display: inline-block;
+        margin-top: 28px;
+        padding: 8px 22px;
+        background: var(--button-background);
+        color: #fff;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: background 0.2s;
+        box-shadow: 0 2px 6px rgba(60,200,255,0.08);
+    }
+    .back-link:hover {
+        background: var(--button-hover);
+    }
+
     .delete-btn {
         background: var(--danger);
     }
@@ -377,45 +394,9 @@ if ($selected_user) {
 
         <br>
         <hr>
-
-        <!-- User Quiz Attempts -->
-        <h3>User Quiz Attempts</h3>
-        <form method="get" class="form-row">
-            <label for="user" style="margin-top: 5px;">Select user:</label>
-            <select name="user" id="user" onchange="this.form.submit()">
-                <option value="">-- Choose User --</option>
-                <?php foreach ($users as $u): ?>
-                    <option value="<?= htmlspecialchars($u) ?>" <?= ($selected_user === $u) ? 'selected' : '' ?>><?= htmlspecialchars($u) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </form>
-        <?php if ($selected_user): ?>
-            <div class="center" style="margin: 20px 0 8px 0; display: flex; flex-direction: column; align-items: center;">
-                <img 
-                    src="<?= htmlspecialchars($selected_profile_img) ?>" 
-                    alt="Profile Picture" 
-                    style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #6A7BA2; margin-bottom: 8px; background: #e5eefd;"
-                >
-                <h4 style="margin: 0; color: #2C3E50;"><?= htmlspecialchars($selected_user) ?>'s Quiz History</h4>
-            </div>
-            <table class="user-table">
-                <thead>
-                    <tr><th>Date</th><th>Score</th></tr>
-                </thead>
-                <tbody>
-                    <?php if (count($user_history) > 0): ?>
-                        <?php foreach ($user_history as $h): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($h['attempt_date']) ?></td>
-                            <td><?= htmlspecialchars($h['score']) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr><td colspan="2" class="center">No attempts yet.</td></tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+        <div class="center">
+            <a href="admin_quiz_scores.php" class="back-link">To View User's Scores</a>
+        </div>
     </div>
 </main>
 
