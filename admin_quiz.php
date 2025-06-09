@@ -87,6 +87,20 @@ if (isset($_GET['user'])) {
         $user_history[] = $row;
     }
 }
+
+$selected_profile_img = '';
+if ($selected_user) {
+    $profile_stmt = $conn->prepare("SELECT profile_img FROM users WHERE username=?");
+    $profile_stmt->bind_param("s", $selected_user);
+    $profile_stmt->execute();
+    $profile_res = $profile_stmt->get_result();
+    if ($profile_res && $profile_res->num_rows > 0) {
+        $img_row = $profile_res->fetch_assoc();
+        $selected_profile_img = !empty($img_row['profile_img']) ? $img_row['profile_img'] : 'icons/user.png';
+    } else {
+        $selected_profile_img = 'icons/user.png';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -295,6 +309,8 @@ if (isset($_GET['user'])) {
             </div>
         </form>
 
+        <hr>
+
         <!-- List & Edit Quiz Questions -->
         <h3>All Questions</h3>
         <table class="quiz-table">
@@ -359,6 +375,9 @@ if (isset($_GET['user'])) {
             </tbody>
         </table>
 
+        <br>
+        <hr>
+
         <!-- User Quiz Attempts -->
         <h3>User Quiz Attempts</h3>
         <form method="get" class="form-row">
@@ -371,7 +390,14 @@ if (isset($_GET['user'])) {
             </select>
         </form>
         <?php if ($selected_user): ?>
-            <h4 class="center"><?= htmlspecialchars($selected_user) ?>'s Quiz History</h4>
+            <div class="center" style="margin: 20px 0 8px 0; display: flex; flex-direction: column; align-items: center;">
+                <img 
+                    src="<?= htmlspecialchars($selected_profile_img) ?>" 
+                    alt="Profile Picture" 
+                    style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #6A7BA2; margin-bottom: 8px; background: #e5eefd;"
+                >
+                <h4 style="margin: 0; color: #2C3E50;"><?= htmlspecialchars($selected_user) ?>'s Quiz History</h4>
+            </div>
             <table class="user-table">
                 <thead>
                     <tr><th>Date</th><th>Score</th></tr>
