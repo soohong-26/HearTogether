@@ -210,6 +210,7 @@ if ($selected_user) {
     .back-link {
         display: inline-block;
         margin-top: 28px;
+        margin-bottom: 28px;
         padding: 8px 22px;
         background: var(--button-background);
         color: #fff;
@@ -327,6 +328,10 @@ if ($selected_user) {
         </form>
 
         <hr>
+        <div class="center">
+            <a href="admin_quiz_scores.php" class="back-link">To View User's Scores</a>
+        </div>
+        <hr>
 
         <!-- List & Edit Quiz Questions -->
         <h3>All Questions</h3>
@@ -394,9 +399,7 @@ if ($selected_user) {
 
         <br>
         <hr>
-        <div class="center">
-            <a href="admin_quiz_scores.php" class="back-link">To View User's Scores</a>
-        </div>
+        
     </div>
 </main>
 
