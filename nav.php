@@ -65,6 +65,7 @@ if (isset($_SESSION['username'])) {
             --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             --border-radius: 8px;
             --transition-speed: 0.3s;
+            --danger: #e57373;
         }
 
         header {
@@ -379,10 +380,10 @@ if (isset($_SESSION['username'])) {
                 href="<?php echo (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') ? 'admin_videos.php' : 'videos.php'; ?>">Videos</a>
             </li>
 
-            <!-- ADMIN ONLY - User Approval -->
+            <!-- ADMIN ONLY - Users -->
             <?php if (isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin') : ?>
                 <li>
-                    <a class='nav-anc <?php echo $currentPage == "admin_approval.php" ? "active" : ""; ?>' href="admin_approval.php">User Approval</a>
+                    <a class='nav-anc <?php echo $currentPage == "admin_users.php" ? "active" : ""; ?>' href="admin_users.php">Users</a>
                 </li>
             <?php endif; ?>
             

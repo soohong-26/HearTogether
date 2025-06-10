@@ -56,6 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 $conn->close();
+
+$msg = "";
+if (isset($_GET['msg'])) {
+    $msg = $_GET['msg'];
+}
 ?>
 
 <!-- HTML -->
@@ -69,6 +74,10 @@ $conn->close();
     <link rel="stylesheet" href="css/login-register.css?v=<?= time(); ?>">
 </head>
 <body>
+    <div id="toast" style="display:none;">
+        <span id="toast-msg"></span>
+    </div>
+
     <div class="login-container"></div>
         <!-- Floating box -->
         <div class="login-box">
@@ -143,6 +152,24 @@ $conn->close();
                 togglePasswordVisibility('loginPassword', 'loginPasswordIcon');
             });
         }
+
+        // Toast show/hide function
+        function showToast(message) {
+            var toast = document.getElementById('toast');
+            var toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = message;
+            toast.className = 'toast show';
+            toast.style.display = 'block';
+            setTimeout(function(){
+                toast.classList.remove('show');
+                setTimeout(function() {
+                    toast.style.display = 'none';
+                }, 500);
+            }, 2800);
+        }
+        <?php if (!empty($msg)) : ?>
+            showToast("<?= addslashes($msg) ?>");
+        <?php endif; ?>
     </script>
 </body>
 </html>
