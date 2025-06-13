@@ -8,13 +8,16 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
+// --- Fetch 5 random questions ---
 $questionsRes = $conn->query("SELECT * FROM quiz_questions ORDER BY RAND() LIMIT 5");
 $questions = [];
 while ($row = $questionsRes->fetch_assoc()) {
     $questions[] = $row;
 }
-?>
 
+// Set your default image path (same as used on admin side)
+$default_image = 'images/quiz_default.svg';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +49,16 @@ while ($row = $questionsRes->fetch_assoc()) {
         .question p {
             font-weight: 600;
         }
+        .question-img {
+            display: block;
+            margin: 0 auto 12px auto;
+            max-width: 160px;
+            max-height: 120px;
+            object-fit: contain;
+            border-radius: 7px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.09);
+            background: #f9f9f9;
+        }
         label {
             display: block;
             margin-bottom: 5px;
@@ -75,6 +88,12 @@ while ($row = $questionsRes->fetch_assoc()) {
         <form action="quiz_complete.php" method="post">
             <?php foreach ($questions as $i => $q): ?>
                 <div class="question">
+                    <?php
+                        // --- Only display image if it exists and is NOT default ---
+                        if (!empty($q['image']) && $q['image'] !== $default_image) {
+                            echo '<img src="' . htmlspecialchars($q['image']) . '" alt="Question Image" class="question-img">';
+                        }
+                    ?>
                     <p>Q<?= $i + 1 ?>. <?= htmlspecialchars($q['question_text']) ?></p>
                     <?php foreach (['A', 'B', 'C', 'D'] as $opt): ?>
                         <label>
