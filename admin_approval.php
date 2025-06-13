@@ -79,7 +79,7 @@ $pendingUsers = $result->fetch_all(MYSQLI_ASSOC);
     .title {
         color: var(--heading-colour);
         margin-bottom: 20px;
-        padding: 0 20px 0 20px;
+        padding: 0 20px 0 50px;
         margin-top: 40px;
         font-weight: 700;
     }
