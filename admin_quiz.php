@@ -211,7 +211,7 @@ if ($selected_user) {
         background: var(--button-background);
         color: #fff;
         border: none;
-        padding: 5px 16px;
+        padding: 8px 20px;
         border-radius: 6px;
         margin-right: 6px;
         font-size: 0.95rem;
@@ -307,6 +307,7 @@ if ($selected_user) {
         color: var(--text);
         max-width: 140px;    /* << add this */
         box-sizing: border-box;
+        display: none;
     }
 
     .user-select-form {
@@ -348,6 +349,25 @@ if ($selected_user) {
     }
     #toast.success { background-color: #1d8a47; }
     #toast.error { background-color: #ff5e57; }
+
+    label.file-label {
+        display: inline-block;
+        background: var(--button-background);
+        color: var(--button-text, #fff);
+        padding: 10px 24px;
+        border-radius: 5px;       /* Updated: border-radius is now 5px */
+        border: 1px solid var(--border-colour); /* Add a border */
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s, border 0.2s;
+        margin-bottom: 10px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    label.file-label:hover {
+        background: var(--button-hover);
+        border-color: var(--primary-hover);
+    }
     </style>
 </head>
 <body>
@@ -394,8 +414,12 @@ if ($selected_user) {
 
             <!-- Image Attachment -->
             <div class="form-row">
-                <label for="question_image">Question Image</label>
-               <input type="file" id="question_image" name="question_image" accept="image/gif, image/png, image/jpeg, image/jpg">
+                <label for="add_question_image">Question Image</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label class="file-label" for="add_question_image">Choose Question Image</label>
+                    <input type="file" id="add_question_image" name="question_image" accept=".gif,.png,.jpg,.jpeg,image/gif,image/png,image/jpeg" style="display:none;">
+                    <span id="add-image-label" style="font-size:0.95em;color:#888;"></span>
+                </div>
             </div>
 
             <div class="form-row center">
@@ -436,9 +460,11 @@ if ($selected_user) {
                             <?php else: ?>
                                 <img src="images/quiz_default.svg" alt="Default Image" style="max-width:80px; max-height:60px; object-fit:contain; margin-bottom:5px;"><br>
                             <?php endif; ?>
-                            <input type="file" name="question_image" accept=".gif,.png,.jpg,.jpeg,image/gif,image/png,image/jpeg">
+                            <label class="file-label" for="edit_question_image_<?= $q['question_id'] ?>">Change Image</label>
+                                <input type="file" id="edit_question_image_<?= $q['question_id'] ?>" name="question_image" accept=".gif,.png,.jpg,.jpeg,image/gif,image/png,image/jpeg">
+                                <span class="edit-image-label" style="font-size:0.95em;color:#888;margin-left:10px;"></span>
                             <br>
-                            <small>Leave blank to keep existing image</small>
+                                <small>Leave blank to keep existing image</small>
                         </td>
                         <td>
                             <input type="text" name="edit_option_a" value="<?= htmlspecialchars($q['option_a']) ?>" required maxlength="100" style="width:60px;"> A<br>
@@ -533,6 +559,19 @@ if ($selected_user) {
         params.delete('quiz_action');
         history.replaceState(null, '', window.location.pathname);
     }
+
+    // Show selected file name for add question
+    document.getElementById('add_question_image')?.addEventListener('change', function() {
+        document.getElementById('add-image-label').textContent = this.files.length ? this.files[0].name : "";
+    });
+
+    // Show selected file name for each edit row
+    document.querySelectorAll('input[type="file"][id^="edit_question_image_"]').forEach(function(input) {
+        input.addEventListener('change', function() {
+            const labelSpan = input.parentNode.querySelector('.edit-image-label');
+            labelSpan.textContent = input.files.length ? input.files[0].name : "";
+        });
+    });
 </script>
 </body>
 </html>
