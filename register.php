@@ -9,6 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
+    // Ensures that the password is more than 8 characters
+    if (strlen($password) < 8) {
+        echo "<script>alert('Password must be at least 8 characters long.'); window.history.back();</script>";
+        exit;
+    }
+
     // Server-side check to ensure username has no spaces
     if (preg_match('/\s/', $username)) {
         echo "<script>alert('Username must not contain spaces.'); window.history.back();</script>";
