@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
 
             if ($_SESSION['roles'] === 'admin') {
-                header("Location: homepage.php"); // Adjust if admin has a separate dashboard
+                header("Location: homepage.php"); 
                 exit();
             } else {
                 header("Location: homepage.php");
@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // Either the email doesn’t exist OR the user isn’t approved yet
-        // So let's do another query just to confirm the cause and give better feedback
         $checkPendingStmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
         $checkPendingStmt->bind_param("s", $email);
         $checkPendingStmt->execute();
