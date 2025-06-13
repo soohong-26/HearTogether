@@ -127,6 +127,9 @@ $conn->close();
                     </span>
                 </div>
 
+                <!-- Password strength message -->
+                <p id="passwordLengthMsg"></p>
+
                 <!-- Double Confirm Password -->
                 <div class="input-group">
                     <input type="password" id="confirmPassword" placeholder="Reenter Password" name="check_password" required>
@@ -134,6 +137,9 @@ $conn->close();
                         <img src="icons/lock2_black.svg" alt="Password Icon" id="confirmPasswordIcon" class="password-icon">
                     </span>
                 </div>
+
+                <!-- Password match message -->
+                <p id="passwordMatchMsg"></p>
 
                 <!-- Submit Button -->
                 <button type="submit" class="login-btn" name="submit">Register</button>
@@ -224,6 +230,44 @@ $conn->close();
                 togglePasswordVisibility('confirmPassword', 'confirmPasswordIcon');
             });
         }
+
+    // Password live length feedback
+    const registerPassword = document.getElementById('registerPassword');
+    const passwordLengthMsg = document.getElementById('passwordLengthMsg');
+
+    registerPassword.addEventListener('input', function () {
+        const length = registerPassword.value.length;
+        if (length === 0) {
+            passwordLengthMsg.textContent = "";
+        } else if (length < 8) {
+            passwordLengthMsg.textContent = "Password must be at least 8 characters.";
+            passwordLengthMsg.style.color = "red";
+        } else {
+            passwordLengthMsg.textContent = "Password length is sufficient.";
+            passwordLengthMsg.style.color = "green";
+        }
+    });
+
+    // Live check for password match
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordMatchMsg = document.getElementById('passwordMatchMsg');
+
+    function checkPasswordMatch() {
+        const passwordValue = registerPassword.value;
+        const confirmValue = confirmPassword.value;
+        if (confirmValue.length === 0) {
+            passwordMatchMsg.textContent = "";
+        } else if (passwordValue !== confirmValue) {
+            passwordMatchMsg.textContent = "Passwords do not match.";
+            passwordMatchMsg.style.color = "red";
+        } else {
+            passwordMatchMsg.textContent = "Passwords match!";
+            passwordMatchMsg.style.color = "green";
+        }
+    }
+
+    registerPassword.addEventListener('input', checkPasswordMatch);
+    confirmPassword.addEventListener('input', checkPasswordMatch);
     </script>
 </body>
 </html>

@@ -200,6 +200,17 @@ h2 {
       top: 32px;
   }
 
+  #passwordLengthMsg {
+    transition: color 0.2s;
+    margin: 0 0 10px 0; 
+    font-size: 0.95em;
+  }
+  #passwordMatchMsg {
+      transition: color 0.2s;
+      margin: 0 0 10px 0; 
+      font-size: 0.95em;
+  }
+
 /* Responsive design */
 @media (max-width: 500px) {
   .login-box {
