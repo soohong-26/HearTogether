@@ -414,6 +414,8 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
     <?php endif; ?>
 </section>
 
+<?php include 'footer.php'; ?>
+
 </body>
 
 <?php if (isset($_GET['error']) && $_GET['error'] === 'unauthorised'): ?>
