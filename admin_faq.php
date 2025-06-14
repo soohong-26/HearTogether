@@ -67,6 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'], $_POST['fi
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     $conn->query("DELETE FROM faq WHERE id=$id");
+
+    // Auto-delete any category with no remaining FAQs
+    $conn->query("DELETE FROM faq_categories WHERE name NOT IN (SELECT DISTINCT category FROM faq)");
+
     header("Location: admin_faq.php?delete_success=1");
     exit();
 }
@@ -175,6 +179,20 @@ while ($row = $res->fetch_assoc()) {
 </main>
 
 <script>
+// FAQ form validation
+document.querySelector('.faq-form form').addEventListener('submit', function(e) {
+    const existing = document.getElementById('new_category').value.trim();
+    const custom = document.getElementById('new_category_input').value.trim();
+
+    // Must choose exactly one: either select OR input (not both, not neither)
+    if ((existing && custom) || (!existing && !custom)) {
+        e.preventDefault();
+        showToast('Please select an existing category OR enter a new one (not both).', true);
+        return false;
+    }
+    // Otherwise: allow submission
+});
+
 // Move category groups (blocks) up or down
 function updateMoveButtons() {
     const lis = document.querySelectorAll('#categoryList li');
@@ -269,6 +287,11 @@ document.addEventListener('DOMContentLoaded', function() {
         params.delete('delete_success');
         window.history.replaceState({}, document.title, window.location.pathname);
     }
+    if (params.get('add') === 'error') {
+        showToast('Please select an existing category OR enter a new one (not both).', true);
+        params.delete('add');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 });
 
 // Dynamic disabling for category and input
@@ -281,7 +304,6 @@ document.getElementById('new_category_input').addEventListener('input', function
     if(this.value) document.getElementById('new_category').value = '';
     else document.getElementById('new_category').disabled = false;
 });
-
 </script>
 </body>
 </html>
