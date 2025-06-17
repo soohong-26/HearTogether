@@ -100,7 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_question'])) {
 // --- Handle Deleting a Question ---
 if (isset($_GET['delete'])) {
     $qid = intval($_GET['delete']);
+
+    // First, delete related responses
+    $conn->query("DELETE FROM quiz_responses WHERE question_id=$qid");
+
+    // Then, delete the question
     $stmt = $conn->prepare("DELETE FROM quiz_questions WHERE question_id=?");
+
     $stmt->bind_param("i", $qid);
     $stmt->execute();
     header("Location: admin_quiz.php?quiz_action=delete_success");
@@ -229,7 +235,7 @@ if ($selected_user) {
         background: var(--button-background);
         color: #fff;
         border: none;
-        padding: 5px 16px;
+        padding: 8px 20px;
         border-radius: 6px;
         font-size: 0.95rem;
         cursor: pointer;
