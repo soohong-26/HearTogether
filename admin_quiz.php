@@ -17,31 +17,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_question'])) {
     $correct = $_POST['correct_option'];
 
     $image_filename = null;
+
 if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] === UPLOAD_ERR_OK) {
-    $uploadDir = 'uploads/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-    $fileTmpPath = $_FILES['question_image']['tmp_name'];
-    $fileName = uniqid() . '_' . basename($_FILES['question_image']['name']);
-    $destPath = $uploadDir . $fileName;
-    $imageType = exif_imagetype($fileTmpPath);
+        $uploadDir = 'uploads/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+        $fileTmpPath = $_FILES['question_image']['tmp_name'];
+        $fileName = uniqid() . '_' . basename($_FILES['question_image']['name']);
+        $destPath = $uploadDir . $fileName;
+        $imageType = exif_imagetype($fileTmpPath);
 
-    // Only allow gif, png, jpg, jpeg
-    $allowedTypes = [IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG];
-    $allowedExtensions = ['gif', 'png', 'jpg', 'jpeg'];
-    $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    if (in_array($imageType, $allowedTypes) && in_array($fileExt, $allowedExtensions)) {
-        move_uploaded_file($fileTmpPath, $destPath);
-        $image_filename = $destPath;
+        // Only allow gif, png, jpg, jpeg
+        $allowedTypes = [IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG];
+        $allowedExtensions = ['gif', 'png', 'jpg', 'jpeg'];
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        
+        if (in_array($imageType, $allowedTypes) && in_array($fileExt, $allowedExtensions)) {
+            move_uploaded_file($fileTmpPath, $destPath);
+            $image_filename = $destPath;
+        }
     }
-}
-
 
     if ($q && $a && $b && $c && $d && in_array($correct, ['A','B','C','D'])) {
         $stmt = $conn->prepare("INSERT INTO quiz_questions (question_text, image, option_a, option_b, option_c, option_d, correct_option) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $q, $image_filename, $a, $b, $c, $d, $correct);
         $stmt->execute();
         header("Location: admin_quiz.php?quiz_action=add_success");
+
         exit();
+
     } else {
         header("Location: admin_quiz.php?quiz_action=add_error");
         exit();

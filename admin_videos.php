@@ -616,7 +616,6 @@ while ($cat = $cat_res->fetch_assoc()) {
     });
 });
 
-
     // Toast helper
     const toast = document.getElementById('toast');
     let toastTimeout;
