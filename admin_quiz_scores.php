@@ -20,6 +20,7 @@ $selected_user = '';
 $user_email = '';
 $profile_img = 'icons/user.png';
 
+// If a user is selected
 if (isset($_GET['user']) && $_GET['user'] !== '') {
     $selected_user = $_GET['user'];
 
@@ -178,6 +179,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
 <main>
     <div class="container">
         <h2>User Quiz Attempts</h2>
+        <!-- User selection -->
         <form method="get" class="form-row" style="justify-content:center;">
             <label for="user" style="margin-top: 5px;">Select user:</label>
             <select name="user" id="user" class="styled-select" onchange="this.form.submit()">
@@ -187,21 +189,28 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
                 <?php endforeach; ?>
             </select>
         </form>
+        <!-- User profile -->
         <?php if ($selected_user): ?>
             <div class="user-profile-summary">
                 <img src="<?= htmlspecialchars($profile_img) ?>" alt="Profile of <?= htmlspecialchars($selected_user) ?>">
                 <div>
+                    <!-- User info -->
                     <div class="info"><?= htmlspecialchars($selected_user) ?></div>
+                    <!-- User email -->
                     <div class="email"><?= $user_email ?></div>
                 </div>
             </div>
+
             <h4 class="center"><?= htmlspecialchars($selected_user) ?>'s Quiz History</h4>
+            <!-- User history -->
             <table class="user-table">
                 <thead>
                     <tr><th>Date</th><th>Score</th></tr>
                 </thead>
+
                 <tbody>
                     <?php if (count($user_history) > 0): ?>
+                        <!-- Each attempt -->
                         <?php foreach ($user_history as $h): ?>
                         <tr>
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
@@ -209,11 +218,13 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
                         </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
+                        <!-- No attempts -->
                         <tr><td colspan="2" class="no-attempts">No attempts yet.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         <?php endif; ?>
+        <!-- Back to the main quiz manager -->
         <div class="center">
             <a href="admin_quiz.php" class="back-link">&larr; Back to Quiz Manager</a>
         </div>

@@ -277,8 +277,10 @@ if ($result && $result->num_rows > 0) {
     <?php include 'nav.php'; ?>
 
     <main>
+        <!-- Page header -->
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
         <h2 style="margin-bottom: 0;">User Overview</h2>
+        <!-- Link to user approval -->
         <a href="admin_approval.php" 
            style="
                 padding: 10px 22px;
@@ -300,9 +302,12 @@ if ($result && $result->num_rows > 0) {
         <span id="toast-msg"></span>
     </div>
 
+    <!-- Search box to filter users by username or email -->
     <div class="user-search-box" style="margin-top: 18px;">
         <input type="text" id="userSearch" placeholder="Search users by username or email...">
     </div>
+    
+    <!-- Scrollable container for table -->
     <div style="overflow-x:auto;">
         <table class="user-table" id="userTable">
             <thead>
@@ -317,9 +322,12 @@ if ($result && $result->num_rows > 0) {
                 </tr>
             </thead>
             <tbody>
+            <!-- Loop through all users and generate a row for each one -->
             <?php foreach ($users as $index => $user): ?>
                 <tr>
+                    <!-- Displaying their name -->
                     <td><?= $index + 1; ?></td>
+                    <!-- Display the profile image -->
                     <td>
                         <?php
                             $imgFile = trim($user['profile_img']);
@@ -333,19 +341,24 @@ if ($result && $result->num_rows > 0) {
                         ?>
                         <img src="<?= htmlspecialchars($finalImg) ?>" class="profile-img" alt="Profile">
                     </td>
+                    <!-- Displaying their username -->
                     <td><?= htmlspecialchars($user['username']); ?></td>
+
                     <!-- Inline edit for email and role -->
                     <form method="post" style="display: contents;">
                         <input type="hidden" name="user_id" value="<?= $user['user_id']; ?>">
+                        <!-- Editable email input -->
                         <td class="edit-fields">
                             <input type="email" name="email" value="<?= htmlspecialchars($user['email']); ?>" required>
                         </td>
+                        <!-- Role selection dropdown -->
                         <td class="edit-fields">
                             <select name="roles" required>
                                 <option value="user" <?= $user['roles'] === 'user' ? 'selected' : '' ?>>User</option>
                                 <option value="admin" <?= $user['roles'] === 'admin' ? 'selected' : '' ?>>Admin</option>
                             </select>
                         </td>
+                        <!-- Show approved or pending -->
                         <td>
                             <?php if ($user['is_approved']): ?>
                                 <span class="is-approved approved">Approved</span>
@@ -353,11 +366,13 @@ if ($result && $result->num_rows > 0) {
                                 <span class="is-approved pending">Pending</span>
                             <?php endif; ?>
                         </td>
+                        <!-- Edit and Delete action buttons -->
                         <td class="admin-actions">
                             <button type="submit" name="edit_user" class="btn-minimal" title="Save Changes">
                                 <img src="icons/save_black.svg" alt="Save" class="action-icon">
                             </button>
                     </form>
+                            <!-- Form to handle the deletion of the user -->
                             <form method="post" onsubmit="return confirm('Are you sure you want to delete this user?');" style="display: contents;">
                                 <input type="hidden" name="user_id" value="<?= $user['user_id']; ?>">
                                 <button type="submit" name="delete_user" class="btn-delete" title="Delete User">

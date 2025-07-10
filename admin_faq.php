@@ -104,25 +104,39 @@ while ($row = $res->fetch_assoc()) {
 <main>
     <div class="admin-header">
         <h2>Admin FAQ Management</h2>
+        <!-- Link to view the public FAQ page -->
         <a href="faq.php" style="color:var(--accent);font-weight:bold;text-decoration:underline;">View Public FAQ</a>
     </div>
 
+    <!-- Form to add a new FAQ -->
     <div class="faq-form">
         <form method="post" autocomplete="off">
+
+            <!-- Dropdown for selecting an existing category -->
             <label for="new_category">Select Existing Category</label>
             <select id="new_category" name="new_category" onchange="document.getElementById('new_category_input').disabled = !!this.value;">
                 <option value="">-- Select Existing Category --</option>
+                
                 <?php foreach ($categories as $cat): ?>
                     <option value="<?= htmlspecialchars($cat) ?>"><?= htmlspecialchars($cat) ?></option>
                 <?php endforeach; ?>
+
             </select>
+
+            <!-- Text input for typing a new category -->
             <label for="new_category_input">Or Type New Category</label>
             <input type="text" id="new_category_input" name="new_category_input" placeholder="Or type new category name here"
                 oninput="document.getElementById('new_category').disabled = !!this.value; if(!this.value) document.getElementById('new_category').disabled=false;">
+            
+            <!-- Question field -->
             <label for="new_question">Question</label>
             <input type="text" id="new_question" name="new_question" required placeholder="Enter new FAQ question">
+            
+            <!-- Answer field -->
             <label for="new_answer">Answer</label>
             <textarea id="new_answer" name="new_answer" required rows="3" placeholder="Enter answer here"></textarea>
+            
+            <!-- Submit button -->
             <button type="submit">Add FAQ</button>
         </form>
     </div>
@@ -134,30 +148,43 @@ while ($row = $res->fetch_assoc()) {
             <ul id="categoryList" style="padding-left:0;">
                 <?php foreach ($categories as $i => $cat): ?>
                     <li data-name="<?= htmlspecialchars($cat) ?>" style="list-style:none;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <!-- Category name -->
                         <span style="flex:1;"><?= htmlspecialchars($cat) ?></span>
+                        <!-- Move up button -->
                         <button type="button" class="move-up" <?= $i==0?'disabled':'' ?>>&#8593;</button>
+                        <!-- Move down button -->
                         <button type="button" class="move-down" <?= $i==count($categories)-1?'disabled':'' ?>>&#8595;</button>
                     </li>
                 <?php endforeach; ?>
             </ul>
+
+            <!-- Hidden input to store the category order -->
             <input type="hidden" name="category_order" id="categoryOrderInput">
             <button type="submit" class="save-order-btn">Save Order</button>
         </form>
     </div>
 
+    <!-- Loop through each category and display its associated FAQs -->
     <?php foreach ($categories as $category): ?>
         <?php if (!empty($faqs[$category])): ?>
             <div class="category-box" data-category="<?= htmlspecialchars($category) ?>">
                 <h3><?= htmlspecialchars($category) ?></h3>
+                <!-- Each individual FAQ in the category -->
                 <?php foreach ($faqs[$category] as $faq): ?>
                     <div class="faq-item" data-id="<?= $faq['id'] ?>">
+                        <!-- Question Field + Edit and Delete -->
                         <div class="faq-field">
+                            <!-- Editable question field -->
                             <input type="text" class="faq-q" value="<?= htmlspecialchars($faq['question']) ?>" data-field="question" autocomplete="off">
+                            <!-- Save button (only appears when question field is edited) -->
                             <button class="confirm-btn" style="display:none;" data-field="question" title="Confirm">
                                 <img src="icons/save_black.svg" alt="Confirm" class="confirm-icon">
                             </button>
+                            <!-- Delete FAQ button -->
                             <form method="get" style="margin:0;display:inline;">
+                                <!-- Editable answer input -->
                                 <input type="hidden" name="delete" value="<?= $faq['id'] ?>">
+                                <!-- Save button -->
                                 <button type="submit" class="delete-btn" title="Delete FAQ" onclick="return confirm('Delete this FAQ?')">
                                     <img src="icons/delete_black.svg" alt="Delete" class="delete-icon">
                                 </button>
@@ -175,6 +202,7 @@ while ($row = $res->fetch_assoc()) {
         <?php endif; ?>
     <?php endforeach; ?>
 
+    <!-- Toast container -->
     <div id="toast" class="toast"></div>
 </main>
 
@@ -203,6 +231,7 @@ function updateMoveButtons() {
 }
 updateMoveButtons();
 
+// Attach click event listeners to move-up and move-down buttons
 document.querySelectorAll('.move-up, .move-down').forEach(btn => {
     btn.addEventListener('click', function() {
         const li = this.closest('li');
@@ -216,6 +245,7 @@ document.querySelectorAll('.move-up, .move-down').forEach(btn => {
     });
 });
 
+// Handle the submission of the new category order form
 document.getElementById('reorderForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const order = Array.from(document.querySelectorAll('#categoryList li')).map(li => li.dataset.name);
@@ -262,6 +292,7 @@ document.querySelectorAll('.confirm-btn').forEach(btn => {
     });
 });
 
+// Toast show/hide function
 function showToast(msg, error) {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
@@ -270,6 +301,7 @@ function showToast(msg, error) {
     setTimeout(()=>{toast.style.display='none';}, 2300);
 }
 
+// Display toast if redirected with message
 document.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('add') === 'success') {

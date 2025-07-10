@@ -11,15 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_POST['user_id'];
     $action = $_POST['action'];
 
+    // Determine the SQL query based on the action
     if ($action === 'approve') {
+        // Update is_approved to 1
         $sql = "UPDATE users SET is_approved = 1 WHERE user_id = ?";
     } elseif ($action === 'decline') {
+        // Delete the user
         $sql = "DELETE FROM users WHERE user_id = ?";
     }
 
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("i", $userId);
         if ($stmt->execute()) {
+            // Redirect after successful action to show status toast
             header("Location: admin_approval.php?status=" . $action);
             exit;
         }
@@ -134,9 +138,11 @@ $pendingUsers = $result->fetch_all(MYSQLI_ASSOC);
 
     <h2 class="title">Pending User Registrations</h2>
 
+    <!-- If there are no users that are awaiting for approval, it will show a status message -->
     <?php if (count($pendingUsers) === 0): ?>
         <p class="status">No new registration requests.</p>
     <?php else: ?>
+        <!-- Otherwise it will display of the pending users -->
         <table class="approval-table">
             <thead>
                 <tr>
@@ -151,11 +157,13 @@ $pendingUsers = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?= htmlspecialchars($user['username']) ?></td>
                         <td><?= htmlspecialchars($user['email']) ?></td>
                         <td>
+                            <!-- The approve form -->
                             <form method="post" style="display:inline;">
                                 <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
                                 <input type="hidden" name="action" value="approve">
                                 <button class="action-btn approve" type="submit">Approve</button>
                             </form>
+                            <!-- The decline form -->
                             <form method="post" style="display:inline;">
                                 <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
                                 <input type="hidden" name="action" value="decline">
@@ -168,6 +176,7 @@ $pendingUsers = $result->fetch_all(MYSQLI_ASSOC);
         </table>
     <?php endif; ?>
 
+    <!-- Toast message for the notification whether the user has been approved or not -->
     <?php if (isset($_GET['status'])): ?>
         <div id="toast" class="toast">
             <?= $_GET['status'] === 'approve' ? 'User approved successfully!' : 'User declined and removed.' ?>

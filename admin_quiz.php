@@ -7,7 +7,7 @@ if (!isset($_SESSION['username']) || $_SESSION['roles'] !== 'admin') {
     exit();
 }
 
-// --- Handle Adding New Question ---
+// Handling adding a question
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_question'])) {
     $q = trim($_POST['question_text']);
     $a = trim($_POST['option_a']);
@@ -18,25 +18,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_question'])) {
 
     $image_filename = null;
 
-if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'uploads/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-        $fileTmpPath = $_FILES['question_image']['tmp_name'];
-        $fileName = uniqid() . '_' . basename($_FILES['question_image']['name']);
-        $destPath = $uploadDir . $fileName;
-        $imageType = exif_imagetype($fileTmpPath);
+    // If image is uploaded, validate and move it
+    if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'uploads/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $fileTmpPath = $_FILES['question_image']['tmp_name'];
+            $fileName = uniqid() . '_' . basename($_FILES['question_image']['name']);
+            $destPath = $uploadDir . $fileName;
+            $imageType = exif_imagetype($fileTmpPath);
 
-        // Only allow gif, png, jpg, jpeg
-        $allowedTypes = [IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG];
-        $allowedExtensions = ['gif', 'png', 'jpg', 'jpeg'];
-        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-        
-        if (in_array($imageType, $allowedTypes) && in_array($fileExt, $allowedExtensions)) {
-            move_uploaded_file($fileTmpPath, $destPath);
-            $image_filename = $destPath;
+            // Only allow gif, png, jpg, jpeg
+            $allowedTypes = [IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG];
+            $allowedExtensions = ['gif', 'png', 'jpg', 'jpeg'];
+            $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            
+            if (in_array($imageType, $allowedTypes) && in_array($fileExt, $allowedExtensions)) {
+                move_uploaded_file($fileTmpPath, $destPath);
+                $image_filename = $destPath;
+            }
         }
-    }
 
+    // Insert the question into the database
     if ($q && $a && $b && $c && $d && in_array($correct, ['A','B','C','D'])) {
         $stmt = $conn->prepare("INSERT INTO quiz_questions (question_text, image, option_a, option_b, option_c, option_d, correct_option) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $q, $image_filename, $a, $b, $c, $d, $correct);
@@ -51,7 +53,7 @@ if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] === U
     }
 }
 
-// --- Handle Editing a Question ---
+// Editing the question
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_question'])) {
     $qid = $_POST['edit_question'];
     $q = trim($_POST['edit_question_text']);
@@ -100,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_question'])) {
     }
 }
 
-// --- Handle Deleting a Question ---
+// Handling deleting a question
 if (isset($_GET['delete'])) {
     $qid = intval($_GET['delete']);
 
@@ -116,21 +118,21 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-// --- Fetch all quiz questions ---
+// Fetching all the quiz questions
 $qres = $conn->query("SELECT * FROM quiz_questions ORDER BY question_id ASC");
 $questions = [];
 while ($row = $qres->fetch_assoc()) {
     $questions[] = $row;
 }
 
-// --- Fetch all users who took the quiz ---
+// Fetching all the users that took the quiz
 $users = [];
 $ures = $conn->query("SELECT DISTINCT username FROM quiz_attempts ORDER BY username ASC");
 while ($row = $ures->fetch_assoc()) {
     $users[] = $row['username'];
 }
 
-// --- If a user is selected, fetch their history ---
+// If the user has been selected, it will fetch all the user data
 $user_history = [];
 $selected_user = '';
 if (isset($_GET['user'])) {
@@ -144,6 +146,7 @@ if (isset($_GET['user'])) {
     }
 }
 
+// Fetching the profile image of the selected user
 $selected_profile_img = '';
 if ($selected_user) {
     $profile_stmt = $conn->prepare("SELECT profile_img FROM users WHERE username=?");
@@ -388,6 +391,8 @@ if ($selected_user) {
         <!-- Add Question Form -->
         <form method="POST" enctype="multipart/form-data" autocomplete="off">
             <h3>Add New Question</h3>
+
+            <!-- Question section -->
             <div class="form-row">
                 <label for="question_text">Question</label>
                 <input type="text" id="question_text" name="question_text" maxlength="255" required>
@@ -454,33 +459,42 @@ if ($selected_user) {
                     <th>Actions</th>
                 </tr>
             </thead>
+
             <tbody>
             <?php foreach ($questions as $q): ?>
+                <!-- Loop through each quiz question in the $questions array -->
                 <?php if (isset($_GET['edit']) && $_GET['edit'] == $q['question_id']): ?>
+                <!-- If the "edit" parameter in URL matches the current question ID, then show the EDIT FORM -->
                 <tr>
                     <form method="POST" enctype="multipart/form-data">
+                        <!-- Hidden field to know which question is being edited -->
                         <input type="hidden" name="edit_question" value="<?= $q['question_id'] ?>">
+                        <!-- Editable text field for question text -->
                         <td>
                             <input type="text" name="edit_question_text" value="<?= htmlspecialchars($q['question_text']) ?>" required maxlength="255">
                         </td>
+                        <!-- Image upload field -->
                         <td style="text-align:center; width: 150px;">
                             <?php if (!empty($q['image'])): ?>
                                 <img src="<?= htmlspecialchars($q['image']) ?>" alt="Current Image" style="max-width:80px; max-height:60px; object-fit:contain; margin-bottom:5px;"><br>
                             <?php else: ?>
                                 <img src="images/quiz_default.svg" alt="Default Image" style="max-width:80px; max-height:60px; object-fit:contain; margin-bottom:5px;"><br>
                             <?php endif; ?>
+                            <!-- File input for uploading new image -->
                             <label class="file-label" for="edit_question_image_<?= $q['question_id'] ?>">Change Image</label>
                                 <input type="file" id="edit_question_image_<?= $q['question_id'] ?>" name="question_image" accept=".gif,.png,.jpg,.jpeg,image/gif,image/png,image/jpeg">
                                 <span class="edit-image-label" style="font-size:0.95em;color:#888;margin-left:10px;"></span>
                             <br>
                                 <small>Leave blank to keep existing image</small>
                         </td>
+                        <!-- Editable text fields for options -->
                         <td>
                             <input type="text" name="edit_option_a" value="<?= htmlspecialchars($q['option_a']) ?>" required maxlength="100" style="width:60px;"> A<br>
                             <input type="text" name="edit_option_b" value="<?= htmlspecialchars($q['option_b']) ?>" required maxlength="100" style="width:60px;"> B<br>
                             <input type="text" name="edit_option_c" value="<?= htmlspecialchars($q['option_c']) ?>" required maxlength="100" style="width:60px;"> C<br>
                             <input type="text" name="edit_option_d" value="<?= htmlspecialchars($q['option_d']) ?>" required maxlength="100" style="width:60px;"> D
                         </td>
+                        <!-- Select field for correct option -->
                         <td>
                             <select name="edit_correct_option" required>
                                 <option value="A" <?= $q['correct_option']=='A'?'selected':'' ?>>A</option>
@@ -489,6 +503,7 @@ if ($selected_user) {
                                 <option value="D" <?= $q['correct_option']=='D'?'selected':'' ?>>D</option>
                             </select>
                         </td>
+                        <!-- Save & Cancel buttons -->
                         <td>
                             <div class="action-buttons">
                                 <button type="submit" name="edit_question" value="<?= $q['question_id'] ?>" class="save-btn">Save</button>
@@ -498,10 +513,12 @@ if ($selected_user) {
                     </form>
                 </tr>
                 <?php else: ?>
+                    <!-- If the "edit" parameter in URL does not match the current question ID, then show the VIEW -->
                     <tr>
                         <td>
                             <?= htmlspecialchars($q['question_text']) ?>
                         </td>
+                        <!-- Image or the default image -->
                         <td style="text-align:center; width: 150px;">
                             <?php if (!empty($q['image'])): ?>
                                 <img src="<?= htmlspecialchars($q['image']) ?>" alt="Question Image" style="max-width:80px; max-height:60px; object-fit:contain;">
@@ -509,16 +526,21 @@ if ($selected_user) {
                                 <img src="images/quiz_default.svg" alt="Default Image" class="quiz_image">
                             <?php endif; ?>
                         </td>
+                        <!-- Options -->
                         <td>
                             A. <?= htmlspecialchars($q['option_a']) ?><br>
                             B. <?= htmlspecialchars($q['option_b']) ?><br>
                             C. <?= htmlspecialchars($q['option_c']) ?><br>
                             D. <?= htmlspecialchars($q['option_d']) ?>
                         </td>
+                        <!-- Correct option just the letter -->
                         <td><?= $q['correct_option'] ?></td>
+                        <!-- Edit & Delete buttons -->
                         <td>
                             <div class="action-buttons">
+                                <!-- Edit button -->
                                 <a href="admin_quiz.php?edit=<?= $q['question_id'] ?>" class="edit-btn">Edit</a>
+                                <!-- Delete button -->
                                 <a href="admin_quiz.php?delete=<?= $q['question_id'] ?>" class="delete-btn" onclick="return confirm('Delete this question?');">Delete</a>
                             </div>
                         </td>

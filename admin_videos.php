@@ -434,19 +434,24 @@ while ($cat = $cat_res->fetch_assoc()) {
 <body>
 <?php include 'nav.php'; ?>
 
+<!-- Main Content -->
 <main class="video-section">
     <h2 class="section-title">Admin Video Management</h2>
-
+    
+    <!-- Upload Form -->
     <div class="upload-form">
         <form method="POST" enctype="multipart/form-data">
             <label for="title">Title</label>
+            <!-- Input for entering the video title -->
             <input type="text" name="title" id="title" placeholder="Enter Title" required>
 
             <br><br>
 
+            <!-- Dropdownn to choose an existing category from the database -->
             <label for="category">Select Existing Category</label>
             <select name="category" id="category" onchange="document.getElementById('new_category').disabled = !!this.value;">
                 <option value="">-- None --</option>
+                <!-- Dynamically populate the list of categories -->
                 <?php foreach ($categories as $cat): ?>
                     <option value="<?php echo htmlspecialchars($cat); ?>">
                         <?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $cat))); ?>
@@ -456,15 +461,18 @@ while ($cat = $cat_res->fetch_assoc()) {
 
             <br><br>
 
+            <!-- Field to optionally create a new category instead of choosing existing -->
             <label for="new_category">Or Add New Category</label>
             <input type="text" name="new_category" id="new_category" placeholder="e.g., Numbers, Greetings">
 
             <br><br>
 
+            <!-- File input field for uploading the GIF file -->
             <label for="gif">Upload File</label>
             <input type="file" name="gif" id="gif" accept=".gif, .png, .jpeg, .jpg, image/gif, image/png, image/jpeg" required>
 
             <br>
+            <!-- Submit upload button -->
             <button type="submit">Upload</button>
         </form>
     </div>
@@ -473,15 +481,19 @@ while ($cat = $cat_res->fetch_assoc()) {
     <div class="category-order-list">
         <h3>Organise Category Groups</h3>
         <form method="post" id="reorderForm" style="margin-bottom:30px;">
+            <!-- List of categories -->
             <ul id="categoryList" style="padding-left:0;">
                 <?php foreach ($categories as $i => $cat): ?>
                     <li data-name="<?= htmlspecialchars($cat) ?>" style="list-style:none;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
                         <span style="flex:1;"><?= htmlspecialchars(ucwords(str_replace('_', ' ', $cat))); ?></span>
+                        <!-- Disable up button for the first time -->
                         <button type="button" class="move-up" <?= $i==0?'disabled':'' ?>>&#8593;</button>
+                        <!-- Disable the down button for the last time -->
                         <button type="button" class="move-down" <?= $i==count($categories)-1?'disabled':'' ?>>&#8595;</button>
                     </li>
                 <?php endforeach; ?>
             </ul>
+            <!-- Hidden input to submit the final category order -->
             <input type="hidden" name="category_order" id="categoryOrderInput">
             <button type="submit" class="save-order-btn">Save Order</button>
         </form>
@@ -493,13 +505,20 @@ while ($cat = $cat_res->fetch_assoc()) {
         $videoSet = $conn->query("SELECT * FROM videos WHERE category = '" . $conn->real_escape_string($catName) . "' ORDER BY video_id DESC");
         if ($videoSet->num_rows > 0):
     ?>
+        <!-- Category section title -->
         <h2 class="section-title"><?php echo ucwords(str_replace('_', ' ', htmlspecialchars($catName))); ?></h2>
+        
+        <!-- Horizontal scrollable list of video cards -->
         <div class="video-grid">
             <?php while ($video = $videoSet->fetch_assoc()): ?>
                 <div class="video-card">
+
+                    <!-- Preview box for the uploaded video file -->
                     <div class="video-wrapper">
                         <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
                     </div>
+
+                    <!-- Editable title with confirm and delete buttons -->
                     <div class="video-title-row" style="display:flex;align-items:center;gap:8px;">
                         <div class="video-title"
                             contenteditable="true"
@@ -508,11 +527,17 @@ while ($cat = $cat_res->fetch_assoc()) {
                             style="flex:1;min-width:0;">
                             <?php echo htmlspecialchars($video['title']); ?>
                         </div>
+
+                        <!-- Save title button (only appears when title field is edited) -->
                         <button class="confirm-btn" style="display:none;" data-field="title" title="Confirm">
                             <img src="icons/save_black.svg" alt="Confirm" class="confirm-icon">
                         </button>
+
+                        <!-- Delete video form -->
                         <form method="get" style="margin:0;display:inline;">
                             <input type="hidden" name="delete" value="<?= $video['video_id'] ?>">
+                            
+                            <!-- Delete video button -->
                             <button type="submit" class="delete-btn" title="Delete" onclick="return confirm('Delete the video?')">
                                 <img src="icons/delete_black.svg" alt="Delete" class="delete-icon">
                             </button>
@@ -542,6 +567,7 @@ while ($cat = $cat_res->fetch_assoc()) {
     }
     updateMoveButtons();
 
+    // For each move button
     document.querySelectorAll('.move-up, .move-down').forEach(btn => {
         btn.addEventListener('click', function() {
             const li = this.closest('li');
@@ -555,6 +581,7 @@ while ($cat = $cat_res->fetch_assoc()) {
         });
     });
 
+    // For the reorder form
     document.getElementById('reorderForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const order = Array.from(document.querySelectorAll('#categoryList li')).map(li => li.dataset.name);
@@ -633,6 +660,7 @@ while ($cat = $cat_res->fetch_assoc()) {
 
     // Show notification based on URL query parameters
     const params = new URLSearchParams(window.location.search);
+    // Video upload
     if (params.has('upload')) {
         if (params.get('upload') === 'success') {
             showToast('Video uploaded successfully!', 'success');
@@ -642,16 +670,19 @@ while ($cat = $cat_res->fetch_assoc()) {
         params.delete('upload');
         history.replaceState(null, '', window.location.pathname);
     }
+    // Video delete
     if (params.has('delete') && params.get('delete') === 'success') {
         showToast('Video deleted successfully!', 'success');
         params.delete('delete');
         history.replaceState(null, '', window.location.pathname);
     }
+    // Category reorder
     if (params.has('reorder') && params.get('reorder') === 'success') {
         showToast('Category order updated!', 'success');
         params.delete('reorder');
         history.replaceState(null, '', window.location.pathname);
     }
+    // Unauthorised
     if (params.has('error') && params.get('error') === 'unauthorised') {
         showToast('Unauthorized access. Please log in.', 'error');
         params.delete('error');
