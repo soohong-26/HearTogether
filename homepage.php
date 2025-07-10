@@ -360,6 +360,7 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
     <!-- Rating Section -->
     <section class="website-rating-section">
     <h2>HearTogether Website Rating</h2>
+    <!-- Display average rating -->
     <div>
         <span class="rating-stars">
             <?php
@@ -368,16 +369,20 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
             for ($i = $stars; $i < 5; $i++) echo "&#9734;"; // Empty star
             ?>
         </span>
+        <!-- Display rating info -->
         <span class="rating-info">
             <?php echo $avgRating ? $avgRating : "No ratings yet"; ?>/5
             <span class="rating-count">(<?php echo $totalRatings; ?> ratings)</span>
         </span>
     </div>
 
+    <!-- Rating form -->
     <?php if (isset($_SESSION['user_id'])): ?>
         <?php if ($canRate): ?>
             <form method="POST">
+                <!-- Rating selection -->
                 <label for="website_rating">Leave your rating:</label><br>
+                <!-- Rating options -->
                 <select name="website_rating" id="website_rating" required>
                     <option value="" disabled selected>Select</option>
                     <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5)</option>
@@ -386,14 +391,18 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
                     <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2)</option>
                     <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1)</option>
                 </select>
+                <!-- Submit button -->
                 <button type="submit">Submit</button>
+                <!-- Error message -->
                 <?php if ($ratingError): ?>
                     <div class="rating-error"><?php echo $ratingError; ?></div>
                 <?php endif; ?>
             </form>
+            <!-- Limit message -->
         <?php else: ?>
             <div class="rating-limit-message">You can only leave a rating once per month.</div>
         <?php endif; ?>
+        <!-- Login message -->
     <?php else: ?>
         <div class="rating-login-message">
             <em>
@@ -402,6 +411,7 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
         </div>
     <?php endif; ?>
 
+    <!-- Success message -->
     <?php if (isset($_GET['rate']) && $_GET['rate'] === 'success'): ?>
         <div class="rating-success-message">Thank you for your feedback!</div>
         <script>
@@ -417,7 +427,7 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
 <?php include 'footer.php'; ?>
 
 </body>
-
+<!-- Toast for unauthorised access -->
 <?php if (isset($_GET['error']) && $_GET['error'] === 'unauthorised'): ?>
     <div id="unauth-toast" style="
         position: fixed;
@@ -435,6 +445,7 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
     ">
         Please log in to view the videos.
     </div>
+    <!-- JavaScript to show and hide the toast -->
     <script>
         const unauthToast = document.getElementById('unauth-toast');
         if (unauthToast) {
@@ -453,6 +464,7 @@ if ($canRate && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['website_ra
     </script>
 <?php endif; ?>
 
+<!-- Logout Toast -->
 <?php if (!empty($logoutMessage)): ?>
     <div id="logout-toast" style="
         position: fixed;

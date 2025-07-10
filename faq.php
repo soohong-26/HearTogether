@@ -32,14 +32,20 @@ while ($row = $res->fetch_assoc()) {
 <main>
     <div class="faq-header">
         <h2>Frequently Asked Questions</h2>
+        <!-- Search bar -->
         <input type="text" id="faqSearch" placeholder="Search...">
     </div>
 
+    <!-- Display all FAQs -->
     <?php foreach ($categories as $category): ?>
         <?php if (!empty($faqs[$category])): ?>
+        <!-- Each category -->
         <div class="category">
+            <!-- Category name -->
             <h3><?= htmlspecialchars($category) ?></h3>
+            <!-- Each individual FAQ -->
             <?php foreach ($faqs[$category] as $faq): ?>
+                <!-- Button for dropdown -->
                 <button class="accordion"><?= htmlspecialchars($faq['question']) ?></button>
                 <div class="panel"><p><?= nl2br(htmlspecialchars($faq['answer'])) ?></p></div>
             <?php endforeach; ?>
