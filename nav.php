@@ -524,18 +524,21 @@ function setFontSize(size) {
 let currentSize = parseInt(localStorage.getItem(FONT_SIZE_KEY)) || DEFAULT_SIZE;
 setFontSize(currentSize);
 
+// Makes the size small
 fontSizeSmallBtn.addEventListener('click', function() {
     if (currentSize > MIN_SIZE) {
         currentSize -= 2;
         setFontSize(currentSize);
     }
 });
+// Makes the size large
 fontSizeLargeBtn.addEventListener('click', function() {
     if (currentSize < MAX_SIZE) {
         currentSize += 2;
         setFontSize(currentSize);
     }
 });
+// Resets the size
 fontSizeResetBtn.addEventListener('click', function() {
     currentSize = DEFAULT_SIZE;
     setFontSize(currentSize);

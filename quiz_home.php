@@ -1,17 +1,23 @@
 <?php
 require 'database.php';
 
+// If the user is not logged in it will not allow them access
 if (!isset($_SESSION['username'])) {
     header("Location: homepage.php?error=unauthorised");
     exit();
 }
 
+// Storing the current user's username
 $username = $_SESSION['username'];
+
+// Fetching the quiz attempt history from the database (latest first)
 $history = [];
 $histRes = $conn->prepare("SELECT attempt_id, score, attempt_date FROM quiz_attempts WHERE username=? ORDER BY attempt_date DESC");
 $histRes->bind_param("s", $username);
 $histRes->execute();
 $historyRes = $histRes->get_result();
+
+// Store each attempt as an asociative array
 while ($row = $historyRes->fetch_assoc()) {
     $history[] = $row;
 }
@@ -73,14 +79,18 @@ while ($row = $historyRes->fetch_assoc()) {
 <?php include 'nav.php'; ?>
 <main>
     <div class="container">
+        <!-- Page title -->
         <h2>Quiz Centre</h2>
 
+        <!-- Start new quiz button -->
         <form action="quiz_start.php" method="post">
             <button type="submit" class="quiz-btn">Start New Quiz</button>
         </form>
 
+        <!-- Section title for quiz history -->
         <h3>Your Past Scores</h3>
         <?php if (count($history) > 0): ?>
+            <!-- Show history table (if available) -->
             <table>
                 <thead>
                     <tr><th>Date</th><th>Score</th></tr>
@@ -94,7 +104,9 @@ while ($row = $historyRes->fetch_assoc()) {
                     <?php endforeach; ?>
                 </tbody>
             </table>
+
         <?php else: ?>
+            <!-- Message for the user who have never attempted a quiz -->
             <p style="text-align: center;">You haven't completed any quizzes yet. Click above to begin!</p>
         <?php endif; ?>
     </div>

@@ -138,6 +138,7 @@ if (isset($_SESSION['username'])) {
     <!-- Back button -->
     <a href="javascript:history.back()" class="back-btn" title="Go back">← Back</a>
 
+    <!-- Content -->
     <div class="container">
         <h2>Welcome!</h2>
         <p>You need to log in or register before continuing.</p>

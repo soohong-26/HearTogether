@@ -85,11 +85,15 @@ $stmt->execute();
     </style>
 </head>
 <body>
+<!-- Navigation -->
 <?php include 'nav.php'; ?>
 <main>
     <div class="container">
+        <!-- Header -->
         <h2>Quiz Completed!</h2>
+        <!-- Final quiz score display -->
         <p class="score">You scored <?= $score ?> out of <?= count($selected) ?>!</p>
+        <!-- Back button -->
         <a href="quiz_home.php" class="back-btn">Back to Quiz Home</a>
     </div>
 </main>

@@ -198,25 +198,36 @@ if ($row = $qresult->fetch_assoc()) {
 <?php include 'nav.php'; ?>
 
 <div class="profile-container">
+    <!-- Display user's profile picture -->
     <img src="<?php echo htmlspecialchars($profile_img); ?>" alt="Profile Picture">
+
+    <!-- Display user's username -->
     <h2><?php echo htmlspecialchars($username); ?></h2>
     
+    <!-- Display user's email -->
     <p><b style="color:var(--primary-colour);">Email:</b> <?php echo $email; ?></p>
 
+    <!-- Form to upload new profile picture -->
     <form method="POST" enctype="multipart/form-data" class="profile-form" style="margin-top:18px;">
         <label class="file-label" for="profile_img">Choose New Profile Picture</label>
         <input type="file" id="profile_img" name="profile_img" accept="image/png, image/jpeg, image/jpg, image/gif">
         <button type="submit">Upload</button>
     </form>
+
+    <!-- Display average quiz score -->
     <?php if (!is_null($avg_score)) : ?>
         <div class="quiz-score">
             Average Quiz Score: <?php echo htmlspecialchars($avg_score); ?>
         </div>
     <?php endif; ?>
+
+    <!-- Link to homepage -->
     <a href="homepage.php" class="back-home">Back to Home</a>
 </div>
 <div id="toast"></div>
+
 <script>
+    // Show selected file name
     document.getElementById('profile_img').addEventListener('change', function() {
         if (this.files.length > 0) {
             document.querySelector('.file-label').textContent = this.files[0].name;
@@ -238,6 +249,7 @@ if ($row = $qresult->fetch_assoc()) {
             toast.style.pointerEvents = 'none';
         }, 3500);
     }
+    // Show notification
     <?php if (!empty($toast_msg)): ?>
         showToast("<?php echo addslashes($toast_msg); ?>", "<?php echo $toast_type; ?>");
     <?php endif; ?>

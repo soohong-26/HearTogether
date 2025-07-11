@@ -174,42 +174,51 @@ if (!isset($_SESSION['username'])) {
 
 <main class="video-section">
 
-    <!-- Video Search -->
+    <!-- Header & Video Search -->
     <div class="video-header">
         <h2>Videos</h2>
         <input type="text" id="videoSearch" placeholder="Search...">
     </div>
 
-
     <?php
+    // Fetching all of the unique categories from the videos table
     $categoryResult = $conn->query("SELECT DISTINCT category FROM videos ORDER BY category ASC");
 
+    // Looping through each category
     while ($cat = $categoryResult->fetch_assoc()):
         $categoryName = $cat['category'];
+        // Get the videos that belong to the current category
         $stmt = $conn->prepare("SELECT * FROM videos WHERE category = ? ORDER BY video_id DESC");
         $stmt->bind_param("s", $categoryName);
         $stmt->execute();
         $videoResult = $stmt->get_result();
     ?>
+        <!-- Section heading with redable category name -->
         <div class="category-section">
             <h2 class="section-title"><?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $categoryName))); ?></h2>
+            <!-- Horizontal scrollable list of video cards -->
             <div class="video-grid">
                 <?php if ($videoResult->num_rows > 0): ?>
                     <?php while ($video = $videoResult->fetch_assoc()): ?>
+                        <!-- Each individual video card -->
                         <div class="video-card"
                             data-title="<?php echo htmlspecialchars(strtolower($video['title'])); ?>"
                             data-category="<?php echo htmlspecialchars(strtolower($video['category'])); ?>">
+                            <!-- Image/GIF display for the video -->
                             <div class="video-wrapper">
                                 <img src="videos/<?php echo htmlspecialchars($video['filename']); ?>" alt="<?php echo htmlspecialchars($video['title']); ?>">
                             </div>
+                            <!-- Video title that is displayed below the image/GIF -->
                             <div class="video-title"><?php echo htmlspecialchars($video['title']); ?></div>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
+                    <!-- If there are no videos in this category, display a message -->
                     <p style="color: var(--text);">No videos found for this category.</p>
                 <?php endif; ?>
             </div>
         </div>
+        <!-- Horizontal line -->
         <hr>
     <?php endwhile; ?>
 </main>
@@ -219,6 +228,7 @@ const videoSearch = document.getElementById('videoSearch');
 const videoCards = document.querySelectorAll('.video-card');
 const categorySections = document.querySelectorAll('.category-section');
 
+// Filter videos based on search term
 videoSearch.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
     // Track if any cards are visible in a category

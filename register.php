@@ -258,6 +258,7 @@ $conn->close();
     const confirmPassword = document.getElementById('confirmPassword');
     const passwordMatchMsg = document.getElementById('passwordMatchMsg');
 
+    // Function to check password match
     function checkPasswordMatch() {
         const passwordValue = registerPassword.value;
         const confirmValue = confirmPassword.value;
@@ -272,6 +273,7 @@ $conn->close();
         }
     }
 
+    // Add event listener to both password fields
     registerPassword.addEventListener('input', checkPasswordMatch);
     confirmPassword.addEventListener('input', checkPasswordMatch);
     </script>

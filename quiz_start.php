@@ -1,15 +1,18 @@
 <?php
 require 'database.php';
 
+// If the user is not logged in it will not allow them access
 if (!isset($_SESSION['username'])) {
     header("Location: homepage.php?error=unauthorised");
     exit();
 }
 
+// Getting the current user's username from the session
 $username = $_SESSION['username'];
 
-// --- Fetch 5 random questions ---
+// Fetch 5 random questions
 $questionsRes = $conn->query("SELECT * FROM quiz_questions ORDER BY RAND() LIMIT 5");
+// Storing the questions in an array
 $questions = [];
 while ($row = $questionsRes->fetch_assoc()) {
     $questions[] = $row;
@@ -85,24 +88,29 @@ $default_image = 'images/quiz_default.svg';
 <main>
     <div class="container">
         <h2>Quiz Time!</h2>
+        <!-- Quiz form -->
         <form action="quiz_complete.php" method="post">
             <?php foreach ($questions as $i => $q): ?>
                 <div class="question">
                     <?php
-                        // --- Only display image if it exists and is NOT default ---
+                        // Only display image if it exists and is NOT default
                         if (!empty($q['image']) && $q['image'] !== $default_image) {
                             echo '<img src="' . htmlspecialchars($q['image']) . '" alt="Question Image" class="question-img">';
                         }
                     ?>
+                    <!-- Display question text -->
                     <p>Q<?= $i + 1 ?>. <?= htmlspecialchars($q['question_text']) ?></p>
+                    <!-- Display options A to D as radio buttons -->
                     <?php foreach (['A', 'B', 'C', 'D'] as $opt): ?>
                         <label>
+                            <!-- Value is the option letter -->
                             <input type="radio" name="selected[<?= $q['question_id'] ?>]" value="<?= $opt ?>" required>
                             <?= htmlspecialchars($q["option_" . strtolower($opt)]) ?>
                         </label>
                     <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
+            <!-- Submit button -->
             <button type="submit" name="quiz_submit" class="submit-btn">Submit Quiz</button>
         </form>
     </div>
