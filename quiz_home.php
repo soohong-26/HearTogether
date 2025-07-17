@@ -93,18 +93,20 @@ while ($row = $historyRes->fetch_assoc()) {
             <!-- Show history table (if available) -->
             <table>
                 <thead>
-                    <tr><th>Date</th><th>Score</th></tr>
+                    <tr><th>Date</th><th>Score</th><th>Action</th></tr>
                 </thead>
                 <tbody>
                     <?php foreach ($history as $h): ?>
                         <tr>
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
                             <td><?= htmlspecialchars($h['score']) ?></td>
+                            <td>
+                                <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>" style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">View</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-
         <?php else: ?>
             <!-- Message for the user who have never attempted a quiz -->
             <p style="text-align: center;">You haven't completed any quizzes yet. Click above to begin!</p>
