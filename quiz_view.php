@@ -9,15 +9,20 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username'];
 $attempt_id = isset($_GET['attempt_id']) ? intval($_GET['attempt_id']) : 0;
 
-// Validate ownership
+// Admin override logic
+$is_admin_view = isset($_GET['admin']) && $_GET['admin'] == 1 && isset($_SESSION['roles']) && $_SESSION['roles'] === 'admin';
+$view_username = $is_admin_view ? $_GET['user'] ?? '' : $username;
+
+// Validate ownership or admin access
 $check = $conn->prepare("SELECT * FROM quiz_attempts WHERE attempt_id=? AND username=?");
-$check->bind_param("is", $attempt_id, $username);
+$check->bind_param("is", $attempt_id, $view_username);
 $check->execute();
 $result = $check->get_result();
 if ($result->num_rows === 0) {
-    header("Location: quiz_home.php?error=invalid_attempt");
+    header("Location: " . ($is_admin_view ? "admin_quiz_scores.php?error=invalid_attempt" : "quiz_home.php?error=invalid_attempt"));
     exit();
 }
+
 
 // Fetch user's responses
 $responsesRes = $conn->prepare("
@@ -133,8 +138,14 @@ $responses = $responsesRes->get_result();
                 <?php endforeach; ?>
             </div>
         <?php endwhile; ?>
-        <a href="quiz_home.php" class="back-btn">Back to Quiz Home</a>
-    </div>
+        <?php if ($is_admin_view): ?>
+
+        <!-- Back button -->
+        <a href="admin_quiz_scores.php?user=<?= urlencode($view_username) ?>" class="back-btn">Back to Admin Scores</a>
+            <?php else: ?>
+                <a href="quiz_home.php" class="back-btn">Back to Quiz Home</a>
+            <?php endif; ?>
+        </div>
 </main>
 </body>
 </html>

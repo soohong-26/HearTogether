@@ -329,9 +329,26 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
     <?php include 'nav.php'; ?>
 
     <main>
+        <!-- Charts row -->
+        <div class="chart-row" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:center; margin-top:10px;">
+        
+            <!-- Approval pie -->
+            <div class="chart-box">
+                <h3>User Approval Status</h3>
+                <canvas id="userChart"></canvas>
+            </div>
+
+            <!-- New‑users doughnut -->
+            <div class="chart-box">
+                <h3>New Users This Month</h3>
+                <canvas id="newUserChart"></canvas>
+            </div>
+        </div>
+
         <!-- Page header -->
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
         <h2 style="margin-bottom: 0;">User Overview</h2>
+        
         <!-- Link to user approval -->
         <a href="admin_approval.php" 
            style="
@@ -437,22 +454,6 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
             </tbody>
         </table>
     </div>
-        <!-- Charts row -->
-        <div class="chart-row" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:center; margin-top:60px;">
-        
-        <!-- Approval pie -->
-        <div class="chart-box">
-            <h3>User Approval Status</h3>
-            <canvas id="userChart"></canvas>
-        </div>
-
-        <!-- New‑users doughnut -->
-        <div class="chart-box">
-            <h3>New Users This Month</h3>
-            <canvas id="newUserChart"></canvas>
-        </div>
-    </div>
-
 </main>
     <script>
         // Toast show/hide function

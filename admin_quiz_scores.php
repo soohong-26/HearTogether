@@ -25,7 +25,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
     $selected_user = $_GET['user'];
 
     // Fetch quiz history for selected user
-    $hstmt = $conn->prepare("SELECT score, attempt_date FROM quiz_attempts WHERE username=? ORDER BY attempt_date DESC");
+    $hstmt = $conn->prepare("SELECT attempt_id, score, attempt_date FROM quiz_attempts WHERE username=? ORDER BY attempt_date DESC");
     $hstmt->bind_param("s", $selected_user);
     $hstmt->execute();
     $hres = $hstmt->get_result();
@@ -205,7 +205,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
             <!-- User history -->
             <table class="user-table">
                 <thead>
-                    <tr><th>Date</th><th>Score</th></tr>
+                    <tr><th>Date</th><th>Score</th><th>Action</th></tr>
                 </thead>
 
                 <tbody>
@@ -215,6 +215,9 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
                         <tr>
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
                             <td><?= htmlspecialchars($h['score']) ?></td>
+                            <td>
+                                <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>&admin=1&user=<?= urlencode($selected_user) ?>" style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">View</a>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -226,7 +229,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
         <?php endif; ?>
         <!-- Back to the main quiz manager -->
         <div class="center">
-            <a href="admin_quiz.php" class="back-link">&larr; Back to Quiz Manager</a>
+            <a href="admin_quiz.php" class="back-link">Back to Quiz Manager</a>
         </div>
     </div>
 </main>
