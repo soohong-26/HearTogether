@@ -96,6 +96,40 @@ if ($result && $result->num_rows > 0) {
         $users[] = $row;
     }
 }
+
+// Count approved and pending users for the pie chart
+$statsRes = $conn->query("SELECT is_approved, COUNT(*) as count FROM users GROUP BY is_approved");
+
+$approvedCount = 0;
+$pendingCount = 0;
+
+while ($row = $statsRes->fetch_assoc()) {
+    if ($row['is_approved'] == 1) {
+        $approvedCount = $row['count'];
+    } else {
+        $pendingCount = $row['count'];
+    }
+}
+
+// New users this month statistics
+$currentMonthStart = date('Y-m-01 00:00:00');
+$nextMonthStart    = date('Y-m-01 00:00:00', strtotime('+1 month'));
+
+// count how many users registered this calendar month
+$monthStmt = $conn->prepare("
+    SELECT COUNT(*) AS month_count
+    FROM users
+    WHERE created_at >= ? AND created_at < ?
+");
+$monthStmt->bind_param("ss", $currentMonthStart, $nextMonthStart);
+$monthStmt->execute();
+$monthUsersCount = $monthStmt->get_result()->fetch_assoc()['month_count'] ?? 0;
+$monthStmt->close();
+
+// how many users are NOT new this month
+$totalUsers        = count($users); // we already built $users[] above
+$existingUsersLong = $totalUsers - $monthUsersCount;
+
 ?>
 
 <!DOCTYPE html>
@@ -266,6 +300,24 @@ if ($result && $result->num_rows > 0) {
         .msg-fail {
             display: none;
         }
+
+        .chart-box {
+            flex: 1 1 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .chart-box canvas {
+            margin-top: 20px;
+            max-width: 280px;
+        }
+        .chart-box h3 {
+            margin: 0;
+            color: var(--heading-colour);
+            font-weight: 600;
+        }
+
         @media (max-width: 700px) {
             main { padding: 12px; }
             .user-table th, .user-table td { padding: 7px; font-size: 14px;}
@@ -385,24 +437,43 @@ if ($result && $result->num_rows > 0) {
             </tbody>
         </table>
     </div>
+        <!-- Charts row -->
+        <div class="chart-row" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:center; margin-top:60px;">
+        
+        <!-- Approval pie -->
+        <div class="chart-box">
+            <h3>User Approval Status</h3>
+            <canvas id="userChart"></canvas>
+        </div>
+
+        <!-- New‑users doughnut -->
+        <div class="chart-box">
+            <h3>New Users This Month</h3>
+            <canvas id="newUserChart"></canvas>
+        </div>
+    </div>
+
 </main>
     <script>
         // Toast show/hide function
         function showToast(message, type = "success") {
-            var toast = document.getElementById('toast');
-            var toastMsg = document.getElementById('toast-msg');
-            toastMsg.textContent = message;
-            // Set class for full background color
-            toast.className = 'toast ' + (type === "success" ? "toast-success" : "toast-fail") + ' show';
-            toast.style.display = 'block';
-            setTimeout(function(){
-                toast.classList.remove('show');
-                setTimeout(function() {
-                    toast.style.display = 'none';
-                }, 500);
-            }, 2800);
-        }
+        var toast = document.getElementById('toast');
+        var toastMsg = document.getElementById('toast-msg');
+        toastMsg.textContent = message;
+        toast.className = 'toast ' + (type === "success" ? "toast-success" : "toast-fail") + ' show';
+        toast.style.display = 'block';
 
+        setTimeout(function(){
+            toast.classList.remove('show');
+            setTimeout(function() {
+                toast.style.display = 'none';
+                // Reload only if success
+                if (type === "success") {
+                    window.location.reload();
+                }
+            }, 500);
+        }, 2800);
+    }
 
         // Display toast if redirected with message (PHP to JS)
         <?php if ($msg): ?>
@@ -424,5 +495,77 @@ if ($result && $result->num_rows > 0) {
             });
         });
     </script>
+    <!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- For the pie chart -->
+<script>
+    // Chart data from PHP
+    const approvedCount = <?= $approvedCount ?>;
+    const pendingCount = <?= $pendingCount ?>;
+
+    const ctx = document.getElementById('userChart').getContext('2d');
+    const newUsersThisMonth = <?= $monthUsersCount ?>;
+    const existingUsers     = <?= $existingUsersLong ?>;
+
+    const ctxNew = document.getElementById('newUserChart').getContext('2d');
+    new Chart(ctxNew, {
+        type: 'doughnut',
+        data: {
+            labels: ['New This Month', 'Existing Users'],
+            datasets: [{
+                data: [newUsersThisMonth, existingUsers],
+                backgroundColor: ['#4caf50', '#90a4ae'],     // green & muted grey‑blue
+                borderColor:    ['#388e3c', '#607d8b'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: getComputedStyle(document.body).getPropertyValue('--heading-colour'),
+                        font: { family: 'Roboto', size: 14 }
+                    }
+                },
+                tooltip: { callbacks: {
+                    label: ctx => `${ctx.label}: ${ctx.parsed} user${ctx.parsed !== 1 ? 's' : ''}`
+                }}
+            }
+        }
+    });
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Approved Users', 'Pending Users'],
+            datasets: [{
+                label: 'User Status',
+                data: [approvedCount, pendingCount],
+                backgroundColor: ['#1d8a47', '#d93434'],
+                borderColor: ['#146c36', '#a12525'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: getComputedStyle(document.body).getPropertyValue('--heading-colour'),
+                        font: {
+                            family: 'Roboto',
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    
+</script>
+
 </body>
 </html>
