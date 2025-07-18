@@ -557,6 +557,15 @@ while ($cat = $cat_res->fetch_assoc()) {
 <div id="toast"></div>
 
 <script>
+    // Category form logic
+    document.getElementById('new_category').addEventListener('input', function() {
+        document.getElementById('category').disabled = !!this.value;
+    });
+
+    document.getElementById('category').addEventListener('change', function() {
+        document.getElementById('new_category').disabled = !!this.value;
+    });
+
     // Category move up/down logic
     function updateMoveButtons() {
         const lis = document.querySelectorAll('#categoryList li');
