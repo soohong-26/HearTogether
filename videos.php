@@ -78,6 +78,7 @@ if (!isset($_SESSION['username'])) {
             gap: 20px;
             padding-bottom: 10px;
             scroll-snap-type: x mandatory;
+            margin-bottom: 55px;
         }
 
         .video-card {
@@ -219,7 +220,7 @@ if (!isset($_SESSION['username'])) {
             </div>
         </div>
         <!-- Horizontal line -->
-        <hr>
+        <!-- <hr> -->
     <?php endwhile; ?>
 </main>
 

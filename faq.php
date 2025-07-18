@@ -55,8 +55,9 @@ while ($row = $res->fetch_assoc()) {
 </main>
 
 <script>
-// One open at a time
 const acc = document.querySelectorAll(".accordion");
+
+// Accordion toggle logic
 acc.forEach(button => {
     button.addEventListener("click", function () {
         acc.forEach(btn => {
@@ -71,17 +72,29 @@ acc.forEach(button => {
     });
 });
 
-// Search/filter function
+// Search/filter logic
 const searchInput = document.getElementById('faqSearch');
 searchInput.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
-    acc.forEach(button => {
-        const question = button.textContent.toLowerCase();
-        const panel = button.nextElementSibling;
-        const match = question.includes(searchTerm);
-        button.style.display = match ? "flex" : "none";
-        panel.style.display = "none";
-        button.classList.remove("active");
+    const categories = document.querySelectorAll('.category');
+
+    categories.forEach(category => {
+        let hasMatch = false;
+        const buttons = category.querySelectorAll('.accordion');
+
+        buttons.forEach(button => {
+            const question = button.textContent.toLowerCase();
+            const match = question.includes(searchTerm);
+
+            button.style.display = match ? "flex" : "none";
+            button.classList.remove("active");
+            button.nextElementSibling.style.display = "none";
+
+            if (match) hasMatch = true;
+        });
+
+        // Show/hide the whole category block
+        category.style.display = hasMatch ? "block" : "none";
     });
 });
 </script>
