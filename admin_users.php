@@ -130,6 +130,45 @@ $monthStmt->close();
 $totalUsers        = count($users); // we already built $users[] above
 $existingUsersLong = $totalUsers - $monthUsersCount;
 
+// Get user registration counts for the past 6 months
+$growthData = [];
+$labels = [];
+$currentDate = new DateTime();
+
+// Loop through last 6 months
+for ($i = 5; $i >= 0; $i--) {
+    // Formatting the current loop month as "YYYY-MM"
+    $month = $currentDate->format('Y-m');
+    // Define the start o the month
+    $start = $month . '-01 00:00:00';
+    // Move the $currentDate one month forward to get the end boundary of that current month
+    $end = $currentDate->modify('+1 month')->format('Y-m-01 00:00:00');
+
+    // Prepare SQL to count users created between the start and the end of that month
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) as count 
+        FROM users 
+        WHERE created_at >= ? AND created_at < ?
+    ");
+
+    // Bind parameters which is the start and the end of the month
+    $stmt->bind_param("ss", $start, $end);
+    $stmt->execute();
+
+    // Fetching the results 
+    $res = $stmt->get_result();
+    $count = $res->fetch_assoc()['count'] ?? 0;
+    $stmt->close();
+
+    // Store label and count
+    $labels[] = date('M Y', strtotime($month)); // e.g. "Jul 2025"
+    $growthData[] = $count;
+
+    // Move back a month for the loop, because ealier 1 month has been added with the (modify('+1 month), and now subtracting 2 to end up with 1 month behind the original one)
+    $currentDate->modify('-2 month');
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -308,14 +347,31 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
             align-items: center;
             text-align: center;
         }
+
         .chart-box canvas {
             margin-top: 20px;
             max-width: 280px;
         }
+
+        .chart-box-chart canvas {
+            margin-top: 10px;
+            max-width: 100%;
+            height: 250px;
+            margin-bottom: 50px;
+        }
+
         .chart-box h3 {
             margin: 0;
             color: var(--heading-colour);
             font-weight: 600;
+        }
+
+        .chart-row {
+            display:flex; 
+            flex-wrap:wrap; 
+            gap:30px; 
+            justify-content:center; 
+            margin-top:10px;
         }
 
         @media (max-width: 700px) {
@@ -330,8 +386,8 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
 
     <main>
         <!-- Charts row -->
-        <div class="chart-row" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:center; margin-top:10px;">
-        
+        <div class="chart-row">
+
             <!-- Approval pie -->
             <div class="chart-box">
                 <h3>User Approval Status</h3>
@@ -342,6 +398,12 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
             <div class="chart-box">
                 <h3>New Users This Month</h3>
                 <canvas id="newUserChart"></canvas>
+            </div>
+
+            <!-- User growth chart -->
+            <div class="chart-box-chart">
+                <h3>User Growth (Past 6 Months)</h3>
+                <canvas id="growthChart"></canvas>
             </div>
         </div>
 
@@ -504,6 +566,9 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
     // Chart data from PHP
     const approvedCount = <?= $approvedCount ?>;
     const pendingCount = <?= $pendingCount ?>;
+    
+    const growthLabels = <?= json_encode($labels) ?>;
+    const growthData   = <?= json_encode($growthData) ?>;
 
     const ctx = document.getElementById('userChart').getContext('2d');
     const newUsersThisMonth = <?= $monthUsersCount ?>;
@@ -565,7 +630,66 @@ $existingUsersLong = $totalUsers - $monthUsersCount;
         }
     });
 
-    
+    // Line Chart for User Growth
+    const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+
+    // Creating a new Chart.js
+    new Chart(ctxGrowth, {
+        type: 'line', // Type: line chart
+        data: {
+            labels: growthLabels,
+            datasets: [{
+                label: 'New Users',
+                data: growthData, // Y-axis values
+                // Line styling
+                borderColor: '#1d8a47',
+                backgroundColor: 'rgba(29, 138, 71, 0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#1d8a47',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true, // It will resize with the screen
+            scales: {
+                y: {
+                    beginAtZero: true, // y-axis always begins at 0
+                    ticks: {
+                        precision: 0, // No decimal place
+                        color: getComputedStyle(document.body).getPropertyValue('--heading-colour')
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)' // Faint grid lines
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--heading-colour')
+                    },
+                    grid: {
+                        display: false // Hiding the grid lines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: getComputedStyle(document.body).getPropertyValue('--heading-colour'),
+                        font: {
+                            family: 'Roboto',
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `+${ctx.parsed.y} users`
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 </body>
