@@ -53,6 +53,8 @@ A beginner-friendly educational website for learning Malaysian Sign Language (MS
 - quiz_start.php
 - quiz_complete.php
 - quiz_view.php
+- quiz_download.php
+- admin_quiz_scores.php
 - admin_quiz.php
 
 # **Database**
