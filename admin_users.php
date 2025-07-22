@@ -351,7 +351,7 @@ for ($i = 5; $i >= 0; $i--) {
         .chart-box canvas {
             margin-top: 20px;
             max-width: 280px;
-        }
+        } 
 
         .chart-box-chart canvas {
             margin-top: 10px;

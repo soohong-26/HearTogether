@@ -205,7 +205,12 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
             <!-- User history -->
             <table class="user-table">
                 <thead>
-                    <tr><th>Date</th><th>Score</th><th>Action</th></tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Action</th>
+                        <th>Download</th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -216,7 +221,14 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
                             <td><?= htmlspecialchars($h['score']) ?></td>
                             <td>
-                                <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>&admin=1&user=<?= urlencode($selected_user) ?>" style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">View</a>
+                                <!-- View button for admins (includes admin flag and user username) -->
+                                <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>&admin=1&user=<?= urlencode($selected_user) ?>" 
+                                style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">View</a>
+                            </td>
+                            <td>
+                                <!-- Download button for admins (same attempt_id, with admin override) -->
+                                <a href="quiz_download.php?attempt_id=<?= $h['attempt_id'] ?>&admin=1&user=<?= urlencode($selected_user) ?>" 
+                                style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">Download</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

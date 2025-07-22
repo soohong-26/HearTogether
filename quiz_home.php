@@ -93,7 +93,12 @@ while ($row = $historyRes->fetch_assoc()) {
             <!-- Show history table (if available) -->
             <table>
                 <thead>
-                    <tr><th>Date</th><th>Score</th><th>Action</th></tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Action</th>
+                        <th>Download</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($history as $h): ?>
@@ -101,7 +106,12 @@ while ($row = $historyRes->fetch_assoc()) {
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
                             <td><?= htmlspecialchars($h['score']) ?></td>
                             <td>
+                                <!-- Link to view the selected quiz attempt details -->
                                 <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>" style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">View</a>
+                            </td>
+                            <td>
+                                <!-- Link to download the selected quiz attempt as a file -->
+                                <a href="quiz_download.php?attempt_id=<?= $h['attempt_id'] ?>" style="text-decoration: none; color: var(--primary-colour); font-weight: bold;">Download</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
