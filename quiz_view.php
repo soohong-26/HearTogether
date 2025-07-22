@@ -141,8 +141,8 @@ $responses = $responsesRes->get_result();
                         <!-- Displaying the correct or the incorrect one depending on the correctness -->
                         <?php if ($row['selected_option'] === $opt): ?>
                             <?= $opt === $row['correct_option']
-                                ? '<span class="correct">✔ Correct</span>'
-                                : '<span class="incorrect">✖ Incorrect</span>' ?>
+                                ? '<span class="correct"> ✔ Correct</span>'
+                                : '<span class="incorrect"> ✖ Incorrect</span>' ?>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
