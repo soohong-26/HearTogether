@@ -1,6 +1,7 @@
 <?php
 require 'database.php';
 
+// Ensuring the the user is logged in
 if (!isset($_SESSION['username'])) {
     header("Location: homepage.php?error=unauthorised");
     exit();
@@ -19,10 +20,10 @@ $check->bind_param("is", $attempt_id, $view_username);
 $check->execute();
 $result = $check->get_result();
 if ($result->num_rows === 0) {
+    // Redirecting if there is no such attempts fuond
     header("Location: " . ($is_admin_view ? "admin_quiz_scores.php?error=invalid_attempt" : "quiz_home.php?error=invalid_attempt"));
     exit();
 }
-
 
 // Fetch user's responses
 $responsesRes = $conn->prepare("
@@ -115,12 +116,19 @@ $responses = $responsesRes->get_result();
 <main>
     <div class="container">
         <h2>Review Your Attempt</h2>
+        <!-- Looping through all the quiz questions and show the user's answers -->
         <?php while ($row = $responses->fetch_assoc()): ?>
             <div class="question">
-                <?php if (!empty($row['image']) && $row['image'] !== 'images/quiz_default.svg'): ?>
+
+            <!-- Display image if it exists and is not the default placeholder -->
+            <?php if (!empty($row['image']) && $row['image'] !== 'images/quiz_default.svg'): ?>
                     <img src="<?= htmlspecialchars($row['image']) ?>" alt="Question Image" class="question-img">
                 <?php endif; ?>
+                
+                <!-- Displaying the question text -->
                 <p><?= htmlspecialchars($row['question_text']) ?></p>
+                
+                <!-- Looping through all the options which are A to D -->
                 <?php foreach (['A', 'B', 'C', 'D'] as $opt): ?>
                     <?php
                         $option_text = $row["option_" . strtolower($opt)];
@@ -129,6 +137,8 @@ $responses = $responsesRes->get_result();
                     ?>
                     <div class="<?= $classes ?>">
                         <?= $opt ?>. <?= htmlspecialchars($option_text) ?>
+                        
+                        <!-- Displaying the correct or the incorrect one depending on the correctness -->
                         <?php if ($row['selected_option'] === $opt): ?>
                             <?= $opt === $row['correct_option']
                                 ? '<span class="correct">✔ Correct</span>'
