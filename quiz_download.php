@@ -43,7 +43,7 @@ $stmt->bind_param("i", $attempt_id);
 $stmt->execute();
 $responses = $stmt->get_result();
 
-// Start building content
+// Start building content (Top of the page)
 $content = "Quiz Attempt ID: {$attempt_id}\n";
 $content .= "Username: {$view_username}\n";
 $content .= "Date: {$attempt['attempt_date']}\n";

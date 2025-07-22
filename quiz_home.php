@@ -90,6 +90,7 @@ while ($row = $historyRes->fetch_assoc()) {
         <!-- Section title for quiz history -->
         <h3>Your Past Scores</h3>
         <?php if (count($history) > 0): ?>
+            
             <!-- Show history table (if available) -->
             <table>
                 <thead>

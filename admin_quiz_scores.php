@@ -140,7 +140,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
     .user-table th, .user-table td {
         border: 1px solid var(--border-colour);
         padding: 8px;
-        text-align: left;
+        text-align: center;
     }
     .user-table th {
         background: var(--primary-colour);
@@ -182,13 +182,16 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
         <!-- User selection -->
         <form method="get" class="form-row" style="justify-content:center;">
             <label for="user" style="margin-top: 5px;">Select user:</label>
+            <!-- Dropdown for user selection -->
             <select name="user" id="user" class="styled-select" onchange="this.form.submit()">
                 <option value="">-- Choose User --</option>
+                <!-- List of users -->
                 <?php foreach ($users as $u): ?>
                     <option value="<?= htmlspecialchars($u) ?>" <?= ($selected_user === $u) ? 'selected' : '' ?>><?= htmlspecialchars($u) ?></option>
                 <?php endforeach; ?>
             </select>
         </form>
+
         <!-- User profile -->
         <?php if ($selected_user): ?>
             <div class="user-profile-summary">
@@ -202,7 +205,7 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
             </div>
 
             <h4 class="center"><?= htmlspecialchars($selected_user) ?>'s Quiz History</h4>
-            <!-- User history -->
+            <!-- User history table -->
             <table class="user-table">
                 <thead>
                     <tr>
@@ -218,8 +221,10 @@ if (isset($_GET['user']) && $_GET['user'] !== '') {
                         <!-- Each attempt -->
                         <?php foreach ($user_history as $h): ?>
                         <tr>
+                            <!-- Date and score -->
                             <td><?= htmlspecialchars($h['attempt_date']) ?></td>
                             <td><?= htmlspecialchars($h['score']) ?></td>
+
                             <td>
                                 <!-- View button for admins (includes admin flag and user username) -->
                                 <a href="quiz_view.php?attempt_id=<?= $h['attempt_id'] ?>&admin=1&user=<?= urlencode($selected_user) ?>" 
