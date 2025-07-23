@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2025 at 05:26 AM
+-- Generation Time: Jul 23, 2025 at 08:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,7 +111,8 @@ INSERT INTO `quiz_attempts` (`attempt_id`, `username`, `score`, `attempt_date`) 
 (8, 'Testuser', 5, '2025-06-17 09:46:37'),
 (9, 'Testuser', 5, '2025-06-17 09:47:12'),
 (10, 'PenguinPlays', 5, '2025-07-17 17:17:02'),
-(11, 'PenguinPlays', 1, '2025-07-21 08:55:01');
+(11, 'PenguinPlays', 1, '2025-07-21 08:55:01'),
+(12, 'PenguinPlays', 5, '2025-07-22 16:16:18');
 
 -- --------------------------------------------------------
 
@@ -135,7 +136,7 @@ CREATE TABLE `quiz_questions` (
 --
 
 INSERT INTO `quiz_questions` (`question_id`, `question_text`, `image`, `option_a`, `option_b`, `option_c`, `option_d`, `correct_option`) VALUES
-(2, 'What is sign language primarily used for?', NULL, 'Playing games', 'Communicating with the deaf', 'Programming computers', 'Making music', 'B'),
+(2, 'What is sign language primarily used for?', NULL, '123', 'Communicating with the deaf', 'Programming computers', 'Making music', 'B'),
 (4, 'What device can help people with hearing loss to hear better?', NULL, 'Smartwatch', 'Calculator', 'Hearing aid', 'Sunglasses', 'C'),
 (6, 'Which part of the body does hearing mostly involve?', NULL, 'Fingers', 'Ears', 'Nose', 'Knees', 'B'),
 (8, 'Which hand  can you use in sign language?', NULL, 'Only right', 'Only left', 'Both', 'Neither', 'C'),
@@ -215,7 +216,12 @@ INSERT INTO `quiz_responses` (`response_id`, `attempt_id`, `question_id`, `selec
 (39, 11, 12, 'A', 1),
 (40, 11, 27, 'A', 0),
 (41, 11, 18, 'A', 0),
-(42, 11, 13, 'A', 0);
+(42, 11, 13, 'A', 0),
+(43, 12, 26, 'D', 1),
+(44, 12, 8, 'C', 1),
+(45, 12, 27, 'C', 1),
+(46, 12, 13, 'D', 1),
+(47, 12, 4, 'C', 1);
 
 -- --------------------------------------------------------
 
@@ -240,11 +246,14 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `profile_img`, `roles`, `is_approved`, `created_at`) VALUES
 (1, 'soohong', '$2y$10$7Aw3ek/m3QfZDMxNhflVRuWvSoe3p1.1YZtVKOm.OeDfJCGZ9nZYS', 'TSHplays@gmail.com', 'profile/soohong_683d9be6649b4.png', 'admin', 1, '2025-07-17 10:55:21'),
-(2, 'PenguinPlays', '$2y$10$S5tU1WCjMV.Dfjip.mPum.lu04y6srQECAQdlICZc5X9R.kU8.77e', 'soohong@gmail.com', 'profile/PenguinPlays_683d9b78e2b26.jpg', 'user', 1, '2025-06-17 10:55:21'),
-(8, 'testing', '$2y$10$NzCkfpSTjsxbv94OEu0RfuCIlWgzs8jTclQ6p90/xnNSmFBjGdTpe', 'testing@gmail.com', 'profile/profile.png', 'user', 0, '2025-07-17 10:55:21'),
+(2, 'PenguinPlays', '$2y$10$S5tU1WCjMV.Dfjip.mPum.lu04y6srQECAQdlICZc5X9R.kU8.77e', 'soohong@gmail.com', 'profile/PenguinPlays_683d9b78e2b26.jpg', 'admin', 1, '2025-06-17 10:55:21'),
+(8, 'testing', '$2y$10$NzCkfpSTjsxbv94OEu0RfuCIlWgzs8jTclQ6p90/xnNSmFBjGdTpe', 'testing@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-17 10:55:21'),
 (9, 'soohong1', '$2y$10$bdWyA89ZLAv1AxUDuc4cb.qEuHq7QihOrEthD1eHv2MDt2UziHEM2', 'soohongwastaken@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-17 10:55:21'),
-(10, '123', '$2y$10$ecFcwpxN7BiMlfFEGLst6e0TXa.8Y.Iak.Mz5c9jtBrS8zNcYv5ya', 'gerg@gmail.com', 'profile/profile.png', 'user', 0, '2025-05-17 10:55:21'),
-(11, 'Testuser', '$2y$10$G3DoYMMIL/GJb6.breU5mOoA63O7cbWbev6Jk5RJMlpGHXd6/JicC', 'test@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-17 10:55:21');
+(10, '123', '$2y$10$ecFcwpxN7BiMlfFEGLst6e0TXa.8Y.Iak.Mz5c9jtBrS8zNcYv5ya', 'gerg@gmail.com', 'profile/profile.png', 'user', 1, '2025-05-17 10:55:21'),
+(12, 'tansoohong1', '$2y$10$bx8bHRtMy/zUnuV.bYcXq.2XxUQT90o9uX7C6.k9xY/umsjpsp8XG', 'tansoohong@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-23 10:46:44'),
+(13, 'ben', '$2y$10$/oW7dnhBJB0yitk995U6X.SpuPM4o.Z2XSRBTgxCsN38e8CkWw9bm', 'ben@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-23 10:48:32'),
+(14, 'Stacy', '$2y$10$kKk/6GI3yA4hc0Y7DFVNHunNrxijUgc4BiLgFRUGV1fdYPgFOvAxG', 'stacy@gmail.com', 'profile/profile.png', 'user', 1, '2025-07-23 10:49:22'),
+(15, 'ali', '$2y$10$bO0CIYJbJ1FmYxImH5fCOO/fCTZs154z0y2SmNfkhkVMX6VWinIYG', 'ali@gmail.com', 'profile/profile.png', 'user', 0, '2025-07-23 10:49:51');
 
 -- --------------------------------------------------------
 
@@ -457,13 +466,13 @@ ALTER TABLE `faq`
 -- AUTO_INCREMENT for table `faq_categories`
 --
 ALTER TABLE `faq_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `attempt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `attempt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
@@ -475,13 +484,13 @@ ALTER TABLE `quiz_questions`
 -- AUTO_INCREMENT for table `quiz_responses`
 --
 ALTER TABLE `quiz_responses`
-  MODIFY `response_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `response_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `videos`
@@ -493,7 +502,7 @@ ALTER TABLE `videos`
 -- AUTO_INCREMENT for table `video_categories`
 --
 ALTER TABLE `video_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=338;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=341;
 
 --
 -- AUTO_INCREMENT for table `website_ratings`
