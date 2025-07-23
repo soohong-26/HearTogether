@@ -400,11 +400,11 @@ for ($i = 5; $i >= 0; $i--) {
                 <canvas id="newUserChart"></canvas>
             </div>
 
-            <!-- User growth chart -->
+            <!-- User growth chart
             <div class="chart-box-chart">
                 <h3>User Growth (Past 6 Months)</h3>
                 <canvas id="growthChart"></canvas>
-            </div>
+            </div> -->
         </div>
 
         <!-- Page header -->

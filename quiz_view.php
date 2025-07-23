@@ -32,6 +32,8 @@ $responsesRes = $conn->prepare("
     JOIN quiz_questions qq ON qr.question_id = qq.question_id
     WHERE qr.attempt_id = ?
 ");
+
+// Bind and execute
 $responsesRes->bind_param("i", $attempt_id);
 $responsesRes->execute();
 $responses = $responsesRes->get_result();
